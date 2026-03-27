@@ -1,0 +1,549 @@
+/* Inline CSS extracted from index.html - corrected with proper selectors */
+
+/* Header actions */
+.icon-btn {
+    position: relative;
+}
+
+/* Hero section background */
+.hero {
+    background-image: url('https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/hero-vineyard-dqfZwyX7rD42XguzQgb2zw.webp');
+}
+
+/* SVG in hero button */
+.btn-premium-gold svg {
+    display: inline-block;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Featured wines section */
+.section:nth-of-type(1) {
+    background-color: var(--background);
+}
+
+/* Section title styling */
+.section-title {
+    text-align: center !important;
+    margin: 0 auto 3rem auto !important;
+    display: block !important;
+    width: 100% !important;
+}
+
+.section-title h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+body main section.section div.container div.section-title h2 {
+    width: auto;
+    text-align: center;
+    margin: 0 0 1rem 0;
+    display: block;
+    float: none;
+}
+
+/* Grid in featured wines */
+.grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+/* Wine cards */
+.card-elegant {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Wine card image container */
+.card-elegant > div:first-child {
+    height: 16rem;
+    overflow: hidden;
+    background-color: var(--muted);
+}
+
+/* Wine card image */
+.card-elegant img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Wine card content */
+.card-elegant > div:nth-child(2) {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Wine card title */
+.card-elegant h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Wine card origin */
+.card-elegant p:nth-of-type(1) {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.25rem;
+}
+
+/* Wine card type */
+.card-elegant p:nth-of-type(2) {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-bottom: 1rem;
+}
+
+/* Wine card stars */
+.card-elegant div:nth-of-type(3) {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Wine card rating count */
+.card-elegant span {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-left: 0.5rem;
+}
+
+/* Wine card price section */
+.card-elegant > div:nth-child(2) > div:last-child {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--muted);
+}
+
+/* Wine card price */
+.card-elegant .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+/* Wine card button */
+.card-elegant .btn-premium {
+    text-align: center;
+    display: block;
+}
+
+/* Ver Catálogo Completo SVG */
+.btn-premium-outline svg {
+    display: inline-block;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Button container centering */
+.btn-container {
+    text-align: center !important;
+    margin-top: 2rem !important;
+}
+
+/* Sommelier section */
+.section:nth-of-type(2) {
+    background-color: var(--background);
+}
+
+/* Sommelier grid */
+.section:nth-of-type(2) > div > div:first-child {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+/* Sommelier image */
+.section:nth-of-type(2) img {
+    width: 100%;
+    border: 2px solid var(--accent);
+}
+
+/* Sommelier badge */
+.badge-elegant {
+    margin-bottom: 1.5rem;
+}
+
+/* Sommelier title */
+.section:nth-of-type(2) h2 {
+    margin-bottom: 1rem;
+}
+
+/* Sommelier origin */
+.section:nth-of-type(2) p:nth-of-type(1) {
+    font-size: 1.125rem;
+    color: var(--muted-foreground);
+    margin-bottom: 1.5rem;
+}
+
+/* Sommelier divider */
+.section:nth-of-type(2) .divider-gold {
+    margin-bottom: 1.5rem;
+}
+
+/* Sommelier characteristics section */
+.section:nth-of-type(2) > div > div:last-child > div:first-child {
+    margin-bottom: 2rem;
+}
+
+/* Sommelier subsections */
+.section:nth-of-type(2) > div > div:last-child > div > div {
+    margin-bottom: 1rem;
+}
+
+/* Sommelier headings */
+.section:nth-of-type(2) h4 {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Sommelier text */
+.section:nth-of-type(2) > div > div:last-child p {
+    color: var(--muted-foreground);
+}
+
+/* Sommelier price and button */
+.section:nth-of-type(2) > div > div:last-child > div:last-child {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* Sommelier price */
+.section:nth-of-type(2) > div > div:last-child > div:last-child > div {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+/* Pairings section */
+.section:nth-of-type(3) {
+    background-color: rgba(245, 230, 211, 0.3);
+}
+
+/* Pairings grid */
+.section:nth-of-type(3) .grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Pairing cards */
+.section:nth-of-type(3) .card-elegant {
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Pairing emoji */
+.section:nth-of-type(3) .card-elegant > div:first-child {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 4rem;
+}
+
+/* Pairing title */
+.section:nth-of-type(3) .card-elegant h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Pairing type */
+.section:nth-of-type(3) .card-elegant p:nth-of-type(1) {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+}
+
+/* Pairing description */
+.section:nth-of-type(3) .card-elegant p:nth-of-type(2) {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}
+
+/* Footer */
+footer {
+    padding: 20px;
+}
+
+/* Footer contact */
+.footer-section:nth-of-type(2) > div {
+    font-size: 0.875rem;
+    line-height: 1.8;
+}
+
+/* Footer contact items */
+.footer-section:nth-of-type(2) > div > div {
+    margin-bottom: 0.75rem;
+}
+
+/* Register page */
+.register-section-title {
+    margin-bottom: 2rem !important;
+}
+
+.register-form-wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.register-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.register-field label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.register-field input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    color: var(--foreground);
+    border-radius: 0;
+    font-family: inherit;
+}
+
+.register-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+}
+
+.register-field-hint {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+}
+
+.register-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.register-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    line-height: 1.4;
+}
+
+.register-checkbox-label input[type="checkbox"] {
+    margin-top: 0.2rem;
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary);
+}
+
+.register-submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.25rem;
+}
+
+.register-login-link {
+    text-align: center;
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    color: var(--muted-foreground);
+}
+
+.register-login-link a {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Account page with tabs */
+.account-section-title {
+    margin-bottom: 2rem !important;
+}
+
+/* Account page with two-column layout */
+.account-section-title {
+    margin-bottom: 2.5rem !important;
+}
+
+.account-columns-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .account-columns-wrapper {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}
+
+.account-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.account-column-title {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.account-divider {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .account-divider {
+        display: block;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--border), transparent);
+        margin: 1rem 0;
+    }
+}
+
+.account-form-wrapper {
+    max-width: 100%;
+}
+
+.account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.account-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.account-field label {
+    font-weight: 500;
+    color: var(--primary);
+    font-size: 0.875rem;
+}
+
+.account-field input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    background-color: var(--background);
+    color: var(--foreground);
+    border-radius: 0;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.account-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+}
+
+.account-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.account-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    cursor: pointer;
+}
+
+.account-checkbox-label input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.account-forgot-link {
+    font-size: 0.85rem;
+    color: var(--primary);
+    align-self: flex-start;
+    transition: color 0.2s ease;
+}
+
+.account-forgot-link:hover {
+    color: var(--accent);
+}
+
+.account-submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.account-column {
+    opacity: 1;
+    transition: opacity 0.3s ease, display 0.3s ease;
+}
+
+.account-column:not(.active) {
+    opacity: 0;
+    display: none;
+    pointer-events: none;
+}
+
+.account-toggle-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.account-toggle-text {
+    font-size: 0.85rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0;
+}
+
+.account-toggle-link {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.account-toggle-link:hover {
+    color: var(--accent);
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - Millésime</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+    <main class="container section">
+        <h1>Meu Carrinho</h1>
+        <div class="cart-items">
+            <p th:if="${#lists.isEmpty(cartItems)}">Seu carrinho está vazio.</p>
+            <div th:each="item : ${cartItems}" class="cart-item">
+                <!-- item details here -->
+            </div>
+        </div>
+        <div class="cart-summary">
+            <p>Subtotal: <span>0.00</span></p>
+            <p>Total: <span>0.00</span></p>
+            <a th:href="@{/checkout}" class="btn-premium">Finalizar Compra</a>
+        </div>
+    </main>
+    <footer th:replace="layout :: footer"></footer>
+</body>
+</html>

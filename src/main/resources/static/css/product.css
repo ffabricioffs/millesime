@@ -1,0 +1,353 @@
+/* Header */
+.cart-icon-link {
+    position: relative;
+}
+
+/* Product Detail */
+.product-breadcrumb {
+    background-color: var(--secondary);
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.product-breadcrumb-text {
+    font-size: 0.875rem;
+}
+
+.product-breadcrumb-link {
+    color: var(--primary);
+}
+
+.product-breadcrumb-separator {
+    color: var(--muted-foreground);
+    margin: 0 0.5rem;
+}
+
+.product-breadcrumb-current {
+    color: var(--muted-foreground);
+}
+
+.product-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.product-image-wrapper {
+    background-color: var(--muted);
+    padding: 2rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+}
+
+.product-main-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.product-thumbnails-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.product-thumbnail-active {
+    width: 100%;
+    height: auto;
+    border: 2px solid var(--accent);
+    cursor: pointer;
+}
+
+.product-thumbnail {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.product-badges {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.product-title {
+    margin-bottom: 0.5rem;
+}
+
+.product-region {
+    font-size: 1.125rem;
+    color: var(--muted-foreground);
+    margin-bottom: 1rem;
+}
+
+.product-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.product-stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.product-rating-text {
+    color: var(--muted-foreground);
+}
+
+.product-divider {
+    margin-bottom: 1.5rem;
+}
+
+.product-price-stock {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.product-price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.product-stock-info {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}
+
+.product-in-stock {
+    color: #22c55e;
+}
+
+.product-out-stock {
+    color: #ef4444;
+}
+
+.product-specs-box {
+    background-color: var(--secondary);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+}
+
+.product-specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.product-spec-label {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.product-spec-value {
+    font-size: 0.875rem;
+}
+
+.product-cart-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.product-quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+}
+
+.product-quantity-button {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.product-quantity-input {
+    width: 3rem;
+    text-align: center;
+    border: none;
+    background: transparent;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+}
+
+.product-add-cart-button {
+    flex: 1;
+}
+
+.product-wishlist-button {
+    margin-bottom: 1.5rem;
+}
+
+.product-wishlist-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.product-share-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.product-share-label {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+}
+
+.product-share-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--muted);
+    border-radius: 0;
+    transition: all 0.3s;
+}
+
+/* Tabs */
+.product-tabs-section {
+    background-color: var(--secondary);
+    background-color: rgba(245, 230, 211, 0.3);
+}
+
+.product-tabs-nav {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 2rem;
+}
+
+.product-tab-button-active {
+    padding: 1rem 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--primary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: -2px;
+}
+
+.product-tab-button {
+    padding: 1rem 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--muted-foreground);
+    font-weight: 600;
+}
+
+.product-tab-title {
+    margin-bottom: 1rem;
+}
+
+.product-tab-paragraph {
+    margin-bottom: 1rem;
+    color: var(--muted-foreground);
+}
+
+.product-tab-subtitle {
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-tech-list {
+    list-style: none;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+}
+
+.product-tech-item {
+    margin-bottom: 0.5rem;
+}
+
+/* Related */
+.related-title {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.related-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.related-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.related-image-wrapper {
+    height: 14rem;
+    overflow: hidden;
+    background-color: var(--muted);
+}
+
+.related-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.related-card-content {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.related-card-title {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.related-card-region {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.75rem;
+}
+
+.related-card-footer {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--muted);
+}
+
+.related-card-price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+}
+
+.related-card-button {
+    text-align: center;
+    display: block;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* Footer */
+.footer-contact-info {
+    font-size: 0.875rem;
+    line-height: 1.8;
+}
+
+.footer-contact-item {
+    margin-bottom: 0.75rem;
+}

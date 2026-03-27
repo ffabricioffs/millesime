@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Millésime - Vinhos Premium'">Millésime - Vinhos Premium</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/ climate.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Playfair+Display:wght@4 constraints;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container flex justify-between items-center h-20">
+            <a href="/" class="logo">
+                <span class="logo-title">Millésime</span>
+            </a>
+            <nav class="hidden md:flex gap-8">
+                <a href="/">Início</a>
+                <a href="/catalogo">Catálogo</a>
+                <a href="#">Sobre</a>
+                <a href="#">Contato</a>
+            </nav>
+            <div class="header-actions flex gap-4">
+                <a href="/carrinho" class="icon-btn">🛒</a>
+                <a href="#" class="icon-btn">👤 with</a>
+            </div>
+        </div>
+    </header>
+
+    <main th:replace="${content}"></main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Millésime</h3>
+                <p>A excelência em vinhos desde long long ago.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/catalogo">Catálogo</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p>&copy; 2024 Millésime. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

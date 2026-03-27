@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Vinhos - Millésime</title>
+    <meta name="description" content="Explore nosso catálogo completo de vinhos premium selecionados com excelência.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/catalog.css}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <a th:href="@{/}" class="logo">
+                    <div>
+                        <div class="logo-title">Millésime</div>
+                        <div class="logo-subtitle">VINHOS PREMIUM</div>
+                    </div>
+                </a>
+
+                <nav>
+                    <a th:href="@{/}">Início</a>
+                    <a th:href="@{/catalogo}">Catálogo</a>
+                    <a th:href="@{/sobre}">Sobre</a>
+                    <a th:href="@{/contato}">Contato</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a th:href="@{/carrinho}" class="icon-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                    </a>
+
+                    <a th:href="@{/conta}" class="icon-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page Header -->
+        <section>
+            <div class="container">
+                <h1>Catálogo de Vinhos</h1>
+                <p>Explore nossa seleção premium de vinhos do mundo</p>
+            </div>
+        </section>
+
+        <!-- Filters & Products -->
+        <section class="section">
+            <div class="container">
+                <div>
+                    <!-- Sidebar Filters -->
+                    <aside>
+                        <h3>Filtros</h3>
+
+                        <!-- Filter: Type -->
+                        <div>
+                            <h4>Tipo de Vinho</h4>
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="type" value="tinto">
+                                    <span>Tinto</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="type" value="branco">
+                                    <span>Branco</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="type" value="rose">
+                                    <span>Rosé</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="type" value="espumante">
+                                    <span>Espumante</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Filter: Price Range -->
+                        <div>
+                            <h4>Faixa de Preço</h4>
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="price" value="0-100">
+                                    <span>R$ 0 - R$ 100</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="price" value="100-300">
+                                    <span>R$ 100 - R$ 300</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="price" value="300-500">
+                                    <span>R$ 300 - R$ 500</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="price" value="500+">
+                                    <span>Acima de R$ 500</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Filter: Region -->
+                        <div>
+                            <h4>Região</h4>
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="region" value="franca">
+                                    <span>França</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="region" value="italia">
+                                    <span>Itália</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="region" value="espanha">
+                                    <span>Espanha</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="region" value="eua">
+                                    <span>EUA</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="region" value="brasil">
+                                    <span>Brasil</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Filter: Rating -->
+                        <div>
+                            <h4>Avaliação</h4>
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="rating" value="5">
+                                    <span>★★★★★ (5 estrelas)</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="rating" value="4">
+                                    <span>★★★★☆ (4+ estrelas)</span>
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="rating" value="3">
+                                    <span>★★★☆☆ (3+ estrelas)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="btn-premium btn-full">Aplicar Filtros</button>
+                        <button class="btn-premium-outline btn-full">Limpar Filtros</button>
+                    </aside>
+
+                    <!-- Products Grid -->
+                    <div>
+                        <!-- Sort Options -->
+                        <div>
+                            <p>Mostrando <strong>12</strong> de <strong>48</strong> produtos</p>
+                            <select>
+                                <option>Ordenar por: Relevância</option>
+                                <option>Preço: Menor para Maior</option>
+                                <option>Preço: Maior para Menor</option>
+                                <option>Mais Avaliados</option>
+                                <option>Mais Recentes</option>
+                            </select>
+                        </div>
+
+                        <!-- Products -->
+                        <div class="grid">
+                            <!-- Product Card Template -->
+                            <div th:each="i : ${#numbers.sequence(1, 12)}" class="card-elegant">
+                                <div>
+                                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Vinho">
+                                    <div class="badge-elegant">Destaque</div>
+                                </div>
+                                <div>
+                                    <h3>Vinho Premium</h3>
+                                    <p>Região • País</p>
+                                    
+                                    <div>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
+                                        <span>(128)</span>
+                                    </div>
+
+                                    <div>
+                                        <div>R$ 189,90</div>
+                                        <a th:href="@{/produto/1}" class="btn-premium btn-full btn-sm">Ver Detalhes</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div>
+                            <button class="btn-premium-outline">← Anterior</button>
+                            <button class="btn-premium">1</button>
+                            <button class="btn-premium-outline">2</button>
+                            <button class="btn-premium-outline">3</button>
+                            <span>...</span>
+                            <button class="btn-premium-outline">5</button>
+                            <button class="btn-premium-outline">Próximo →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="logo-title">Millésime</h3>
+                    <p>Experiências únicas em cada safra. Vinhos premium selecionados com excelência de adega.</p>
+                    <div class="footer-social">
+                        <a th:href="@{#}" title="Facebook">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a6 6 0 0 0-6 6v3H7v4h2v8h4v-8h3l1-4h-4V8a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a th:href="@{#}" title="Instagram">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <circle cx="17.5" cy="6.5" r="1.5"></circle>
+                            </svg>
+                        </a>
+                        <a th:href="@{#}" title="Twitter">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2s9 5 20 5a9.5 9.5 0 0 0-9-5.5c4.75 2.25 7-7 7-7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <div>
+                        <div>
+                            <strong>Telefone:</strong><br>
+                            +55 (11) 3000-0000
+                        </div>
+                        <div>
+                            <strong>Email:</strong><br>
+                            contato@millesime.com.br
+                        </div>
+                        <div>
+                            <strong>Endereço:</strong><br>
+                            São Paulo, SP - Brasil
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Links Úteis</h4>
+                    <ul class="footer-links">
+                        <li><a href="/sobre">Sobre Nós</a></li>
+                        <li><a href="/catalogo">Catálogo</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Receba recomendações exclusivas de nossos sommeliers.</p>
+                    <form class="footer-newsletter" action="/newsletter" method="post">
+                        <input type="email" name="email" placeholder="Seu email" required>
+                        <button type="submit" class="btn-premium-gold btn-sm">Inscrever</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Millésime. Todos os direitos reservados.</p>
+                <div class="payment-methods">
+                    <span>Formas de Pagamento:</span>
+                    <div class="payment-badge">CC</div>
+                    <div class="payment-badge">PIX</div>
+                    <div class="payment-badge">BOL</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
