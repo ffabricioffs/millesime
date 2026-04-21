@@ -29,3 +29,19 @@ build/
 # Node (if using npm)
 node_modules/
 package-lock.json
+
+# === NOVAS ADIÇÕES ===
+# Maven Wrapper (apenas manter o .gitignore da pasta)
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Docker
+Dockerfile
+
+# Arquivos temporários do Git
+.gitattributes
+
+# Arquivos de sistema
+Thumbs.db
+desktop.ini
+
