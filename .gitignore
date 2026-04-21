@@ -26,40 +26,32 @@ logs/
 .gradle/
 build/
 
-# Node (if using npm)
+# Node
 node_modules/
 package-lock.json
 
-# === NOVAS ADIÇÕES ===
-# Maven Wrapper (apenas manter o .gitignore da pasta)
-.mvn/wrapper/maven-wrapper.properties
-.mvn/wrapper/maven-wrapper.jar
+# === NOVAS ADIÇÕES BASEADAS NO SEU REPO ===
+# Arquivos de documentação gerados automaticamente
+HELP.md
+*.md.old
+*.md.bak
 
-# Docker
-Dockerfile
+# Scripts locais específicos
+*.ps1                          # Scripts PowerShell (a menos que sejam essenciais)
+run-*.ps1
+setup-*.ps1
 
-# Arquivos temporários do Git
-.gitattributes
-
-# Arquivos de sistema
-Thumbs.db
-desktop.ini
-
-# Arquivos de sistema/IDE específicos
-HELP.md                          # Arquivo de ajuda do Spring Initializr
-*.txt                            # Arquivos de texto genéricos
-
-# Scripts locais (específicos da minha máquina)
-run-app.ps1                      # Script PowerShell local
-setup-env.ps1                    # Script de setup local
-
-# Arquivos de documentação temporária 
-INTEGRATION_GUIDE.md
-TEMPLATES_README.md
+# Arquivos de texto avulsos
+*.txt
 integration_guide.txt
 
-# Arquivos do Maven Wrapper (opcional - depende da equipe)
+# Pastas duplicadas/confusas
+*_layout.html/
+content_/
+*_backup/
+*_temp/
+
+# Binários do Maven Wrapper (opcional - veja observação)
 mvnw
 mvnw.cmd
 .mvn/wrapper/maven-wrapper.jar
-.mvn/wrapper/maven-wrapper.properties
