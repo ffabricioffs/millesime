@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://dpg-d7jph7vavr4c73chk1e0-a.ohio-postgres.render.com/millesime
+    username: admin
+    password: MyylWWoU2uiPAqmcCbIa3l0PF9CqNuMP
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-postgresql.sql

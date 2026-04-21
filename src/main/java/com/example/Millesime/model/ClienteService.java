@@ -1,10 +1,10 @@
 package com.example.Millesime.model;
 
-import org.springframework.stereotype.Service;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService {
@@ -85,6 +85,14 @@ public class ClienteService {
             clienteDAO.deletar(id);
         } catch (SQLException e) {
             throw new Exception("Erro ao desativar conta do cliente.", e);
+        }
+    }
+
+    public Cliente buscarPorId(UUID id) throws Exception {
+        try {
+            return clienteDAO.buscarPorId(id);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao buscar cliente.", e);
         }
     }
 
