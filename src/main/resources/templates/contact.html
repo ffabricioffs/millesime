@@ -170,28 +170,28 @@
                         <p>Preencha o formulário abaixo e retornaremos o mais breve possível.</p>
 
                         <form th:action="@{/enviar-contato}" method="post" class="contact-form" id="contactForm">
-                            <div class="form-row">
-                                <div class="form-group">
+                            <div class="contact-form-row">
+                                <div class="contact-field">
                                     <label for="nome">Nome Completo *</label>
                                     <input type="text" id="nome" name="nome" required 
                                            placeholder="Seu nome completo">
                                 </div>
 
-                                <div class="form-group">
+                                <div class="contact-field">
                                     <label for="email">E-mail *</label>
                                     <input type="email" id="email" name="email" required 
                                            placeholder="seu@email.com">
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
+                            <div class="contact-form-row">
+                                <div class="contact-field">
                                     <label for="telefone">Telefone</label>
                                     <input type="tel" id="telefone" name="telefone" 
                                            placeholder="(11) 99999-9999">
                                 </div>
 
-                                <div class="form-group">
+                                <div class="contact-field">
                                     <label for="assunto">Assunto *</label>
                                     <select id="assunto" name="assunto" required>
                                         <option value="">Selecione um assunto</option>
@@ -205,21 +205,21 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="contact-field">
                                 <label for="mensagem">Mensagem *</label>
                                 <textarea id="mensagem" name="mensagem" rows="6" required 
                                           placeholder="Digite sua mensagem aqui..."></textarea>
                             </div>
 
-                            <div class="form-group checkbox-group">
-                                <label class="checkbox-label">
+                            <div class="contact-checkbox-group">
+                                <label class="contact-checkbox-label">
                                     <input type="checkbox" name="newsletter" value="sim">
                                     <span>Desejo receber novidades e ofertas exclusivas por e-mail</span>
                                 </label>
                             </div>
 
-                            <div class="form-group checkbox-group">
-                                <label class="checkbox-label">
+                            <div class="contact-checkbox-group">
+                                <label class="contact-checkbox-label">
                                     <input type="checkbox" name="privacidade" required>
                                     <span>Li e concordo com a <a th:href="@{/politica-privacidade}">Política de Privacidade</a> *</span>
                                 </label>
