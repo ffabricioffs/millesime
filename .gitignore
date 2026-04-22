@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.*.local
+.env.example
 
 # IDEs
 .vscode/
@@ -51,7 +52,5 @@ content_/
 *_backup/
 *_temp/
 
-# Binários do Maven Wrapper (opcional - veja observação)
-mvnw
-mvnw.cmd
+# Binários do Maven Wrap
 .mvn/wrapper/maven-wrapper.jar
