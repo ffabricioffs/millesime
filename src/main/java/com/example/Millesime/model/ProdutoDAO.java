@@ -18,16 +18,20 @@ import org.springframework.stereotype.Repository;
 public class ProdutoDAO {
 
     private static final String INSERT_SQL = """
-            INSERT INTO produto (id, nome, descricao, tipo, regiao, pais, uva, preco, estoque, data_criacao, ativo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO produto (id, nome, descricao, tipo, regiao, pais, uva, preco, estoque, imagem, data_criacao, ativo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM produto WHERE id = ?";
     private static final String SELECT_ALL_ACTIVE_SQL = "SELECT * FROM produto WHERE ativo = true ORDER BY nome";
+    private static final String SELECT_ALL_ACTIVE_PAGED_SQL = "SELECT * FROM produto WHERE ativo = true ORDER BY nome LIMIT ? OFFSET ?";
     private static final String SELECT_BY_TIPO_SQL = "SELECT * FROM produto WHERE tipo = ? AND ativo = true";
+    private static final String SELECT_BY_TIPO_PAGED_SQL = "SELECT * FROM produto WHERE tipo = ? AND ativo = true ORDER BY nome LIMIT ? OFFSET ?";
+    private static final String SELECT_COUNT_ALL_ACTIVE_SQL = "SELECT COUNT(*) FROM produto WHERE ativo = true";
+    private static final String SELECT_COUNT_BY_TIPO_SQL = "SELECT COUNT(*) FROM produto WHERE tipo = ? AND ativo = true";
     private static final String UPDATE_SQL = """
             UPDATE produto
-            SET nome = ?, descricao = ?, tipo = ?, regiao = ?, pais = ?, uva = ?, preco = ?, estoque = ?, ativo = ?
+            SET nome = ?, descricao = ?, tipo = ?, regiao = ?, pais = ?, uva = ?, preco = ?, estoque = ?, imagem = ?, ativo = ?
             WHERE id = ?
             """;
     private static final String SOFT_DELETE_SQL = "UPDATE produto SET ativo = false WHERE id = ?";
@@ -57,8 +61,9 @@ public class ProdutoDAO {
             statement.setString(7, produto.getUva());
             statement.setDouble(8, produto.getPreco());
             statement.setInt(9, produto.getEstoque());
-            statement.setTimestamp(10, Timestamp.valueOf(produto.getDataCriacao()));
-            statement.setBoolean(11, produto.isAtivo());
+            statement.setString(10, produto.getImagem());
+            statement.setTimestamp(11, Timestamp.valueOf(produto.getDataCriacao()));
+            statement.setBoolean(12, produto.isAtivo());
             statement.executeUpdate();
         }
     }
@@ -79,26 +84,17 @@ public class ProdutoDAO {
     }
 
     public List<Produto> listarTodos() throws SQLException {
-        List<Produto> produtos = new ArrayList<>();
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_ACTIVE_SQL);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                produtos.add(mapearProduto(resultSet));
-            }
-        }
-
-        return produtos;
+        return listarTodos(1, Integer.MAX_VALUE);
     }
 
-    public List<Produto> buscarPorTipo(String tipo) throws SQLException {
+    public List<Produto> listarTodos(int page, int pageSize) throws SQLException {
         List<Produto> produtos = new ArrayList<>();
+        int offset = Math.max(0, page - 1) * pageSize;
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_BY_TIPO_SQL)) {
-            statement.setString(1, tipo);
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_ACTIVE_PAGED_SQL)) {
+            statement.setInt(1, pageSize);
+            statement.setInt(2, offset);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -108,6 +104,55 @@ public class ProdutoDAO {
         }
 
         return produtos;
+    }
+
+    public int contarTodos() throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_ALL_ACTIVE_SQL);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public List<Produto> buscarPorTipo(String tipo) throws SQLException {
+        return buscarPorTipo(tipo, 1, Integer.MAX_VALUE);
+    }
+
+    public List<Produto> buscarPorTipo(String tipo, int page, int pageSize) throws SQLException {
+        List<Produto> produtos = new ArrayList<>();
+        int offset = Math.max(0, page - 1) * pageSize;
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BY_TIPO_PAGED_SQL)) {
+            statement.setString(1, tipo);
+            statement.setInt(2, pageSize);
+            statement.setInt(3, offset);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    produtos.add(mapearProduto(resultSet));
+                }
+            }
+        }
+
+        return produtos;
+    }
+
+    public int contarPorTipo(String tipo) throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_BY_TIPO_SQL)) {
+            statement.setString(1, tipo);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+            }
+        }
+        return 0;
     }
 
     public void atualizar(Produto produto) throws SQLException {
@@ -121,8 +166,9 @@ public class ProdutoDAO {
             statement.setString(6, produto.getUva());
             statement.setDouble(7, produto.getPreco());
             statement.setInt(8, produto.getEstoque());
-            statement.setBoolean(9, produto.isAtivo());
-            statement.setObject(10, produto.getId());
+            statement.setString(9, produto.getImagem());
+            statement.setBoolean(10, produto.isAtivo());
+            statement.setObject(11, produto.getId());
             statement.executeUpdate();
         }
     }
@@ -146,6 +192,7 @@ public class ProdutoDAO {
         produto.setUva(resultSet.getString("uva"));
         produto.setPreco(resultSet.getDouble("preco"));
         produto.setEstoque(resultSet.getInt("estoque"));
+        produto.setImagem(resultSet.getString("imagem"));
         produto.setDataCriacao(resultSet.getTimestamp("data_criacao").toLocalDateTime());
         produto.setAtivo(resultSet.getBoolean("ativo"));
         return produto;

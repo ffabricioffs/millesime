@@ -169,7 +169,7 @@
                     <div>
                         <!-- Sort Options -->
                         <div>
-                            <p>Mostrando <strong th:text="${produtos.size()}">0</strong> produtos</p>
+                            <p>Mostrando <strong th:text="${produtos.size()}">0</strong> de <strong th:text="${totalCount}">0</strong> produtos</p>
                             <select>
                                 <option>Ordenar por: Relevância</option>
                                 <option>Preço: Menor para Maior</option>
@@ -183,7 +183,7 @@
                         <div class="grid">
                             <div th:each="produto : ${produtos}" class="card-elegant">
                                 <div>
-                                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Vinho">
+                                    <img th:src="${produto.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Vinho">
                                     <div class="badge-elegant" th:text="${produto.tipo}">Destaque</div>
                                 </div>
                                 <div>
@@ -208,14 +208,20 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div>
-                            <button class="btn-premium-outline">← Anterior</button>
-                            <button class="btn-premium">1</button>
-                            <button class="btn-premium-outline">2</button>
-                            <button class="btn-premium-outline">3</button>
-                            <span>...</span>
-                            <button class="btn-premium-outline">5</button>
-                            <button class="btn-premium-outline">Próximo →</button>
+                        <div class="catalog-pagination">
+                            <a th:if="${currentPage > 1}"
+                               th:href="@{/catalogo(page=${currentPage - 1}, type=${selectedType})}"
+                               class="btn-premium-outline">← Anterior</a>
+
+                            <span th:each="pageNumber : ${#numbers.sequence(1, totalPages)}">
+                                <a th:href="@{/catalogo(page=${pageNumber}, type=${selectedType})}"
+                                   th:text="${pageNumber}"
+                                   th:classappend="${pageNumber == currentPage} ? ' btn-premium' : ' btn-premium-outline'"></a>
+                            </span>
+
+                            <a th:if="${currentPage < totalPages}"
+                               th:href="@{/catalogo(page=${currentPage + 1}, type=${selectedType})}"
+                               class="btn-premium-outline">Próximo →</a>
                         </div>
                     </div>
                 </div>

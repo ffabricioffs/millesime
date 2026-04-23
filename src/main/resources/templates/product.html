@@ -63,13 +63,13 @@
                     <!-- Product Image -->
                     <div>
                         <div class="product-image-wrapper">
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Vinho" class="product-main-image">
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Vinho" class="product-main-image">
                         </div>
                         <div class="product-thumbnails-grid">
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail-active">
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail">
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail">
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail">
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail-active">
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail">
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail">
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail">
                         </div>
                     </div>
 

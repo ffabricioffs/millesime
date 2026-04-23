@@ -14,6 +14,7 @@ public class Produto {
     private String uva;
     private Double preco;
     private Integer estoque;
+    private String imagem;
     private LocalDateTime dataCriacao;
     private boolean ativo;
 
@@ -23,7 +24,7 @@ public class Produto {
     }
 
     public Produto(UUID id, String nome, String descricao, String tipo, String regiao, String pais,
-                   String uva, Double preco, Integer estoque, LocalDateTime dataCriacao, boolean ativo) {
+                   String uva, Double preco, Integer estoque, String imagem, LocalDateTime dataCriacao, boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -33,6 +34,7 @@ public class Produto {
         this.uva = uva;
         this.preco = preco;
         this.estoque = estoque;
+        this.imagem = imagem;
         this.dataCriacao = dataCriacao;
         this.ativo = ativo;
     }
@@ -107,6 +109,14 @@ public class Produto {
 
     public void setEstoque(Integer estoque) {
         this.estoque = estoque;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public LocalDateTime getDataCriacao() {

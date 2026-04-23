@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS produto(
     uva VARCHAR(100),
     preco DECIMAL(10, 2) NOT NULL,
     estoque INT DEFAULT 0,
+    imagem VARCHAR(255),
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ativo BOOLEAN DEFAULT true
 );

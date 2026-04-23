@@ -41,11 +41,43 @@ public class ProdutoService {
         }
     }
 
+    public List<Produto> listarTodos(int page, int pageSize) throws Exception {
+        try {
+            return produtoDAO.listarTodos(page, pageSize);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao listar produtos.", e);
+        }
+    }
+
+    public int contarTodos() throws Exception {
+        try {
+            return produtoDAO.contarTodos();
+        } catch (SQLException e) {
+            throw new Exception("Erro ao contar produtos.", e);
+        }
+    }
+
     public List<Produto> filtrarPorTipo(String tipo) throws Exception {
         try {
             return produtoDAO.buscarPorTipo(tipo);
         } catch (SQLException e) {
             throw new Exception("Erro ao filtrar produtos por tipo.", e);
+        }
+    }
+
+    public List<Produto> filtrarPorTipo(String tipo, int page, int pageSize) throws Exception {
+        try {
+            return produtoDAO.buscarPorTipo(tipo, page, pageSize);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao filtrar produtos por tipo.", e);
+        }
+    }
+
+    public int contarPorTipo(String tipo) throws Exception {
+        try {
+            return produtoDAO.contarPorTipo(tipo);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao contar produtos por tipo.", e);
         }
     }
 

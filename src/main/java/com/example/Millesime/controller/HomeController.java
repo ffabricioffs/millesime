@@ -67,18 +67,35 @@ public class HomeController {
     @GetMapping("/catalogo")
     public String catalog(
             Model model,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String region) throws Exception {
-        
+        final int pageSize = 12;
+
+        int totalCount;
+
+        if (type != null && !type.isBlank()) {
+            totalCount = produtoService.contarPorTipo(type);
+        } else {
+            totalCount = produtoService.contarTodos();
+        }
+
+        int totalPages = Math.max(1, (totalCount + pageSize - 1) / pageSize);
+        page = Math.min(Math.max(page, 1), totalPages);
+
         List<Produto> produtos;
         if (type != null && !type.isBlank()) {
-            produtos = produtoService.filtrarPorTipo(type);
+            produtos = produtoService.filtrarPorTipo(type, page, pageSize);
         } else {
-            produtos = produtoService.listarTodos();
+            produtos = produtoService.listarTodos(page, pageSize);
         }
 
         model.addAttribute("pageTitle", "Catálogo de Vinhos - Millésime");
         model.addAttribute("produtos", produtos);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("pageSize", pageSize);
         model.addAttribute("selectedType", type);
         model.addAttribute("selectedRegion", region);
 
