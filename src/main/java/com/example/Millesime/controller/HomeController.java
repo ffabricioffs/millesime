@@ -1,5 +1,8 @@
 package com.example.Millesime.controller;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
+import com.example.Millesime.model.Produto;
+import com.example.Millesime.model.ProdutoService;
 
 /**
  * Millésime - Home Controller
@@ -19,9 +24,11 @@ import com.example.Millesime.model.ClienteService;
 public class HomeController {
 
     private final ClienteService clienteService;
+    private final ProdutoService produtoService;
 
-    public HomeController(ClienteService clienteService) {
+    public HomeController(ClienteService clienteService, ProdutoService produtoService) {
         this.clienteService = clienteService;
+        this.produtoService = produtoService;
     }
 
     /**
@@ -60,23 +67,21 @@ public class HomeController {
     @GetMapping("/catalogo")
     public String catalog(
             Model model,
-            @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String region) {
+            @RequestParam(required = false) String region) throws Exception {
         
+        List<Produto> produtos;
+        if (type != null && !type.isBlank()) {
+            produtos = produtoService.filtrarPorTipo(type);
+        } else {
+            produtos = produtoService.listarTodos();
+        }
+
         model.addAttribute("pageTitle", "Catálogo de Vinhos - Millésime");
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", 5);
-        model.addAttribute("totalCount", 48);
-        
-        // Filtros aplicados
-        if (type != null) {
-            model.addAttribute("selectedType", type);
-        }
-        if (region != null) {
-            model.addAttribute("selectedRegion", region);
-        }
-        
+        model.addAttribute("produtos", produtos);
+        model.addAttribute("selectedType", type);
+        model.addAttribute("selectedRegion", region);
+
         return "catalog";
     }
 
@@ -86,28 +91,15 @@ public class HomeController {
      */
     @GetMapping("/produto/{id}")
     public String product(
-            @PathVariable Long id,
-            Model model) {
-        
-        // Dados de exemplo do produto
-        model.addAttribute("pageTitle", "Vinho Premium - Millésime");
-        model.addAttribute("product", new Object() {
-            public Long getId() { return id; }
-            public String getName() { return "Vinho Tinto Premium"; }
-            public String getRegion() { return "Napa Valley"; }
-            public String getCountry() { return "EUA"; }
-            public String getType() { return "Tinto"; }
-            public String getGrape() { return "Cabernet Sauvignon"; }
-            public Integer getHarvest() { return 2018; }
-            public Double getPrice() { return 189.90; }
-            public Integer getStock() { return 15; }
-            public Double getRating() { return 4.8; }
-            public Integer getReviews() { return 128; }
-            public String getDescription() { 
-                return "Este vinho tinto premium é uma obra-prima de elegância e sofisticação."; 
-            }
-        });
-        
+            @PathVariable UUID id,
+            Model model) throws Exception {
+        Produto produto = produtoService.buscarPorId(id);
+        if (produto == null) {
+            return "redirect:/catalogo";
+        }
+
+        model.addAttribute("pageTitle", produto.getNome() + " - Millésime");
+        model.addAttribute("product", produto);
         return "product";
     }
 

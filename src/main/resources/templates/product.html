@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${product.name} + ' - Millésime'">Vinho Premium - Millésime</title>
+    <title th:text="${product.nome} + ' - Millésime'">Vinho Premium - Millésime</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,7 +52,7 @@
                 <span class="product-breadcrumb-separator">/</span>
                 <a th:href="@{/catalogo}" class="product-breadcrumb-link">Catálogo</a>
                 <span class="product-breadcrumb-separator">/</span>
-                <span class="product-breadcrumb-current" th:text="${product.name}">Vinho Premium</span>
+                <span class="product-breadcrumb-current" th:text="${product.nome}">Vinho Premium</span>
             </div>
         </div>
 
@@ -63,13 +63,13 @@
                     <!-- Product Image -->
                     <div>
                         <div class="product-image-wrapper">
-                            <img th:src="${product.image}" alt="Vinho" class="product-main-image">
+                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Vinho" class="product-main-image">
                         </div>
                         <div class="product-thumbnails-grid">
-                            <img th:src="${product.images[0]}" alt="Thumbnail" class="product-thumbnail-active">
-                            <img th:src="${product.images[1]}" alt="Thumbnail" class="product-thumbnail">
-                            <img th:src="${product.images[2]}" alt="Thumbnail" class="product-thumbnail">
-                            <img th:src="${product.images[3]}" alt="Thumbnail" class="product-thumbnail">
+                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail-active">
+                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail">
+                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail">
+                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Thumbnail" class="product-thumbnail">
                         </div>
                     </div>
 
@@ -82,11 +82,11 @@
                         </div>
 
                         <!-- Title -->
-                        <h1 th:text="${product.name}" class="product-title">Vinho Tinto Premium</h1>
+                        <h1 th:text="${product.nome}" class="product-title">Vinho Tinto Premium</h1>
 
                         <!-- Region & Type -->
                         <p class="product-region">
-                            <span th:text="${product.region}">Napa Valley</span>, <span th:text="${product.country}">EUA</span>
+                            <span th:text="${product.regiao}">Napa Valley</span>, <span th:text="${product.pais}">EUA</span>
                         </p>
 
                         <!-- Rating -->
@@ -106,10 +106,10 @@
 
                         <!-- Price & Stock -->
                         <div class="product-price-stock">
-                            <div class="product-price" th:text="'R$ ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 2, 'COMMA')}">R$ 189,90</div>
+                            <div class="product-price" th:text="'R$ ' + ${#numbers.formatDecimal(product.preco, 0, 'POINT', 2, 'COMMA')}">R$ 189,90</div>
                             <div class="product-stock-info">
-                                <span th:if="${product.stock > 0}" class="product-in-stock">✓ Em Estoque</span>
-                                <span th:if="${product.stock == 0}" class="product-out-stock">✗ Fora de Estoque</span>
+                                <span th:if="${product.estoque > 0}" class="product-in-stock">✓ Em Estoque</span>
+                                <span th:if="${product.estoque == 0}" class="product-out-stock">✗ Fora de Estoque</span>
                             </div>
                         </div>
 
@@ -118,15 +118,15 @@
                             <div class="product-specs-grid">
                                 <div>
                                     <h4 class="product-spec-label">Tipo</h4>
-                                    <p class="product-spec-value" th:text="${product.type}">Tinto</p>
+                                    <p class="product-spec-value" th:text="${product.tipo}">Tinto</p>
                                 </div>
                                 <div>
                                     <h4 class="product-spec-label">Uva</h4>
-                                    <p class="product-spec-value" th:text="${product.grape}">Cabernet Sauvignon</p>
+                                    <p class="product-spec-value" th:text="${product.uva}">Cabernet Sauvignon</p>
                                 </div>
                                 <div>
                                     <h4 class="product-spec-label">Safra</h4>
-                                    <p class="product-spec-value" th:text="${product.harvest}">2018</p>
+                                    <p class="product-spec-value" th:text="${product.dataCriacao.year}">2018</p>
                                 </div>
                                 <div>
                                     <h4 class="product-spec-label">Álcool</h4>
@@ -186,7 +186,7 @@
                 <!-- Tab Content -->
                 <div>
                     <h3 class="product-tab-title">Descrição do Vinho</h3>
-                    <p class="product-tab-paragraph">
+                    <p class="product-tab-paragraph" th:text="${product.descricao}">
                         Este vinho tinto premium é uma obra-prima de elegância e sofisticação. Produzido em Napa Valley com as melhores uvas Cabernet Sauvignon, apresenta um corpo encorpado com aromas complexos e um paladar refinado.
                     </p>
                     <p class="product-tab-paragraph">

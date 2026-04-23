@@ -169,7 +169,7 @@
                     <div>
                         <!-- Sort Options -->
                         <div>
-                            <p>Mostrando <strong>12</strong> de <strong>48</strong> produtos</p>
+                            <p>Mostrando <strong th:text="${produtos.size()}">0</strong> produtos</p>
                             <select>
                                 <option>Ordenar por: Relevância</option>
                                 <option>Preço: Menor para Maior</option>
@@ -181,15 +181,14 @@
 
                         <!-- Products -->
                         <div class="grid">
-                            <!-- Product Card Template -->
-                            <div th:each="i : ${#numbers.sequence(1, 12)}" class="card-elegant">
+                            <div th:each="produto : ${produtos}" class="card-elegant">
                                 <div>
                                     <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp" alt="Vinho">
-                                    <div class="badge-elegant">Destaque</div>
+                                    <div class="badge-elegant" th:text="${produto.tipo}">Destaque</div>
                                 </div>
                                 <div>
-                                    <h3>Vinho Premium</h3>
-                                    <p>Região • País</p>
+                                    <h3 th:text="${produto.nome}">Vinho Premium</h3>
+                                    <p th:text="${produto.regiao} + ' • ' + ${produto.pais}">Região • País</p>
                                     
                                     <div>
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
@@ -201,8 +200,8 @@
                                     </div>
 
                                     <div>
-                                        <div>R$ 189,90</div>
-                                        <a th:href="@{/produto/1}" class="btn-premium btn-full btn-sm">Ver Detalhes</a>
+                                        <div th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 0, 'POINT', 2, 'COMMA')}">R$ 189,90</div>
+                                        <a th:href="@{/produto/{id}(id=${produto.id})}" class="btn-premium btn-full btn-sm">Ver Detalhes</a>
                                     </div>
                                 </div>
                             </div>
