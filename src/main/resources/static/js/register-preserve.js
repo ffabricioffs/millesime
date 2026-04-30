@@ -15,7 +15,20 @@ document.addEventListener('DOMContentLoaded', function () {
         'newsletter'
     ];
 
+    function isPageReload() {
+        const navigation = window.performance.getEntriesByType('navigation')[0];
+        if (navigation && navigation.type) {
+            return navigation.type === 'reload';
+        }
+        return window.performance.navigation && window.performance.navigation.type === 1;
+    }
+
     function loadSavedData() {
+        if (isPageReload()) {
+            sessionStorage.removeItem(storageKey);
+            return;
+        }
+
         const savedData = sessionStorage.getItem(storageKey);
         if (!savedData) return;
 

@@ -215,7 +215,7 @@ class GerenciadorValidacaoSenha {
             return false;
         }
 
-        mensagem.textContent = 'Senhas coincdem ✓';
+        mensagem.textContent = 'Senhas coincidem ✓';
         mensagem.className = 'confirmacao-validation-message confirmacao-validation-success';
         mensagem.setAttribute('role', 'status');
         this.confirmPasswordInput.setAttribute('aria-invalid', 'false');
