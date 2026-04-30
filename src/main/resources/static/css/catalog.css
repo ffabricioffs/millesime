@@ -7,6 +7,7 @@ header .header-actions .icon-btn:first-child {
 main > section:first-of-type {
     background-color: var(--secondary);
     padding: 3rem 0;
+    text-align: center;
 }
 
 main > section:first-of-type h1 {
