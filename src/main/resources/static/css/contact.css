@@ -320,20 +320,27 @@
 }
 
 .faq-answer {
-    padding: 0 1.5rem 1.5rem;
+    padding: 0 1.5rem 0;
     color: var(--muted-foreground);
     line-height: 1.6;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
 .faq-item.active .faq-answer {
-    max-height: 200px;
+    max-height: 400px;
+    opacity: 1;
+    padding: 0 1.5rem 1.5rem;
 }
 
 .faq-item.active .faq-icon {
     transform: rotate(45deg);
+}
+
+.faq-item.active .faq-question {
+    background-color: rgba(92, 46, 58, 0.08);
 }
 
 /* Field Error Styles */
