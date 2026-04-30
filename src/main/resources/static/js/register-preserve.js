@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     field.checked = formData[name];
                 } else {
                     field.value = formData[name];
+                    field.dispatchEvent(new Event('input', { bubbles: true }));
                 }
             });
         } catch (error) {
