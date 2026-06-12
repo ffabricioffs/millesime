@@ -2,16 +2,21 @@ package com.example.Millesime.controller;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Millesime.dto.ClienteRequest;
+import com.example.Millesime.dto.ClienteResponse;
 import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
 
@@ -33,32 +38,42 @@ public class ClienteRestController {
      * GET - Listar todos os clientes ativos
      */
     @GetMapping
-    public ResponseEntity<List<Cliente>> listar() throws Exception {
-        return ResponseEntity.ok(clienteService.listarTodosClientes());
+    public ResponseEntity<List<ClienteResponse>> listar() throws Exception {
+        List<ClienteResponse> clientes = clienteService.listarTodosClientes().stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(clientes);
     }
 
     /**
      * GET - Buscar cliente por ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable UUID id) throws Exception {
-        try {
-            Cliente cliente = clienteService.buscarPorId(id);
-            if (cliente != null && cliente.isAtivo()) {
-                return ResponseEntity.ok(cliente);
-            }
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+    public ResponseEntity<ClienteResponse> buscarPorId(@PathVariable UUID id) throws Exception {
+        Cliente cliente = clienteService.buscarPorId(id);
+        if (cliente != null && cliente.isAtivo()) {
+            return ResponseEntity.ok(toResponse(cliente));
         }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * POST - Criar novo cliente
+     */
+    @PostMapping
+    public ResponseEntity<ClienteResponse> criar(@RequestBody ClienteRequest request) throws Exception {
+        Cliente cliente = fromRequest(request);
+        clienteService.cadastrarCliente(cliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(cliente));
     }
 
     /**
      * PUT - Atualizar cliente existente
      */
     @PutMapping("/{id}")
-    public ResponseEntity<String> atualizar(@PathVariable UUID id, @RequestBody Cliente cliente) {
+    public ResponseEntity<String> atualizar(@PathVariable UUID id, @RequestBody ClienteRequest request) {
         try {
+            Cliente cliente = fromRequest(request);
             cliente.setId(id);
             clienteService.atualizarCadastro(cliente);
             return ResponseEntity.ok("Cliente atualizado com sucesso");
@@ -78,5 +93,31 @@ public class ClienteRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    private ClienteResponse toResponse(Cliente cliente) {
+        ClienteResponse response = new ClienteResponse();
+        response.setId(cliente.getId());
+        response.setNomeCompleto(cliente.getNomeCompleto());
+        response.setEmail(cliente.getEmail());
+        response.setCpf(cliente.getCpf());
+        response.setDataNascimento(cliente.getDataNascimento());
+        response.setTelefone(cliente.getTelefone());
+        response.setNewsletter(cliente.isNewsletter());
+        response.setDataCadastro(cliente.getDataCadastro());
+        response.setAtivo(cliente.isAtivo());
+        return response;
+    }
+
+    private Cliente fromRequest(ClienteRequest request) {
+        Cliente cliente = new Cliente();
+        cliente.setNomeCompleto(request.getNomeCompleto());
+        cliente.setEmail(request.getEmail());
+        cliente.setSenha(request.getSenha());
+        cliente.setCpf(request.getCpf());
+        cliente.setDataNascimento(request.getDataNascimento());
+        cliente.setTelefone(request.getTelefone());
+        cliente.setNewsletter(request.isNewsletter());
+        return cliente;
     }
 }

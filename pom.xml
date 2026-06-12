@@ -8,23 +8,30 @@
 		<version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.millesime</groupId>
 	<artifactId>Millesime</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>Millesime</name>
-	<description>Demo project for Spring Boot</description>
-	<url/>
+	<version>1.0.0</version>
+	<name>Millésime - Plataforma de E-commerce de Vinhos Premium</name>
+	<description>Plataforma completa de e-commerce para venda de vinhos premium, com gerenciamento de catálogo, sistema de login, carrinho de compras e checkout integrado.</description>
+	<url>https://millesime.com.br</url>
 	<licenses>
-		<license/>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
 	</licenses>
 	<developers>
-		<developer/>
+		<developer>
+			<name>Equipe Millésime</name>
+			<email>dev@millesime.com.br</email>
+			<organization>Millésime</organization>
+		</developer>
 	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection>scm:git:https://github.com/millesime/millesime-store.git</connection>
+		<developerConnection>scm:git:https://github.com/millesime/millesime-store.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/millesime/millesime-store</url>
 	</scm>
 	<properties>
 		<java.version>17</java.version>
@@ -33,6 +40,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

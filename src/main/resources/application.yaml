@@ -17,3 +17,18 @@ spring:
     init:
       mode: ${SQL_INIT_MODE:always}
       schema-locations: classpath:schema-postgresql.sql
+
+  mail:
+    host: ${MAIL_HOST:smtp.example.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:username}
+    password: ${MAIL_PASSWORD:password}
+    from: ${MAIL_FROM:no-reply@millesime.com.br}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: ${MAIL_HOST:smtp.example.com}

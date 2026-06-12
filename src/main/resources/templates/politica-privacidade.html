@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade - Millésime</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <a th:href="@{/}" class="logo">
+                    <div>
+                        <div class="logo-title">Millésime</div>
+                        <div class="logo-subtitle">VINHOS PREMIUM</div>
+                    </div>
+                </a>
+                <nav>
+                    <a th:href="@{/}">Início</a>
+                    <a th:href="@{/catalogo}">Catálogo</a>
+                    <a th:href="@{/sobre}">Sobre</a>
+                    <a th:href="@{/contato}">Contato</a>
+                </nav>
+                <div class="header-actions">
+                    <a th:href="@{/carrinho}" class="icon-btn">Carrinho</a>
+                    <a th:href="@{/conta}" class="icon-btn">Conta</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="container section">
+            <h1>Política de Privacidade</h1>
+            <p>Na Millésime, respeitamos sua privacidade e tratamos seus dados com segurança e transparência.</p>
+            <h2>Uso de informações</h2>
+            <p>Coletamos apenas os dados necessários para processar pedidos, melhorar nossos serviços e enviar comunicações quando autorizado.</p>
+            <h2>Segurança dos dados</h2>
+            <p>Adotamos medidas técnicas e administrativas para proteger as informações pessoais contra acessos não autorizados.</p>
+            <h2>Compartilhamento</h2>
+            <p>Nunca vendemos seus dados. Compartilhamos informações apenas com parceiros essenciais à entrega e ao processamento de pagamentos.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2024</span> Millésime. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

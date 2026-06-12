@@ -16,6 +16,9 @@ import com.example.Millesime.model.ClienteService;
 import com.example.Millesime.model.Produto;
 import com.example.Millesime.model.ProdutoService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 /**
  * Millésime - Home Controller
  * Controlador principal para renderizar os templates HTML/Thymeleaf
@@ -169,6 +172,52 @@ public class HomeController {
         return "contact";
     }
 
+    @PostMapping("/enviar-contato")
+    public String enviarContato(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String telefone,
+            @RequestParam(required = false) String assunto,
+            @RequestParam(required = false) String mensagem,
+            @RequestParam(required = false) String newsletter,
+            @RequestParam(required = false) String privacidade,
+            RedirectAttributes redirectAttributes) {
+        if (nome == null || nome.isBlank() || email == null || email.isBlank() || assunto == null || assunto.isBlank() || mensagem == null || mensagem.isBlank() || privacidade == null) {
+            redirectAttributes.addFlashAttribute("contactError", "Preencha os campos obrigatórios e concorde com a Política de Privacidade.");
+            return "redirect:/contato";
+        }
+
+        redirectAttributes.addFlashAttribute("contactSuccess", "Mensagem enviada com sucesso. Em breve retornaremos! Obrigado pelo contato.");
+        return "redirect:/contato";
+    }
+
+    @GetMapping("/politica-privacidade")
+    public String privacyPolicy(Model model) {
+        model.addAttribute("pageTitle", "Política de Privacidade - Millésime");
+        return "politica-privacidade";
+    }
+
+    @GetMapping("/faleconosco")
+    public String contactRedirect() {
+        return "redirect:/contato";
+    }
+
+    @GetMapping("/minhaconta")
+    public String accountRedirectLegacy() {
+        return "redirect:/account";
+    }
+
+    @PostMapping("/newsletter")
+    public String newsletter(@RequestParam String email, RedirectAttributes redirectAttributes) {
+        if (email == null || email.isBlank()) {
+            redirectAttributes.addFlashAttribute("newsletterError", "Digite um e-mail válido para receber nossas novidades.");
+            return "redirect:/";
+        }
+
+        redirectAttributes.addFlashAttribute("newsletterSuccess", "Obrigado! Você foi inscrito para receber nossas novidades.");
+        return "redirect:/";
+    }
+
     /**
      * Página de cadastro
      * Formulário para criação de conta
@@ -219,8 +268,82 @@ public class HomeController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("pageTitle", "Entrar - Millésime");
-        
         return "login";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPassword(Model model) {
+        model.addAttribute("pageTitle", "Recuperar Senha - Millésime");
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPasswordSubmit(@RequestParam String email,
+                                      RedirectAttributes redirectAttributes,
+                                      HttpServletRequest request) {
+        if (email == null || email.isBlank()) {
+            redirectAttributes.addFlashAttribute("error", "Informe um e-mail válido para recuperar a senha.");
+            return "redirect:/reset-password";
+        }
+
+        String baseUrl = String.format("%s://%s%s", request.getScheme(), request.getServerName(), request.getServerPort() == 80 || request.getServerPort() == 443 ? "" : ":" + request.getServerPort());
+        try {
+            clienteService.criarTokenRedefinicaoSenha(email, baseUrl);
+            redirectAttributes.addFlashAttribute("message", "Se o e-mail estiver cadastrado, você receberá instruções de recuperação em breve.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Não foi possível processar sua solicitação no momento. Tente novamente mais tarde.");
+        }
+        return "redirect:/reset-password";
+    }
+
+    @GetMapping("/reset-password/confirm")
+    public String confirmResetPassword(@RequestParam String token, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Cliente cliente = clienteService.validarTokenRedefinicaoSenha(token);
+            model.addAttribute("pageTitle", "Redefinir Senha - Millésime");
+            model.addAttribute("token", token);
+            model.addAttribute("cliente", cliente);
+            return "reset-password-confirm";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/reset-password";
+        }
+    }
+
+    @PostMapping("/reset-password/confirm")
+    public String confirmResetPasswordSubmit(@RequestParam String token,
+                                              @RequestParam String novaSenha,
+                                              RedirectAttributes redirectAttributes) {
+        try {
+            clienteService.redefinirSenha(token, novaSenha);
+            redirectAttributes.addFlashAttribute("message", "Senha redefinida com sucesso. Faça login com sua nova senha.");
+            return "redirect:/login";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/reset-password/confirm?token=" + token;
+        }
+    }
+
+    @PostMapping("/login")
+    public String loginSubmit(@RequestParam String email,
+                              @RequestParam String password,
+                              RedirectAttributes redirectAttributes,
+                              HttpSession session) {
+        try {
+            Cliente cliente = clienteService.autenticar(email, password);
+            session.setAttribute("clienteLogado", cliente);
+            return "redirect:/account";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("loginError", e.getMessage());
+            return "redirect:/login";
+        }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("logoutSuccess", "Logout realizado com sucesso.");
+        return "redirect:/";
     }
 
     /**

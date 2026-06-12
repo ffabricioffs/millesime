@@ -41,3 +41,11 @@ CREATE TABLE IF NOT EXISTS item_pedido(
     quantidade INT NOT NULL,
     preco_unitario DECIMAL(10, 2) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS password_reset_token(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    cliente_id UUID NOT NULL REFERENCES cliente(id),
+    token VARCHAR(255) NOT NULL UNIQUE,
+    expiration TIMESTAMP NOT NULL,
+    used BOOLEAN DEFAULT false
+);
