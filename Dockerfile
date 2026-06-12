@@ -13,4 +13,4 @@ RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8081
 
-CMD ["java", "-Dspring.profiles.active=prod", "-Dserver.port=${PORT:8081}", "-jar", "target/Millesime-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-Dspring.profiles.active=prod", "-Dserver.port=${PORT:8081}", "-jar", "target/Millesime-1.0.0.jar"]
