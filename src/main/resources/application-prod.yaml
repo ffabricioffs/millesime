@@ -4,10 +4,14 @@ server:
 spring:
   datasource:
     platform: postgres
-    url: ${DATABASE_URL}
+    url: ${DATABASE_URL:${DB_URL:jdbc:postgresql://localhost:5432/millesime}}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      data-source-properties:
+        sslmode: ${DB_SSL_MODE:require}
+        ssl: ${DB_SSL:true}
 
   jpa:
     hibernate:

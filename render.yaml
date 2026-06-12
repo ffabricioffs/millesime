@@ -13,3 +13,9 @@ services:
         sync: false
       - key: DB_PASSWORD
         sync: false
+      - key: DB_SSL_MODE
+        value: require
+        sync: false
+      - key: DB_SSL
+        value: true
+        sync: false
