@@ -21,12 +21,17 @@ public class EmailService {
         mensagem.setFrom(fromAddress);
         mensagem.setTo(para);
         mensagem.setSubject("Redefinição de Senha - Millésime");
-        mensagem.setText("Olá,\n\n" +
-                "Recebemos uma solicitação para redefinir sua senha. Clique no link abaixo para criar uma nova senha:\n" +
-                linkRedefinicao + "\n\n" +
-                "Se você não solicitou esta alteração, ignore esta mensagem.\n\n" +
-                "Atenciosamente,\n" +
-                "Equipe Millésime");
+        mensagem.setText("""
+                Olá,
+
+                Recebemos uma solicitação para redefinir sua senha. Clique no link abaixo para criar uma nova senha:
+                %s
+
+                Se você não solicitou esta alteração, ignore esta mensagem.
+
+                Atenciosamente,
+                Equipe Millésime
+                """.formatted(linkRedefinicao));
         mailSender.send(mensagem);
     }
 }

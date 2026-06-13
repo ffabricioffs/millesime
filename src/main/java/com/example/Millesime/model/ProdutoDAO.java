@@ -23,9 +23,7 @@ public class ProdutoDAO {
             """;
 
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM produto WHERE id = ?";
-    private static final String SELECT_ALL_ACTIVE_SQL = "SELECT * FROM produto WHERE ativo = true ORDER BY nome";
     private static final String SELECT_ALL_ACTIVE_PAGED_SQL = "SELECT * FROM produto WHERE ativo = true ORDER BY nome LIMIT ? OFFSET ?";
-    private static final String SELECT_BY_TIPO_SQL = "SELECT * FROM produto WHERE tipo = ? AND ativo = true";
     private static final String SELECT_BY_TIPO_PAGED_SQL = "SELECT * FROM produto WHERE tipo = ? AND ativo = true ORDER BY nome LIMIT ? OFFSET ?";
     private static final String SELECT_COUNT_ALL_ACTIVE_SQL = "SELECT COUNT(*) FROM produto WHERE ativo = true";
     private static final String SELECT_COUNT_BY_TIPO_SQL = "SELECT COUNT(*) FROM produto WHERE tipo = ? AND ativo = true";
