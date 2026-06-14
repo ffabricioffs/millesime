@@ -5,11 +5,6 @@
     position: relative;
 }
 
-/* Hero section background */
-.hero-bg {
-    background-image: url('https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/hero-vineyard-dqfZwyX7rD42XguzQgb2zw.webp');
-}
-
 /* SVG in hero button */
 .btn-premium-gold svg {
     display: inline-block;
