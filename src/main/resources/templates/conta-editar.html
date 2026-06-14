@@ -31,48 +31,47 @@
                 </div>
 
                 <div class="register-form-wrapper">
-                    <form class="register-form" th:action="@{/conta/editar}" method="post" th:object="${cliente}">
+                    <form class="register-form" th:action="@{/conta/editar}" method="post" th:object="${perfilRequest}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                         <div class="register-field">
                             <label for="nomeCompleto">Nome Completo</label>
-                            <input id="nomeCompleto" type="text" name="nomeCompleto" th:value="*{nomeCompleto}" required placeholder="Seu nome completo">
+                            <input id="nomeCompleto" type="text" th:field="*{nomeCompleto}" required placeholder="Seu nome completo">
                         </div>
 
                         <div class="register-field">
                             <label for="email">E-mail</label>
-                            <input id="email" type="email" name="email" th:value="*{email}" required autocomplete="email" placeholder="seuemail@exemplo.com">
+                            <input id="email" type="email" th:field="*{email}" required autocomplete="email" placeholder="seuemail@exemplo.com">
                         </div>
 
                         <div class="register-field">
-                            <label for="cpf">CPF</label>
-                            <input id="cpf" type="text" name="cpf" th:value="*{cpf}" required placeholder="000.000.000-00">
+                            <label>CPF</label>
+                            <input type="text" th:value="${cliente.cpf}" readonly disabled style="background:#f5f5f0;cursor:not-allowed;opacity:0.7;">
                         </div>
 
                         <div class="register-field">
                             <label for="dataNascimento">Data de Nascimento</label>
-                            <input id="dataNascimento" type="date" name="dataNascimento" th:value="*{dataNascimento}">
+                            <input id="dataNascimento" type="date" th:field="*{dataNascimento}">
                         </div>
 
                         <div class="register-field">
                             <label for="telefone">Telefone</label>
-                            <input id="telefone" type="text" name="telefone" th:value="*{telefone}" placeholder="(11) 99999-9999">
-                        </div>
-
-                        <div class="register-field">
-                            <label for="senha">Nova Senha (deixe em branco para manter a atual)</label>
-                            <input id="senha" type="password" name="senha" autocomplete="new-password" placeholder="Nova senha">
+                            <input id="telefone" type="text" th:field="*{telefone}" placeholder="(11) 99999-9999">
                         </div>
 
                         <div class="register-field checkbox-field">
                             <label>
-                                <input type="checkbox" name="newsletter" value="true" th:checked="*{newsletter}" />
+                                <input type="checkbox" th:field="*{newsletter}" />
                                 <span>Desejo receber novidades e ofertas por e-mail</span>
                             </label>
                         </div>
 
                         <button type="submit" class="btn-premium-gold register-submit">Salvar Alterações</button>
                     </form>
+
+                    <div style="text-align:center;margin-top:1.5rem;">
+                        <a th:href="@{/conta/alterar-senha}" style="color:#8b6914;text-decoration:underline;">Alterar senha</a>
+                    </div>
 
                     <a th:href="@{/conta}" style="display:block;text-align:center;margin-top:1rem;color:#8b6914;">Voltar para Minha Conta</a>
                 </div>

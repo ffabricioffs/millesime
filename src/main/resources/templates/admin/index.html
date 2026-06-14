@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Admin - Millésime</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+    <main>
+        <div class="admin-layout">
+            <div th:replace="admin/layout :: sidebar"></div>
+            <div class="admin-content">
+                <h1 class="admin-page-title">Dashboard</h1>
+
+                <div th:if="${success}" class="admin-alert admin-alert-success" th:text="${success}"></div>
+                <div th:if="${error}" class="admin-alert admin-alert-error" th:text="${error}"></div>
+
+                <div class="admin-cards">
+                    <div class="admin-card">
+                        <div class="admin-card-number" th:text="${totalProdutos}">0</div>
+                        <div class="admin-card-label">Produtos</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-number" th:text="${totalPedidos}">0</div>
+                        <div class="admin-card-label">Pedidos</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-number" th:text="${totalClientes}">0</div>
+                        <div class="admin-card-label">Clientes</div>
+                    </div>
+                </div>
+
+                <h2 class="admin-section-title">Últimos Pedidos</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Data</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pedido : ${ultimosPedidos}">
+                            <td th:text="${#strings.substring(pedido.id.toString(), 0, 8)} + '...'"></td>
+                            <td th:text="${pedido.clienteNome}">Nome</td>
+                            <td th:text="${pedido.dataFormatada}">01/01/2024</td>
+                            <td>R$ <span th:text="${#numbers.formatDecimal(pedido.total, 1, 2)}">0,00</span></td>
+                            <td><span class="admin-status" th:classappend="'admin-status-' + ${pedido.status.toLowerCase()}" th:text="${pedido.status}">PENDENTE</span></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(ultimosPedidos)}">
+                            <td colspan="5" style="text-align:center;padding:2rem;color:#888;">Nenhum pedido encontrado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="layout :: footer"></footer>
+</body>
+</html>

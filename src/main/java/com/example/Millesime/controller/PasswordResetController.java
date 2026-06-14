@@ -52,8 +52,19 @@ public class PasswordResetController {
     }
 
     @GetMapping("/confirm")
-    public String confirmResetPassword(@RequestParam String token, Model model,
+    public String confirmResetPassword(@RequestParam(required = false) String token, Model model,
                                         RedirectAttributes redirectAttributes) {
+        if (token == null) {
+            Object flashToken = redirectAttributes.getFlashAttributes().get("token");
+            if (flashToken instanceof String) {
+                token = (String) flashToken;
+            }
+        }
+        if (token == null || token.isBlank()) {
+            redirectAttributes.addFlashAttribute("error", "Token de redefinição inválido.");
+            return "redirect:/reset-password";
+        }
+
         try {
             Cliente cliente = clienteService.validarTokenRedefinicaoSenha(token);
             model.addAttribute("pageTitle", "Redefinir Senha - Millésime");
@@ -68,8 +79,8 @@ public class PasswordResetController {
 
     @PostMapping("/confirm")
     public String confirmResetPasswordSubmit(@RequestParam String token,
-                                              @RequestParam String novaSenha,
-                                              RedirectAttributes redirectAttributes) {
+                                               @RequestParam String novaSenha,
+                                               RedirectAttributes redirectAttributes) {
         try {
             clienteService.redefinirSenha(token, novaSenha);
             redirectAttributes.addFlashAttribute("message",
@@ -77,7 +88,8 @@ public class PasswordResetController {
             return "redirect:/login";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/reset-password/confirm?token=" + token;
+            redirectAttributes.addFlashAttribute("token", token);
+            return "redirect:/reset-password/confirm";
         }
     }
 }

@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.Millesime.exception.ResourceNotFoundException;
 import com.example.Millesime.exception.ValidationException;
 
 @Service
@@ -38,7 +39,11 @@ public class ProdutoService {
         }
 
         try {
-            return produtoDAO.buscarPorId(id);
+            Produto produto = produtoDAO.buscarPorId(id);
+            if (produto == null) {
+                throw new ResourceNotFoundException("Produto não encontrado.");
+            }
+            return produto;
         } catch (SQLException e) {
             throw new Exception("Erro ao buscar produto.", e);
         }
@@ -121,6 +126,22 @@ public class ProdutoService {
             return produtoDAO.contarPorNome("%" + termo.trim() + "%");
         } catch (SQLException e) {
             throw new Exception("Erro ao contar produtos.", e);
+        }
+    }
+
+    public List<Produto> listarTodosAdmin(int page, int pageSize) throws Exception {
+        try {
+            return produtoDAO.listarTodosAdmin(page, pageSize);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao listar todos os produtos.", e);
+        }
+    }
+
+    public int contarTodosAdmin() throws Exception {
+        try {
+            return produtoDAO.contarTodosAdmin();
+        } catch (SQLException e) {
+            throw new Exception("Erro ao contar todos os produtos.", e);
         }
     }
 

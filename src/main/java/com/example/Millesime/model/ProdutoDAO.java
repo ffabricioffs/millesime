@@ -1,5 +1,8 @@
 package com.example.Millesime.model;
 
+import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,31 +13,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.sql.DataSource;
-
-import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 @Repository
 public class ProdutoDAO {
 
     private static final String INSERT_SQL = """
-            INSERT INTO produto (id, nome, descricao, tipo, regiao, pais, uva, preco, estoque, imagem, data_criacao, ativo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO produto (
+                id, nome, descricao, tipo, uva, pais, regiao, preco, estoque, imagem, data_criacao, ativo
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
-    private static final String SELECT_BY_ID_SQL = "SELECT * FROM produto WHERE id = ?";
-    private static final String SELECT_ALL_ACTIVE_PAGED_SQL = "SELECT * FROM produto WHERE ativo = true ORDER BY nome LIMIT ? OFFSET ?";
-    private static final String SELECT_BY_TIPO_PAGED_SQL = "SELECT * FROM produto WHERE tipo = ? AND ativo = true ORDER BY nome LIMIT ? OFFSET ?";
-    private static final String SELECT_COUNT_ALL_ACTIVE_SQL = "SELECT COUNT(*) FROM produto WHERE ativo = true";
-    private static final String SELECT_COUNT_BY_TIPO_SQL = "SELECT COUNT(*) FROM produto WHERE tipo = ? AND ativo = true";
+    private static final String COLUNAS = "id, nome, descricao, tipo, uva, pais, regiao, preco, estoque, imagem, data_criacao, ativo";
+    private static final String SELECT_BY_ID_SQL = "SELECT " + COLUNAS + " FROM produto WHERE id = ?";
+    private static final String SELECT_ALL_ATIVOS_SQL = "SELECT " + COLUNAS + " FROM produto WHERE ativo = true ORDER BY nome";
+    private static final String SELECT_ALL_ADMIN_SQL = "SELECT " + COLUNAS + " FROM produto ORDER BY nome";
+    private static final String COUNT_ALL_SQL = "SELECT COUNT(*) FROM produto";
+    private static final String COUNT_ATIVOS_SQL = "SELECT COUNT(*) FROM produto WHERE ativo = true";
     private static final String UPDATE_SQL = """
-            UPDATE produto
-            SET nome = ?, descricao = ?, tipo = ?, regiao = ?, pais = ?, uva = ?, preco = ?, estoque = ?, imagem = ?, ativo = ?
-            WHERE id = ?
+            UPDATE produto SET nome = ?, descricao = ?, tipo = ?, uva = ?, pais = ?, regiao = ?,
+                preco = ?, estoque = ?, imagem = ?, ativo = ? WHERE id = ?
             """;
-    private static final String SELECT_BY_NOME_SQL = "SELECT * FROM produto WHERE ativo = true AND LOWER(nome) LIKE LOWER(?) ORDER BY nome LIMIT ? OFFSET ?";
-    private static final String SELECT_COUNT_BY_NOME_SQL = "SELECT COUNT(*) FROM produto WHERE ativo = true AND LOWER(nome) LIKE LOWER(?)";
     private static final String SOFT_DELETE_SQL = "UPDATE produto SET ativo = false WHERE id = ?";
+    private static final String BAIXAR_ESTOQUE_SQL = "UPDATE produto SET estoque = estoque - ? WHERE id = ? AND estoque >= ?";
+    private static final String SELECT_DESTAQUES_SQL = "SELECT " + COLUNAS + " FROM produto WHERE ativo = true ORDER BY nome LIMIT 8";
+    private static final String SELECT_BY_TIPO_SQL = "SELECT " + COLUNAS + " FROM produto WHERE ativo = true AND tipo = ? ORDER BY nome";
+    private static final String SEARCH_SQL = "SELECT " + COLUNAS + " FROM produto WHERE ativo = true AND (LOWER(nome) LIKE ? OR LOWER(tipo) LIKE ? OR LOWER(uva) LIKE ? OR LOWER(pais) LIKE ? OR LOWER(regiao) LIKE ?) ORDER BY nome";
 
     private final DataSource dataSource;
 
@@ -49,184 +53,261 @@ public class ProdutoDAO {
         if (produto.getDataCriacao() == null) {
             produto.setDataCriacao(LocalDateTime.now());
         }
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_SQL)) {
-            statement.setObject(1, produto.getId());
-            statement.setString(2, produto.getNome());
-            statement.setString(3, produto.getDescricao());
-            statement.setString(4, produto.getTipo());
-            statement.setString(5, produto.getRegiao());
-            statement.setString(6, produto.getPais());
-            statement.setString(7, produto.getUva());
-            statement.setDouble(8, produto.getPreco());
-            statement.setInt(9, produto.getEstoque());
-            statement.setString(10, produto.getImagem());
-            statement.setTimestamp(11, Timestamp.valueOf(produto.getDataCriacao()));
-            statement.setBoolean(12, produto.isAtivo());
-            statement.executeUpdate();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(INSERT_SQL)) {
+            stmt.setObject(1, produto.getId());
+            stmt.setString(2, produto.getNome());
+            stmt.setString(3, produto.getDescricao());
+            stmt.setString(4, produto.getTipo());
+            stmt.setString(5, produto.getUva());
+            stmt.setString(6, produto.getPais());
+            stmt.setString(7, produto.getRegiao());
+            stmt.setDouble(8, produto.getPreco());
+            stmt.setInt(9, produto.getEstoque());
+            stmt.setString(10, produto.getImagem());
+            stmt.setTimestamp(11, Timestamp.valueOf(produto.getDataCriacao()));
+            stmt.setBoolean(12, produto.isAtivo());
+            stmt.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     public Produto buscarPorId(UUID id) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID_SQL)) {
-            statement.setObject(1, id);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return mapearProduto(resultSet);
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_BY_ID_SQL)) {
+            stmt.setObject(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapearProduto(rs);
                 }
             }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
-
         return null;
     }
 
     public List<Produto> listarTodos() throws SQLException {
-        return listarTodos(1, Integer.MAX_VALUE);
+        return listar(SELECT_ALL_ATIVOS_SQL, null, 0, Integer.MAX_VALUE);
     }
 
     public List<Produto> listarTodos(int page, int pageSize) throws SQLException {
-        List<Produto> produtos = new ArrayList<>();
-        int offset = Math.max(0, page - 1) * pageSize;
+        return listarPaginado(SELECT_ALL_ATIVOS_SQL, page, pageSize);
+    }
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_ACTIVE_PAGED_SQL)) {
-            statement.setInt(1, pageSize);
-            statement.setInt(2, offset);
+    public List<Produto> listarTodosAdmin() throws SQLException {
+        return listar(SELECT_ALL_ADMIN_SQL, null, 0, Integer.MAX_VALUE);
+    }
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    produtos.add(mapearProduto(resultSet));
-                }
-            }
-        }
-
-        return produtos;
+    public List<Produto> listarTodosAdmin(int page, int pageSize) throws SQLException {
+        return listarPaginado(SELECT_ALL_ADMIN_SQL, page, pageSize);
     }
 
     public int contarTodos() throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_ALL_ACTIVE_SQL);
-             ResultSet resultSet = statement.executeQuery()) {
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-        }
-        return 0;
+        return contar(COUNT_ALL_SQL);
     }
 
-    public List<Produto> buscarPorTipo(String tipo) throws SQLException {
-        return buscarPorTipo(tipo, 1, Integer.MAX_VALUE);
+    public int contarAtivos() throws SQLException {
+        return contar(COUNT_ATIVOS_SQL);
     }
 
-    public List<Produto> buscarPorTipo(String tipo, int page, int pageSize) throws SQLException {
-        List<Produto> produtos = new ArrayList<>();
-        int offset = Math.max(0, page - 1) * pageSize;
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_BY_TIPO_PAGED_SQL)) {
-            statement.setString(1, tipo);
-            statement.setInt(2, pageSize);
-            statement.setInt(3, offset);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    produtos.add(mapearProduto(resultSet));
-                }
-            }
-        }
-
-        return produtos;
-    }
-
-    public int contarPorTipo(String tipo) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_BY_TIPO_SQL)) {
-            statement.setString(1, tipo);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt(1);
-                }
-            }
-        }
-        return 0;
-    }
-
-    public List<Produto> buscarPorNome(String termo, int page, int pageSize) throws SQLException {
-        List<Produto> produtos = new ArrayList<>();
-        int offset = Math.max(0, page - 1) * pageSize;
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_BY_NOME_SQL)) {
-            statement.setString(1, termo);
-            statement.setInt(2, pageSize);
-            statement.setInt(3, offset);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    produtos.add(mapearProduto(resultSet));
-                }
-            }
-        }
-        return produtos;
-    }
-
-    public int contarPorNome(String termo) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_BY_NOME_SQL)) {
-            statement.setString(1, termo);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt(1);
-                }
-            }
-        }
-        return 0;
+    public int contarTodosAdmin() throws SQLException {
+        return contar(COUNT_ALL_SQL);
     }
 
     public void atualizar(Produto produto) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
-            statement.setString(1, produto.getNome());
-            statement.setString(2, produto.getDescricao());
-            statement.setString(3, produto.getTipo());
-            statement.setString(4, produto.getRegiao());
-            statement.setString(5, produto.getPais());
-            statement.setString(6, produto.getUva());
-            statement.setDouble(7, produto.getPreco());
-            statement.setInt(8, produto.getEstoque());
-            statement.setString(9, produto.getImagem());
-            statement.setBoolean(10, produto.isAtivo());
-            statement.setObject(11, produto.getId());
-            statement.executeUpdate();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(UPDATE_SQL)) {
+            stmt.setString(1, produto.getNome());
+            stmt.setString(2, produto.getDescricao());
+            stmt.setString(3, produto.getTipo());
+            stmt.setString(4, produto.getUva());
+            stmt.setString(5, produto.getPais());
+            stmt.setString(6, produto.getRegiao());
+            stmt.setDouble(7, produto.getPreco());
+            stmt.setInt(8, produto.getEstoque());
+            stmt.setString(9, produto.getImagem());
+            stmt.setBoolean(10, produto.isAtivo());
+            stmt.setObject(11, produto.getId());
+            stmt.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     public void deletar(UUID id) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SOFT_DELETE_SQL)) {
-            statement.setObject(1, id);
-            statement.executeUpdate();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(SOFT_DELETE_SQL)) {
+            stmt.setObject(1, id);
+            stmt.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
-    private Produto mapearProduto(ResultSet resultSet) throws SQLException {
-        Produto produto = new Produto();
-        produto.setId((UUID) resultSet.getObject("id"));
-        produto.setNome(resultSet.getString("nome"));
-        produto.setDescricao(resultSet.getString("descricao"));
-        produto.setTipo(resultSet.getString("tipo"));
-        produto.setRegiao(resultSet.getString("regiao"));
-        produto.setPais(resultSet.getString("pais"));
-        produto.setUva(resultSet.getString("uva"));
-        produto.setPreco(resultSet.getDouble("preco"));
-        produto.setEstoque(resultSet.getInt("estoque"));
-        produto.setImagem(resultSet.getString("imagem"));
-        produto.setDataCriacao(resultSet.getTimestamp("data_criacao").toLocalDateTime());
-        produto.setAtivo(resultSet.getBoolean("ativo"));
-        return produto;
+    public int darBaixaEstoque(UUID produtoId, int quantidade) throws SQLException {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(BAIXAR_ESTOQUE_SQL)) {
+            stmt.setInt(1, quantidade);
+            stmt.setObject(2, produtoId);
+            stmt.setInt(3, quantidade);
+            return stmt.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+    }
+
+    public List<Produto> buscarDestaques() throws SQLException {
+        return listar(SELECT_DESTAQUES_SQL, null, 0, Integer.MAX_VALUE);
+    }
+
+    public List<Produto> buscarPorTipo(String tipo) throws SQLException {
+        return listar(SELECT_BY_TIPO_SQL, tipo, 0, Integer.MAX_VALUE);
+    }
+
+    public List<Produto> buscarPorTipo(String tipo, int page, int pageSize) throws SQLException {
+        return listarPaginadoComParam(SELECT_BY_TIPO_SQL, tipo, page, pageSize);
+    }
+
+    public int contarPorTipo(String tipo) throws SQLException {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM produto WHERE ativo = true AND tipo = ?")) {
+            stmt.setString(1, tipo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return 0;
+    }
+
+    public List<Produto> buscar(String termo) throws SQLException {
+        String like = "%" + termo.toLowerCase() + "%";
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(SEARCH_SQL)) {
+            for (int i = 1; i <= 5; i++) stmt.setString(i, like);
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Produto> produtos = new ArrayList<>();
+                while (rs.next()) {
+                    Produto p = mapearProduto(rs);
+                    if (p != null) produtos.add(p);
+                }
+                return produtos;
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+    }
+
+    public List<Produto> buscarPorNome(String pattern, int page, int pageSize) throws SQLException {
+        String sql = "SELECT " + COLUNAS + " FROM produto WHERE ativo = true AND LOWER(nome) LIKE ? ORDER BY nome";
+        return listarPaginadoComParam(sql, pattern, page, pageSize);
+    }
+
+    public int contarPorNome(String pattern) throws SQLException {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM produto WHERE ativo = true AND LOWER(nome) LIKE ?")) {
+            stmt.setString(1, pattern);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return 0;
+    }
+
+    private List<Produto> listar(String sql, String param, int offset, int limit) throws SQLException {
+        List<Produto> produtos = new ArrayList<>();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            if (param != null) stmt.setString(1, param);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Produto p = mapearProduto(rs);
+                    if (p != null) produtos.add(p);
+                }
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return produtos;
+    }
+
+    private List<Produto> listarPaginado(String sql, int page, int pageSize) throws SQLException {
+        int offset = (page - 1) * pageSize;
+        List<Produto> produtos = new ArrayList<>();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        String paginado = sql + " LIMIT ? OFFSET ?";
+        try (PreparedStatement stmt = connection.prepareStatement(paginado)) {
+            stmt.setInt(1, pageSize);
+            stmt.setInt(2, offset);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Produto p = mapearProduto(rs);
+                    if (p != null) produtos.add(p);
+                }
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return produtos;
+    }
+
+    private List<Produto> listarPaginadoComParam(String sql, String param, int page, int pageSize) throws SQLException {
+        int offset = (page - 1) * pageSize;
+        List<Produto> produtos = new ArrayList<>();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        String paginado = sql + " LIMIT ? OFFSET ?";
+        try (PreparedStatement stmt = connection.prepareStatement(paginado)) {
+            stmt.setString(1, param);
+            stmt.setInt(2, pageSize);
+            stmt.setInt(3, offset);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Produto p = mapearProduto(rs);
+                    if (p != null) produtos.add(p);
+                }
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return produtos;
+    }
+
+    private int contar(String sql) throws SQLException {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return 0;
+    }
+
+    private Produto mapearProduto(ResultSet rs) throws SQLException {
+        try {
+            Produto p = new Produto();
+            p.setId(rs.getObject("id", UUID.class));
+            if (p.getId() == null) return null;
+            p.setNome(rs.getString("nome"));
+            p.setDescricao(rs.getString("descricao"));
+            p.setTipo(rs.getString("tipo"));
+            p.setUva(rs.getString("uva"));
+            p.setPais(rs.getString("pais"));
+            p.setRegiao(rs.getString("regiao"));
+            p.setPreco(rs.getDouble("preco"));
+            p.setEstoque(rs.getInt("estoque"));
+            p.setImagem(rs.getString("imagem"));
+            p.setAtivo(rs.getBoolean("ativo"));
+            Timestamp dc = rs.getTimestamp("data_criacao");
+            if (dc != null) p.setDataCriacao(dc.toLocalDateTime());
+            return p;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }

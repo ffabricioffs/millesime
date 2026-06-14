@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.ServletException;
 
+import com.example.Millesime.dto.ClienteSession;
 import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
 
@@ -31,11 +32,18 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         try {
             Cliente cliente = clienteService.buscarPorEmail(email);
             if (cliente != null) {
-                request.getSession().setAttribute("clienteLogado", cliente);
+                ClienteSession sessionCliente = new ClienteSession(
+                    cliente.getId(), cliente.getNomeCompleto(), cliente.getEmail()
+                );
+                request.getSession().setAttribute("clienteLogado", sessionCliente);
             }
         } catch (Exception e) {
             logger.warn("Could not load cliente for session", e);
         }
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        request.getSession().setAttribute("isAdmin", isAdmin);
 
         super.onAuthenticationSuccess(request, response, authentication);
     }

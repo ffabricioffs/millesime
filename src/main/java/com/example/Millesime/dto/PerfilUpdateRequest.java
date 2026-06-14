@@ -1,12 +1,12 @@
 package com.example.Millesime.dto;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 
-public class ClienteRequest {
+public class PerfilUpdateRequest {
+
     @NotBlank(message = "Nome completo é obrigatório")
     @Size(min = 3, message = "Nome deve ter pelo menos 3 caracteres")
     private String nomeCompleto;
@@ -14,13 +14,6 @@ public class ClienteRequest {
     @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail inválido")
     private String email;
-
-    @NotBlank(message = "Senha é obrigatória")
-    @Size(min = 12, message = "Senha deve ter no mínimo 12 caracteres")
-    private String senha;
-
-    @NotBlank(message = "CPF é obrigatório")
-    private String cpf;
 
     private LocalDate dataNascimento;
     private String telefone;
@@ -40,22 +33,6 @@ public class ClienteRequest {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public LocalDate getDataNascimento() {

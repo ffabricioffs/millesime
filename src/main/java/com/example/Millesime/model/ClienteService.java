@@ -105,8 +105,11 @@ public class ClienteService {
         if (tokenString == null || tokenString.isBlank()) {
             throw new ValidationException("Token de redefinicao de senha invalido.");
         }
-        if (novaSenha == null || novaSenha.length() < 6) {
-            throw new ValidationException("A senha deve ter no minimo 6 caracteres.");
+        if (novaSenha == null || novaSenha.length() < 12) {
+            throw new ValidationException("A senha deve ter no minimo 12 caracteres.");
+        }
+        if (!novaSenha.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            throw new ValidationException("A senha deve conter maiuscula, minuscula e numero.");
         }
 
         try {
@@ -206,12 +209,38 @@ public class ClienteService {
 
     public Cliente buscarPorEmail(String email) throws Exception {
         if (email == null || email.isBlank()) {
-            throw new ValidationException("E-mail é obrigatório.");
+            throw new ValidationException("E-mail \u00e9 obrigat\u00f3rio.");
         }
         try {
             return clienteDAO.buscarPorEmail(normalizeEmail(email));
         } catch (SQLException e) {
             throw new Exception("Erro ao buscar cliente por e-mail.", e);
+        }
+    }
+
+    public boolean verificarSenha(Cliente cliente, String rawPassword) {
+        if (cliente == null || rawPassword == null) {
+            return false;
+        }
+        return passwordEncoder.matches(rawPassword, cliente.getSenha());
+    }
+
+    public void alterarSenhaDiretamente(Cliente cliente, String novaSenha) throws Exception {
+        if (cliente == null || cliente.getId() == null) {
+            throw new ValidationException("Cliente n\u00e3o informado.");
+        }
+        if (novaSenha == null || novaSenha.length() < 12) {
+            throw new ValidationException("A nova senha deve ter no m\u00ednimo 12 caracteres.");
+        }
+        if (!novaSenha.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            throw new ValidationException("A nova senha deve conter mai\u00fascula, min\u00fascula e n\u00famero.");
+        }
+
+        try {
+            cliente.setSenha(passwordEncoder.encode(novaSenha));
+            clienteDAO.atualizar(cliente);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao alterar senha.", e);
         }
     }
 
@@ -242,8 +271,11 @@ public class ClienteService {
             throw new ValidationException("O CPF informado e invalido.");
         }
 
-        if (cliente.getSenha() == null || cliente.getSenha().length() < 6) {
-            throw new ValidationException("A senha deve ter no minimo 6 caracteres.");
+        if (cliente.getSenha() == null || cliente.getSenha().length() < 12) {
+            throw new ValidationException("A senha deve ter no minimo 12 caracteres, com maiuscula, minuscula e numero.");
+        }
+        if (!cliente.getSenha().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            throw new ValidationException("A senha deve conter pelo menos uma maiuscula, uma minuscula e um numero.");
         }
 
         if (cliente.getDataNascimento() != null) {

@@ -8,14 +8,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 @Repository
 public class PasswordResetTokenDAO {
 
-    private static final String INSERT_SQL = "INSERT INTO password_reset_token (id, cliente_id, token, expiration, used) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT_SQL = """
+            INSERT INTO password_reset_token (id, cliente_id, token, expiration, used)
+            VALUES (?, ?, ?, ?, ?)
+            """;
     private static final String SELECT_BY_TOKEN_SQL = "SELECT * FROM password_reset_token WHERE token = ?";
-    private static final String UPDATE_USED_SQL = "UPDATE password_reset_token SET used = ? WHERE id = ?";
+    private static final String INVALIDATE_BY_CLIENTE_SQL = "UPDATE password_reset_token SET used = true WHERE cliente_id = ? AND used = false";
+    private static final String MARK_AS_USED_SQL = "UPDATE password_reset_token SET used = true WHERE id = ?";
 
     private final DataSource dataSource;
 
@@ -24,42 +31,72 @@ public class PasswordResetTokenDAO {
     }
 
     public void salvar(PasswordResetToken token) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_SQL)) {
+        if (token.getId() == null) {
+            token.setId(UUID.randomUUID());
+        }
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL)) {
             statement.setObject(1, token.getId());
             statement.setObject(2, token.getClienteId());
             statement.setString(3, token.getToken());
             statement.setTimestamp(4, Timestamp.valueOf(token.getExpiration()));
             statement.setBoolean(5, token.isUsed());
             statement.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
-    public PasswordResetToken buscarPorToken(String tokenString) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_BY_TOKEN_SQL)) {
-            statement.setString(1, tokenString);
+    public PasswordResetToken buscarPorToken(String token) throws SQLException {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_TOKEN_SQL)) {
+            statement.setString(1, token);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    PasswordResetToken token = new PasswordResetToken();
-                    token.setId(resultSet.getObject("id", UUID.class));
-                    token.setClienteId(resultSet.getObject("cliente_id", UUID.class));
-                    token.setToken(resultSet.getString("token"));
-                    token.setExpiration(resultSet.getTimestamp("expiration").toLocalDateTime());
-                    token.setUsed(resultSet.getBoolean("used"));
-                    return token;
+                    return mapearToken(resultSet);
                 }
             }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return null;
     }
 
     public void marcarComoUsado(UUID id) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_USED_SQL)) {
-            statement.setBoolean(1, true);
-            statement.setObject(2, id);
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement statement = connection.prepareStatement(MARK_AS_USED_SQL)) {
+            statement.setObject(1, id);
             statement.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+    }
+
+    public void invalidarTokens(UUID clienteId) throws SQLException {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement statement = connection.prepareStatement(INVALIDATE_BY_CLIENTE_SQL)) {
+            statement.setObject(1, clienteId);
+            statement.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+    }
+
+    private PasswordResetToken mapearToken(ResultSet resultSet) {
+        try {
+            PasswordResetToken token = new PasswordResetToken();
+            token.setId(resultSet.getObject("id", UUID.class));
+            if (token.getId() == null) return null;
+            token.setClienteId(resultSet.getObject("cliente_id", UUID.class));
+            token.setToken(resultSet.getString("token"));
+            Timestamp expiration = resultSet.getTimestamp("expiration");
+            if (expiration != null) {
+                token.setExpiration(expiration.toLocalDateTime());
+            }
+            token.setUsed(resultSet.getBoolean("used"));
+            return token;
+        } catch (SQLException e) {
+            return null;
         }
     }
 }

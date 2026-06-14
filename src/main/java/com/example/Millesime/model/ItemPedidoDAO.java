@@ -11,11 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
 @Repository
 public class ItemPedidoDAO {
 
     private static final String INSERT_SQL = "INSERT INTO item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?, ?)";
-    private static final String SELECT_BY_PEDIDO_SQL = "SELECT ip.*, p.nome AS produto_nome FROM item_pedido ip JOIN produto p ON p.id = ip.produto_id WHERE ip.pedido_id = ?";
+    private static final String SELECT_BY_PEDIDO_SQL = """
+            SELECT ip.*, p.nome as nome_produto
+            FROM item_pedido ip
+            JOIN produto p ON p.id = ip.produto_id
+            WHERE ip.pedido_id = ?
+            """;
 
     private final DataSource dataSource;
 
@@ -27,45 +34,43 @@ public class ItemPedidoDAO {
         if (item.getId() == null) {
             item.setId(UUID.randomUUID());
         }
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_SQL)) {
-            statement.setObject(1, item.getId());
-            statement.setObject(2, item.getPedidoId());
-            statement.setObject(3, item.getProdutoId());
-            statement.setInt(4, item.getQuantidade());
-            statement.setDouble(5, item.getPrecoUnitario());
-            statement.executeUpdate();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(INSERT_SQL)) {
+            stmt.setObject(1, item.getId());
+            stmt.setObject(2, item.getPedidoId());
+            stmt.setObject(3, item.getProdutoId());
+            stmt.setInt(4, item.getQuantidade());
+            stmt.setDouble(5, item.getPrecoUnitario());
+            stmt.executeUpdate();
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     public List<ItemPedido> buscarPorPedidoId(UUID pedidoId) throws SQLException {
         List<ItemPedido> itens = new ArrayList<>();
-
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_BY_PEDIDO_SQL)) {
-            statement.setObject(1, pedidoId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    itens.add(mapearItem(resultSet));
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_BY_PEDIDO_SQL)) {
+            stmt.setObject(1, pedidoId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    itens.add(mapearItemPedido(rs));
                 }
             }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return itens;
     }
 
-    private ItemPedido mapearItem(ResultSet resultSet) throws SQLException {
+    private ItemPedido mapearItemPedido(ResultSet rs) throws SQLException {
         ItemPedido item = new ItemPedido();
-        item.setId(resultSet.getObject("id", UUID.class));
-        item.setPedidoId(resultSet.getObject("pedido_id", UUID.class));
-        item.setProdutoId(resultSet.getObject("produto_id", UUID.class));
-        item.setQuantidade(resultSet.getInt("quantidade"));
-        item.setPrecoUnitario(resultSet.getDouble("preco_unitario"));
-        try {
-            item.setNomeProduto(resultSet.getString("produto_nome"));
-        } catch (SQLException e) {
-            // campo opcional do JOIN
-        }
+        item.setId(rs.getObject("id", UUID.class));
+        item.setPedidoId(rs.getObject("pedido_id", UUID.class));
+        item.setProdutoId(rs.getObject("produto_id", UUID.class));
+        item.setQuantidade(rs.getInt("quantidade"));
+        item.setPrecoUnitario(rs.getDouble("preco_unitario"));
+        item.setNomeProduto(rs.getString("nome_produto"));
         return item;
     }
 }

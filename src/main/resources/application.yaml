@@ -8,14 +8,13 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: ${HIBERNATE_DDL_AUTO:create-drop}
+    hikari:
+      connection-timeout: ${HIKARI_CONNECTION_TIMEOUT:30000}
+      idle-timeout: ${HIKARI_IDLE_TIMEOUT:600000}
 
   sql:
     init:
-      mode: ${SQL_INIT_MODE:always}
+      mode: ${SQL_INIT_MODE:never}
       schema-locations: classpath:schema-postgresql.sql
 
   mail:
@@ -32,3 +31,8 @@ spring:
             enable: true
           ssl:
             trust: ${MAIL_HOST:smtp.example.com}
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration

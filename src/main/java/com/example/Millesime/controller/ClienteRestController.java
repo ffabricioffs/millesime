@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Millesime.dto.ClienteRequest;
 import com.example.Millesime.dto.ClienteResponse;
+import com.example.Millesime.dto.ClienteSummaryResponse;
 import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
 
@@ -40,9 +41,9 @@ public class ClienteRestController {
      * GET - Listar todos os clientes ativos
      */
     @GetMapping
-    public ResponseEntity<List<ClienteResponse>> listar() throws Exception {
-        List<ClienteResponse> clientes = clienteService.listarTodosClientes().stream()
-                .map(this::toResponse)
+    public ResponseEntity<List<ClienteSummaryResponse>> listar() throws Exception {
+        List<ClienteSummaryResponse> clientes = clienteService.listarTodosClientes().stream()
+                .map(this::toSummary)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(clientes);
     }
@@ -95,6 +96,18 @@ public class ClienteRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    private ClienteSummaryResponse toSummary(Cliente cliente) {
+        ClienteSummaryResponse r = new ClienteSummaryResponse();
+        r.setId(cliente.getId());
+        r.setNomeCompleto(cliente.getNomeCompleto());
+        r.setEmail(cliente.getEmail());
+        r.setTelefone(cliente.getTelefone());
+        r.setNewsletter(cliente.isNewsletter());
+        r.setDataCadastro(cliente.getDataCadastro());
+        r.setAtivo(cliente.isAtivo());
+        return r;
     }
 
     private ClienteResponse toResponse(Cliente cliente) {

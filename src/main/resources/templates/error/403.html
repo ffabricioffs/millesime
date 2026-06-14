@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Negado - Millésime</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+    <main class="container section" style="text-align:center;padding:4rem 1rem;">
+        <h1 style="font-family:'Playfair Display',serif;font-size:4rem;color:var(--primary);margin-bottom:0.5rem;">403</h1>
+        <h2 style="font-family:'Playfair Display',serif;color:var(--primary);margin-bottom:1rem;">Acesso Negado</h2>
+        <p style="color:#666;margin-bottom:2rem;max-width:400px;margin-left:auto;margin-right:auto;">
+            Você não tem permissão para acessar esta página.
+            Se você acha que isso é um erro, entre em contato com o administrador.
+        </p>
+        <a href="/" class="btn-premium-gold">Voltar ao início</a>
+    </main>
+    <footer th:replace="layout :: footer"></footer>
+</body>
+</html>

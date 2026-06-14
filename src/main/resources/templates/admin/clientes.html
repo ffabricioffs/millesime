@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Clientes - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+    <main>
+        <div class="admin-layout">
+            <div th:replace="admin/layout :: sidebar"></div>
+            <div class="admin-content">
+                <h1 class="admin-page-title">Clientes</h1>
+
+                <div th:if="${success}" class="admin-alert admin-alert-success" th:text="${success}"></div>
+                <div th:if="${error}" class="admin-alert admin-alert-error" th:text="${error}"></div>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>CPF</th>
+                            <th>Telefone</th>
+                            <th>Data Cadastro</th>
+                            <th>Ativo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cliente : ${clientes}">
+                            <td th:text="${cliente.nomeCompleto}">Nome</td>
+                            <td th:text="${cliente.email}">email@exemplo.com</td>
+                            <td th:text="${cliente.cpf}">000.000.000-00</td>
+                            <td th:text="${cliente.telefone}">(11) 99999-9999</td>
+                            <td th:text="${cliente.dataCadastroFormatada}">01/01/2024</td>
+                            <td>
+                                <span th:if="${cliente.ativo}" class="admin-status admin-status-ativo">Sim</span>
+                                <span th:unless="${cliente.ativo}" class="admin-status admin-status-inativo">Não</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(clientes)}">
+                            <td colspan="6" style="text-align:center;padding:2rem;color:#888;">Nenhum cliente encontrado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="layout :: footer"></footer>
+</body>
+</html>

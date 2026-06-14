@@ -36,6 +36,7 @@
                     <a href="/catalogo">Catálogo</a>
                     <a href="/sobre">Sobre</a>
                     <a href="/contato">Contato</a>
+                    <a th:if="${session.isAdmin}" href="/admin" style="color:#D4AF37;font-weight:600;">Admin</a>
                 </nav>
 
                 <!-- Right Actions -->

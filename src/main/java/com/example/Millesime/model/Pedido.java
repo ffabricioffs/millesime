@@ -13,6 +13,15 @@ public class Pedido {
     private Double total;
     private String status;
     private List<ItemPedido> itens;
+    private String clienteNome;
+
+    public String getClienteNome() {
+        return clienteNome;
+    }
+
+    public void setClienteNome(String clienteNome) {
+        this.clienteNome = clienteNome;
+    }
 
     public String getDataFormatada() {
         if (dataPedido == null) return "";

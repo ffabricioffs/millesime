@@ -3,10 +3,14 @@ package com.example.Millesime.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.Millesime.dto.AlterarSenhaRequest;
+import com.example.Millesime.dto.ClienteSession;
+import com.example.Millesime.dto.PerfilUpdateRequest;
 import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
 
@@ -26,18 +30,18 @@ public class AuthController {
                         @RequestParam(value = "logout", required = false) String logout,
                         Model model) {
         if (error != null) {
-            model.addAttribute("loginError", "E-mail ou senha inválidos.");
+            model.addAttribute("loginError", "E-mail ou senha inv\u00e1lidos.");
         }
         if (logout != null) {
-            model.addAttribute("logoutMsg", "Você saiu do sistema.");
+            model.addAttribute("logoutMsg", "Voc\u00ea saiu do sistema.");
         }
-        model.addAttribute("pageTitle", "Entrar - Millésime");
+        model.addAttribute("pageTitle", "Entrar - Mill\u00e9sime");
         return "login";
     }
 
     @GetMapping("/account")
     public String account(Model model) {
-        model.addAttribute("pageTitle", "Acesso - Millésime");
+        model.addAttribute("pageTitle", "Acesso - Mill\u00e9sime");
         return "account";
     }
 
@@ -51,14 +55,21 @@ public class AuthController {
 
     @GetMapping("/conta/editar")
     public String editProfile(Model model, HttpSession session) {
-        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
-        if (cliente == null) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
             return "redirect:/login";
         }
         try {
-            Cliente clienteAtualizado = clienteService.buscarPorId(cliente.getId());
-            model.addAttribute("cliente", clienteAtualizado);
-            model.addAttribute("pageTitle", "Editar Perfil - Millésime");
+            Cliente cliente = clienteService.buscarPorId(sessionCliente.getId());
+            PerfilUpdateRequest request = new PerfilUpdateRequest();
+            request.setNomeCompleto(cliente.getNomeCompleto());
+            request.setEmail(cliente.getEmail());
+            request.setDataNascimento(cliente.getDataNascimento());
+            request.setTelefone(cliente.getTelefone());
+            request.setNewsletter(cliente.isNewsletter());
+            model.addAttribute("perfilRequest", request);
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("pageTitle", "Editar Perfil - Mill\u00e9sime");
             return "conta-editar";
         } catch (Exception e) {
             return "redirect:/login";
@@ -66,23 +77,73 @@ public class AuthController {
     }
 
     @PostMapping("/conta/editar")
-    public String saveProfile(Cliente clienteForm, HttpSession session,
-                              RedirectAttributes redirectAttributes) {
-        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
-        if (cliente == null) {
+    public String saveProfile(@ModelAttribute PerfilUpdateRequest request,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
             return "redirect:/login";
         }
         try {
-            clienteForm.setId(cliente.getId());
-            clienteService.atualizarCadastro(clienteForm);
+            Cliente cliente = new Cliente();
+            cliente.setId(sessionCliente.getId());
+            cliente.setNomeCompleto(request.getNomeCompleto());
+            cliente.setEmail(request.getEmail());
+            cliente.setDataNascimento(request.getDataNascimento());
+            cliente.setTelefone(request.getTelefone());
+            cliente.setNewsletter(request.isNewsletter());
 
-            Cliente clienteAtualizado = clienteService.buscarPorId(cliente.getId());
-            session.setAttribute("clienteLogado", clienteAtualizado);
+            clienteService.atualizarCadastro(cliente);
+
+            Cliente clienteAtualizado = clienteService.buscarPorId(sessionCliente.getId());
+            sessionCliente.setNomeCompleto(clienteAtualizado.getNomeCompleto());
+            sessionCliente.setEmail(clienteAtualizado.getEmail());
+            session.setAttribute("clienteLogado", sessionCliente);
             redirectAttributes.addFlashAttribute("success", "Perfil atualizado com sucesso!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/conta/editar";
+    }
+
+    @GetMapping("/conta/alterar-senha")
+    public String alterarSenha(Model model, HttpSession session) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("alterarSenhaRequest", new AlterarSenhaRequest());
+        model.addAttribute("pageTitle", "Alterar Senha - Mill\u00e9sime");
+        return "conta-alterar-senha";
+    }
+
+    @PostMapping("/conta/alterar-senha")
+    public String alterarSenhaSubmit(@ModelAttribute AlterarSenhaRequest request,
+                                      HttpSession session,
+                                      RedirectAttributes redirectAttributes) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
+            return "redirect:/login";
+        }
+        try {
+            if (!request.getNovaSenha().equals(request.getConfirmaSenha())) {
+                redirectAttributes.addFlashAttribute("error", "A confirma\u00e7\u00e3o da senha n\u00e3o confere.");
+                return "redirect:/conta/alterar-senha";
+            }
+
+            Cliente cliente = clienteService.buscarPorId(sessionCliente.getId());
+            if (!clienteService.verificarSenha(cliente, request.getSenhaAtual())) {
+                redirectAttributes.addFlashAttribute("error", "Senha atual incorreta.");
+                return "redirect:/conta/alterar-senha";
+            }
+
+            clienteService.alterarSenhaDiretamente(cliente, request.getNovaSenha());
+            redirectAttributes.addFlashAttribute("success", "Senha alterada com sucesso!");
+            return "redirect:/conta/editar";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/conta/alterar-senha";
+        }
     }
 
     @GetMapping("/minhaconta")

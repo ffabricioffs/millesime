@@ -31,8 +31,6 @@ public class HomeController {
      */
     @GetMapping("/")
     public String index(Model model) {
-        // Adicionar dados ao modelo para o template
-        model.addAttribute("cartCount", 3);
         model.addAttribute("pageTitle", "Millésime - Vinhos Premium");
         
         // Dados de exemplo para destaques

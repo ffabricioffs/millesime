@@ -44,15 +44,27 @@ public class SecurityConfig {
                     "/reset-password/**", "/catalogo", "/produto/**",
                     "/busca", "/sobre", "/contato", "/enviar-contato", "/politica-privacidade",
                     "/newsletter", "/carrinho", "/carrinho/adicionar", "/carrinho/remover",
-                    "/css/**", "/js/**",
-                    "/api/produtos/**").permitAll()
+                    "/css/**", "/js/**", "/error/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/clientes").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/clientes").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/clientes/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/clientes/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/clientes/**").hasRole("ADMIN")
                 .requestMatchers("/api/pedidos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/produtos/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/produtos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/produtos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
+            )
+            .headers(headers -> headers
+                .contentSecurityPolicy(csp -> csp
+                    .policyDirectives("default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'")
+                )
+            )
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**")
             )
             .formLogin(form -> form
                 .loginPage("/login")
