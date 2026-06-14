@@ -219,6 +219,103 @@ public class ProdutoDAO {
         return 0;
     }
 
+    public List<Produto> listarComFiltros(String tipo, Double precoMin, Double precoMax, String ordem, int page, int pageSize) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT " + COLUNAS + " FROM produto WHERE ativo = true");
+        List<Object> params = new ArrayList<>();
+
+        if (tipo != null && !tipo.isBlank()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo);
+        }
+        if (precoMin != null) {
+            sql.append(" AND preco >= ?");
+            params.add(precoMin);
+        }
+        if (precoMax != null) {
+            sql.append(" AND preco <= ?");
+            params.add(precoMax);
+        }
+
+        String orderClause;
+        if (ordem != null) {
+            switch (ordem) {
+                case "preco_asc": orderClause = "preco ASC"; break;
+                case "preco_desc": orderClause = "preco DESC"; break;
+                case "nome_asc": orderClause = "nome ASC"; break;
+                case "recentes": orderClause = "data_criacao DESC"; break;
+                default: orderClause = "nome ASC";
+            }
+        } else {
+            orderClause = "nome ASC";
+        }
+        sql.append(" ORDER BY ").append(orderClause);
+
+        int offset = (page - 1) * pageSize;
+        sql.append(" LIMIT ? OFFSET ?");
+        params.add(pageSize);
+        params.add(offset);
+
+        List<Produto> produtos = new ArrayList<>();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                Object param = params.get(i);
+                if (param instanceof String) {
+                    stmt.setString(i + 1, (String) param);
+                } else if (param instanceof Double) {
+                    stmt.setDouble(i + 1, (Double) param);
+                } else if (param instanceof Integer) {
+                    stmt.setInt(i + 1, (Integer) param);
+                }
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Produto p = mapearProduto(rs);
+                    if (p != null) produtos.add(p);
+                }
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return produtos;
+    }
+
+    public int contarComFiltros(String tipo, Double precoMin, Double precoMax) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM produto WHERE ativo = true");
+        List<Object> params = new ArrayList<>();
+
+        if (tipo != null && !tipo.isBlank()) {
+            sql.append(" AND tipo = ?");
+            params.add(tipo);
+        }
+        if (precoMin != null) {
+            sql.append(" AND preco >= ?");
+            params.add(precoMin);
+        }
+        if (precoMax != null) {
+            sql.append(" AND preco <= ?");
+            params.add(precoMax);
+        }
+
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                Object param = params.get(i);
+                if (param instanceof String) {
+                    stmt.setString(i + 1, (String) param);
+                } else if (param instanceof Double) {
+                    stmt.setDouble(i + 1, (Double) param);
+                }
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
+        }
+        return 0;
+    }
+
     private List<Produto> listar(String sql, String param, int offset, int limit) throws SQLException {
         List<Produto> produtos = new ArrayList<>();
         Connection connection = DataSourceUtils.getConnection(dataSource);

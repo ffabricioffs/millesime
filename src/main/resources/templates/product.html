@@ -107,14 +107,16 @@
                         </div>
 
                         <!-- Add to Cart -->
-                        <div class="product-cart-row">
+                        <form th:action="@{/carrinho/adicionar}" method="post" class="product-cart-row">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="produtoId" th:value="${product.id}" />
                             <div class="product-quantity-selector">
-                                <button class="product-quantity-button">−</button>
-                                <input type="number" value="1" class="product-quantity-input">
-                                <button class="product-quantity-button">+</button>
+                                <button type="button" class="product-quantity-button" data-action="decrease">−</button>
+                                <input type="number" name="quantidade" value="1" min="1" class="product-quantity-input">
+                                <button type="button" class="product-quantity-button" data-action="increase">+</button>
                             </div>
-                            <button class="btn-premium btn-full product-add-cart-button">Adicionar ao Carrinho</button>
-                        </div>
+                            <button type="submit" class="btn-premium btn-full product-add-cart-button">Adicionar ao Carrinho</button>
+                        </form>
 
                         <!-- Wishlist -->
                         <button class="btn-premium-outline btn-full product-wishlist-button">

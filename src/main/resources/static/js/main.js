@@ -89,18 +89,19 @@ function initializeProductInteractions() {
         });
     });
 
-    // Add to cart buttons
-    const addToCartButtons = document.querySelectorAll('button:contains("Adicionar ao Carrinho")');
-    addToCartButtons.forEach(button => {
+    // Add to cart buttons (via class selector)
+    document.querySelectorAll('.product-add-cart-button').forEach(button => {
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            addToCart(this);
+            const form = this.closest('form');
+            if (!form) {
+                e.preventDefault();
+                addToCart(this);
+            }
         });
     });
 
     // Wishlist buttons
-    const wishlistButtons = document.querySelectorAll('button:contains("Lista de Desejos")');
-    wishlistButtons.forEach(button => {
+    document.querySelectorAll('.product-wishlist-button').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             toggleWishlist(this);

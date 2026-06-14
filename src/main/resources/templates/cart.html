@@ -43,7 +43,14 @@
                             <tr th:each="item, stat : ${cartItems}" style="border-bottom:1px solid #e0d5c1;">
                                 <td style="padding:1rem 0.5rem;" th:text="${item.nomeProduto}">Vinho Tinto</td>
                                 <td style="text-align:center;padding:1rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.precoUnitario, 1, 2)}">R$ 89,90</td>
-                                <td style="text-align:center;padding:1rem 0.5rem;" th:text="${item.quantidade}">1</td>
+                                <td style="text-align:center;padding:1rem 0.5rem;">
+                                    <form th:action="@{/carrinho/atualizar}" method="post" style="display:inline-flex;align-items:center;gap:0.25rem;">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                        <input type="hidden" name="index" th:value="${stat.index}" />
+                                        <input type="number" name="quantidade" th:value="${item.quantidade}" min="1" style="width:3rem;text-align:center;padding:0.25rem;border:1px solid #d0c8b8;border-radius:4px;" />
+                                        <button type="submit" style="background:none;border:none;cursor:pointer;color:#8b6914;font-size:0.9rem;">↻</button>
+                                    </form>
+                                </td>
                                 <td style="text-align:right;padding:1rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}">R$ 89,90</td>
                                 <td style="text-align:center;padding:1rem 0.5rem;">
                                     <form th:action="@{/carrinho/remover}" method="post" style="display:inline;">

@@ -315,7 +315,10 @@
     font-size: 0.9rem;
     font-family: 'Open Sans', sans-serif;
     transition: border-color 0.2s;
-    resize: vertical;
+}
+
+textarea.admin-input {
+    resize: none;
     min-height: 120px;
 }
 

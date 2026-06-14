@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.Millesime.model.Cliente;
+import com.example.Millesime.dto.ClienteSession;
 import com.example.Millesime.model.ItemPedido;
 import com.example.Millesime.model.Pedido;
 import com.example.Millesime.model.PedidoService;
@@ -87,6 +87,16 @@ public class OrderController {
         return "redirect:/carrinho";
     }
 
+    @PostMapping("/carrinho/atualizar")
+    public String updateCart(@RequestParam int index, @RequestParam int quantidade, HttpSession session) {
+        @SuppressWarnings("unchecked")
+        List<ItemPedido> carrinho = (List<ItemPedido>) session.getAttribute("carrinho");
+        if (carrinho != null && index >= 0 && index < carrinho.size() && quantidade > 0) {
+            carrinho.get(index).setQuantidade(quantidade);
+        }
+        return "redirect:/carrinho";
+    }
+
     @PostMapping("/carrinho/remover")
     public String removeFromCart(@RequestParam int index, HttpSession session) {
         @SuppressWarnings("unchecked")
@@ -100,14 +110,14 @@ public class OrderController {
     @PostMapping("/pedido/{id}/cancelar")
     public String cancelOrder(@PathVariable UUID id, HttpSession session,
                               RedirectAttributes redirectAttributes) {
-        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
-        if (cliente == null) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
             return "redirect:/login";
         }
 
         try {
             Pedido pedido = pedidoService.buscarPorId(id);
-            if (!pedido.getClienteId().equals(cliente.getId())) {
+            if (!pedido.getClienteId().equals(sessionCliente.getId())) {
                 redirectAttributes.addFlashAttribute("error", "Este pedido não pertence a você.");
                 return "redirect:/meus-pedidos";
             }
@@ -122,8 +132,8 @@ public class OrderController {
 
     @GetMapping("/checkout")
     public String checkout(Model model, HttpSession session) {
-        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
-        if (cliente == null) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
             return "redirect:/login";
         }
 
@@ -136,7 +146,7 @@ public class OrderController {
         model.addAttribute("cartItems", carrinho);
         model.addAttribute("subtotal", calcSubtotal(session));
         model.addAttribute("total", calcSubtotal(session));
-        model.addAttribute("cliente", cliente);
+        model.addAttribute("cliente", sessionCliente);
         model.addAttribute("today", LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         return "checkout";
     }
@@ -144,8 +154,8 @@ public class OrderController {
     @PostMapping("/pedido/finalizar")
     public String placeOrder(HttpSession session,
                              RedirectAttributes redirectAttributes) {
-        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
-        if (cliente == null) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
             return "redirect:/login";
         }
 
@@ -157,7 +167,7 @@ public class OrderController {
 
         try {
             List<ItemPedido> itens = new ArrayList<>(carrinho);
-            Pedido pedido = pedidoService.criarPedido(cliente.getId(), itens);
+            Pedido pedido = pedidoService.criarPedido(sessionCliente.getId(), itens);
             session.removeAttribute("carrinho");
             return "redirect:/pedido/" + pedido.getId() + "?success";
         } catch (Exception e) {
@@ -170,14 +180,14 @@ public class OrderController {
     public String orderDetail(@PathVariable UUID id, Model model,
                               HttpSession session,
                               @RequestParam(required = false) String success) {
-        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
-        if (cliente == null) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
             return "redirect:/login";
         }
 
         try {
             Pedido pedido = pedidoService.buscarPorId(id);
-            if (!pedido.getClienteId().equals(cliente.getId())) {
+            if (!pedido.getClienteId().equals(sessionCliente.getId())) {
                 return "redirect:/meus-pedidos";
             }
 
@@ -195,19 +205,19 @@ public class OrderController {
     @GetMapping("/meus-pedidos")
     public String myOrders(Model model, HttpSession session,
                            @RequestParam(defaultValue = "1") int page) {
-        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
-        if (cliente == null) {
+        ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
+        if (sessionCliente == null) {
             return "redirect:/login";
         }
 
         try {
             int pageSize = 10;
-            int totalCount = pedidoService.contarPorCliente(cliente.getId());
+            int totalCount = pedidoService.contarPorCliente(sessionCliente.getId());
             int totalPages = Math.max(1, (totalCount + pageSize - 1) / pageSize);
             page = Math.min(Math.max(page, 1), totalPages);
 
             model.addAttribute("pageTitle", "Meus Pedidos - Millésime");
-            model.addAttribute("pedidos", pedidoService.listarPorCliente(cliente.getId(), page, pageSize));
+            model.addAttribute("pedidos", pedidoService.listarPorCliente(sessionCliente.getId(), page, pageSize));
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", totalPages);
             return "meus-pedidos";

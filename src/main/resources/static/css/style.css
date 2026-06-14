@@ -914,6 +914,57 @@ footer {
   }
 }
 
+/* ========== User Dropdown ========== */
+.user-dropdown {
+  position: relative;
+}
+
+.user-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  min-width: 180px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 100;
+  padding: 0.5rem 0;
+}
+
+.user-dropdown:hover .user-dropdown-menu {
+  display: block;
+}
+
+.user-dropdown-name {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.user-dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  text-decoration: none;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s;
+}
+
+.user-dropdown-item:hover {
+  background-color: var(--muted);
+  color: var(--primary);
+}
+
 /* ========== Print Styles ========== */
 @media print {
   header,

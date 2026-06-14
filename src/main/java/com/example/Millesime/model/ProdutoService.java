@@ -145,6 +145,22 @@ public class ProdutoService {
         }
     }
 
+    public List<Produto> listarComFiltros(String tipo, Double precoMin, Double precoMax, String ordem, int page, int pageSize) throws Exception {
+        try {
+            return produtoDAO.listarComFiltros(tipo, precoMin, precoMax, ordem, page, pageSize);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao listar produtos com filtros.", e);
+        }
+    }
+
+    public int contarComFiltros(String tipo, Double precoMin, Double precoMax) throws Exception {
+        try {
+            return produtoDAO.contarComFiltros(tipo, precoMin, precoMax);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao contar produtos com filtros.", e);
+        }
+    }
+
     public void atualizarProduto(Produto produto) throws Exception {
         if (produto == null || produto.getId() == null) {
             throw new ValidationException("O id do produto é obrigatório.");

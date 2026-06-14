@@ -66,16 +66,20 @@ public class HomeController {
             @RequestParam(required = false) String ordem) throws Exception {
         final int pageSize = 12;
 
-        int totalCount;
-        List<Produto> produtos;
-
-        if (type != null && !type.isBlank()) {
-            totalCount = produtoService.contarPorTipo(type);
-            produtos = produtoService.filtrarPorTipo(type, page, pageSize);
-        } else {
-            totalCount = produtoService.contarTodos();
-            produtos = produtoService.listarTodos(page, pageSize);
+        Double precoMin = null;
+        Double precoMax = null;
+        if (preco != null && !preco.isBlank()) {
+            if (preco.contains("-")) {
+                String[] parts = preco.split("-", 2);
+                precoMin = Double.parseDouble(parts[0]);
+                precoMax = Double.parseDouble(parts[1]);
+            } else {
+                precoMin = Double.parseDouble(preco);
+            }
         }
+
+        int totalCount = produtoService.contarComFiltros(type, precoMin, precoMax);
+        List<Produto> produtos = produtoService.listarComFiltros(type, precoMin, precoMax, ordem, page, pageSize);
 
         int totalPages = Math.max(1, (totalCount + pageSize - 1) / pageSize);
         page = Math.min(Math.max(page, 1), totalPages);

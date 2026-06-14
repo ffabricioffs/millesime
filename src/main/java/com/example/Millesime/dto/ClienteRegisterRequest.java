@@ -28,6 +28,15 @@ public class ClienteRegisterRequest {
     private LocalDate dataNascimento;
     private String telefone;
     private boolean newsletter;
+    private String confirmPassword;
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
     public String getNomeCompleto() {
         return nomeCompleto;

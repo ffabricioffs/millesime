@@ -31,6 +31,11 @@ public class RegisterController {
     public String registerPost(@ModelAttribute ClienteRegisterRequest request,
                                 RedirectAttributes redirectAttributes) {
         try {
+            if (!request.getSenha().equals(request.getConfirmPassword())) {
+                redirectAttributes.addFlashAttribute("error", "Senhas não conferem.");
+                return "redirect:/register";
+            }
+
             Cliente cliente = new Cliente();
             cliente.setNomeCompleto(request.getNomeCompleto());
             cliente.setEmail(request.getEmail());
