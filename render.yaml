@@ -3,7 +3,6 @@ services:
     name: millesime
     plan: free
     runtime: docker
-    dockerCommand: ./run-app.sh
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod

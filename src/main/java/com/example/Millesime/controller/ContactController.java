@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class ContactController {
 
@@ -32,15 +34,21 @@ public class ContactController {
     }
 
     @PostMapping("/newsletter")
-    public String newsletter(@RequestParam String email, RedirectAttributes redirectAttributes) {
+    public String newsletter(@RequestParam String email, RedirectAttributes redirectAttributes,
+                              HttpServletRequest request) {
         if (email == null || email.isBlank()) {
             redirectAttributes.addFlashAttribute("newsletterError",
                 "Digite um e-mail válido para receber nossas novidades.");
-            return "redirect:/";
+            return "redirect:" + getReferer(request);
         }
 
         redirectAttributes.addFlashAttribute("newsletterSuccess",
             "Obrigado! Você foi inscrito para receber nossas novidades.");
-        return "redirect:/";
+        return "redirect:" + getReferer(request);
+    }
+
+    private String getReferer(HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        return referer != null ? referer : "/";
     }
 }

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Millésime</title>
+    <meta name="description" content="Edite seus dados cadastrais na Millésime.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title register-section-title">
+                    <h2>Editar Perfil</h2>
+                    <div class="divider-gold"></div>
+                    <p class="section-subtitle">Atualize seus dados cadastrais</p>
+                </div>
+
+                <div th:if="${success}" class="success-message">
+                    <p th:text="${success}">Perfil atualizado com sucesso!</p>
+                </div>
+                <div th:if="${error}" class="error-message">
+                    <p th:text="${error}">Erro ao atualizar perfil.</p>
+                </div>
+
+                <div class="register-form-wrapper">
+                    <form class="register-form" th:action="@{/conta/editar}" method="post" th:object="${cliente}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                        <div class="register-field">
+                            <label for="nomeCompleto">Nome Completo</label>
+                            <input id="nomeCompleto" type="text" name="nomeCompleto" th:value="*{nomeCompleto}" required placeholder="Seu nome completo">
+                        </div>
+
+                        <div class="register-field">
+                            <label for="email">E-mail</label>
+                            <input id="email" type="email" name="email" th:value="*{email}" required autocomplete="email" placeholder="seuemail@exemplo.com">
+                        </div>
+
+                        <div class="register-field">
+                            <label for="cpf">CPF</label>
+                            <input id="cpf" type="text" name="cpf" th:value="*{cpf}" required placeholder="000.000.000-00">
+                        </div>
+
+                        <div class="register-field">
+                            <label for="dataNascimento">Data de Nascimento</label>
+                            <input id="dataNascimento" type="date" name="dataNascimento" th:value="*{dataNascimento}">
+                        </div>
+
+                        <div class="register-field">
+                            <label for="telefone">Telefone</label>
+                            <input id="telefone" type="text" name="telefone" th:value="*{telefone}" placeholder="(11) 99999-9999">
+                        </div>
+
+                        <div class="register-field">
+                            <label for="senha">Nova Senha (deixe em branco para manter a atual)</label>
+                            <input id="senha" type="password" name="senha" autocomplete="new-password" placeholder="Nova senha">
+                        </div>
+
+                        <div class="register-field checkbox-field">
+                            <label>
+                                <input type="checkbox" name="newsletter" value="true" th:checked="*{newsletter}" />
+                                <span>Desejo receber novidades e ofertas por e-mail</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-premium-gold register-submit">Salvar Alterações</button>
+                    </form>
+
+                    <a th:href="@{/conta}" style="display:block;text-align:center;margin-top:1rem;color:#8b6914;">Voltar para Minha Conta</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="layout :: footer"></footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

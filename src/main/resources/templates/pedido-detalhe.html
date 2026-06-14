@@ -54,9 +54,15 @@
                     </tfoot>
                 </table>
 
-                <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
                     <a th:href="@{/meus-pedidos}" class="btn-premium" style="display:inline-block;padding:0.75rem 1.5rem;border:1px solid #c9a84c;color:#c9a84c;text-decoration:none;border-radius:4px;">&laquo; Voltar aos Pedidos</a>
                     <a th:href="@{/catalogo}" class="btn-premium-gold" style="display:inline-block;padding:0.75rem 1.5rem;text-decoration:none;border-radius:4px;">Comprar Novamente</a>
+                    <form th:if="${pedido.status == 'PENDENTE' or pedido.status == 'CONFIRMADO'}"
+                          th:action="@{/pedido/{id}/cancelar(id=${pedido.id})}" method="post" style="display:inline;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn-premium" style="padding:0.75rem 1.5rem;border:1px solid #c0392b;color:#c0392b;background:none;border-radius:4px;cursor:pointer;"
+                                onclick="return confirm('Tem certeza que deseja cancelar este pedido?')">Cancelar Pedido</button>
+                    </form>
                 </div>
             </div>
         </section>

@@ -63,26 +63,24 @@ public class HomeController {
             Model model,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String region) throws Exception {
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String preco,
+            @RequestParam(required = false) String ordem) throws Exception {
         final int pageSize = 12;
 
         int totalCount;
+        List<Produto> produtos;
 
         if (type != null && !type.isBlank()) {
             totalCount = produtoService.contarPorTipo(type);
+            produtos = produtoService.filtrarPorTipo(type, page, pageSize);
         } else {
             totalCount = produtoService.contarTodos();
+            produtos = produtoService.listarTodos(page, pageSize);
         }
 
         int totalPages = Math.max(1, (totalCount + pageSize - 1) / pageSize);
         page = Math.min(Math.max(page, 1), totalPages);
-
-        List<Produto> produtos;
-        if (type != null && !type.isBlank()) {
-            produtos = produtoService.filtrarPorTipo(type, page, pageSize);
-        } else {
-            produtos = produtoService.listarTodos(page, pageSize);
-        }
 
         model.addAttribute("pageTitle", "Catálogo de Vinhos - Millésime");
         model.addAttribute("produtos", produtos);
@@ -92,6 +90,7 @@ public class HomeController {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("selectedType", type);
         model.addAttribute("selectedRegion", region);
+        model.addAttribute("ordem", ordem);
 
         return "catalog";
     }
@@ -112,6 +111,32 @@ public class HomeController {
         model.addAttribute("pageTitle", produto.getNome() + " - Millésime");
         model.addAttribute("product", produto);
         return "product";
+    }
+
+    @GetMapping("/busca")
+    public String search(Model model,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam String q) throws Exception {
+        final int pageSize = 12;
+
+        if (q == null || q.isBlank()) {
+            return "redirect:/catalogo";
+        }
+
+        int totalCount = produtoService.contarPorNome(q);
+        int totalPages = Math.max(1, (totalCount + pageSize - 1) / pageSize);
+        page = Math.min(Math.max(page, 1), totalPages);
+
+        List<Produto> produtos = produtoService.buscarPorNome(q, page, pageSize);
+
+        model.addAttribute("pageTitle", "Busca: " + q + " - Millésime");
+        model.addAttribute("produtos", produtos);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("termo", q);
+
+        return "busca";
     }
 
     @GetMapping("/sobre")

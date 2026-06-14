@@ -97,6 +97,29 @@ public class OrderController {
         return "redirect:/carrinho";
     }
 
+    @PostMapping("/pedido/{id}/cancelar")
+    public String cancelOrder(@PathVariable UUID id, HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+        Cliente cliente = (Cliente) session.getAttribute("clienteLogado");
+        if (cliente == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Pedido pedido = pedidoService.buscarPorId(id);
+            if (!pedido.getClienteId().equals(cliente.getId())) {
+                redirectAttributes.addFlashAttribute("error", "Este pedido não pertence a você.");
+                return "redirect:/meus-pedidos";
+            }
+
+            pedidoService.cancelarPedido(id);
+            redirectAttributes.addFlashAttribute("success", "Pedido cancelado com sucesso.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/pedido/" + id;
+    }
+
     @GetMapping("/checkout")
     public String checkout(Model model, HttpSession session) {
         Cliente cliente = (Cliente) session.getAttribute("clienteLogado");

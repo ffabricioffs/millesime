@@ -25,12 +25,12 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(DataSource dataSource) {
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
         manager.setUsersByUsernameQuery(
-            "SELECT email, senha, ativo FROM cliente WHERE email = ?"
+            "SELECT email, senha, ativo FROM cliente WHERE LOWER(email) = LOWER(?)"
         );
         manager.setAuthoritiesByUsernameQuery(
             "SELECT c.email, cr.role FROM cliente c " +
             "JOIN cliente_role cr ON c.id = cr.cliente_id " +
-            "WHERE c.email = ?"
+            "WHERE LOWER(c.email) = LOWER(?)"
         );
         return manager;
     }
@@ -42,14 +42,16 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/register", "/register-success",
                     "/reset-password/**", "/catalogo", "/produto/**",
-                    "/sobre", "/contato", "/enviar-contato", "/politica-privacidade",
-                    "/newsletter", "/css/**", "/js/**",
+                    "/busca", "/sobre", "/contato", "/enviar-contato", "/politica-privacidade",
+                    "/newsletter", "/carrinho", "/carrinho/adicionar", "/carrinho/remover",
+                    "/css/**", "/js/**",
                     "/api/produtos/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/clientes").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/clientes").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/clientes/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/clientes/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/clientes/**").hasRole("ADMIN")
+                .requestMatchers("/api/pedidos/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

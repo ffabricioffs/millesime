@@ -104,6 +104,26 @@ public class ProdutoService {
         }
     }
 
+    public List<Produto> buscarPorNome(String termo, int page, int pageSize) throws Exception {
+        if (termo == null || termo.isBlank()) {
+            throw new ValidationException("Termo de busca é obrigatório.");
+        }
+        try {
+            return produtoDAO.buscarPorNome("%" + termo.trim() + "%", page, pageSize);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao buscar produtos.", e);
+        }
+    }
+
+    public int contarPorNome(String termo) throws Exception {
+        if (termo == null || termo.isBlank()) return 0;
+        try {
+            return produtoDAO.contarPorNome("%" + termo.trim() + "%");
+        } catch (SQLException e) {
+            throw new Exception("Erro ao contar produtos.", e);
+        }
+    }
+
     public void atualizarProduto(Produto produto) throws Exception {
         if (produto == null || produto.getId() == null) {
             throw new ValidationException("O id do produto é obrigatório.");

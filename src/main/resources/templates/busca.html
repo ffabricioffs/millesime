@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Busca - Millésime</title>
+    <meta name="description" content="Resultados da busca por vinhos premium.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/catalog.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+
+    <main>
+        <section>
+            <div class="container">
+                <h1>Resultados da Busca</h1>
+                <p th:text="'Você buscou por: ' + ${termo}">Termo buscado</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div th:if="${#lists.isEmpty(produtos)}" style="text-align:center;padding:3rem 0;">
+                    <p>Nenhum produto encontrado para "<span th:text="${termo}">termo</span>".</p>
+                    <a th:href="@{/catalogo}" class="btn-premium-gold" style="display:inline-block;margin-top:1rem;">Ver Catálogo Completo</a>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(produtos)}">
+                    <div>
+                        <p>Mostrando <strong th:text="${produtos.size()}">0</strong> de <strong th:text="${totalCount}">0</strong> resultados para "<span th:text="${termo}">termo</span>"</p>
+                    </div>
+
+                    <div class="grid">
+                        <div th:each="produto : ${produtos}" class="card-elegant">
+                            <div>
+                                <img th:src="${produto.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Vinho">
+                                <div class="badge-elegant" th:text="${produto.tipo}">Tipo</div>
+                            </div>
+                            <div>
+                                <h3 th:text="${produto.nome}">Vinho Premium</h3>
+                                <p th:text="${produto.regiao} + ' • ' + ${produto.pais}">Região • País</p>
+                                <div>
+                                    <div th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 0, 'POINT', 2, 'COMMA')}">R$ 189,90</div>
+                                    <a th:href="@{/produto/{id}(id=${produto.id})}" class="btn-premium btn-full btn-sm">Ver Detalhes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="catalog-pagination">
+                        <a th:if="${currentPage > 1}"
+                           th:href="@{/busca(q=${termo}, page=${currentPage - 1})}"
+                           class="btn-premium-outline">← Anterior</a>
+                        <span th:each="pageNumber : ${#numbers.sequence(1, totalPages)}">
+                            <a th:href="@{/busca(q=${termo}, page=${pageNumber})}"
+                               th:text="${pageNumber}"
+                               th:classappend="${pageNumber == currentPage} ? ' btn-premium' : ' btn-premium-outline'"></a>
+                        </span>
+                        <a th:if="${currentPage < totalPages}"
+                           th:href="@{/busca(q=${termo}, page=${currentPage + 1})}"
+                           class="btn-premium-outline">Próximo →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="layout :: footer"></footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

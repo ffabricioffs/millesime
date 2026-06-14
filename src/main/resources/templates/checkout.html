@@ -57,6 +57,7 @@
                         <p><strong>Itens:</strong> <span th:text="${#lists.size(cartItems)}">0</span></p>
 
                         <form th:action="@{/pedido/finalizar}" method="post" style="margin-top:2rem;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <button type="submit" class="btn-premium-gold" style="width:100%;">Confirmar Pedido</button>
                         </form>
                         <a th:href="@{/carrinho}" style="display:block;text-align:center;margin-top:0.75rem;color:#8b6914;">Voltar ao Carrinho</a>

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
 @Repository
 public class ClienteDAO {
 
@@ -50,10 +52,21 @@ public class ClienteDAO {
             cliente.setDataCadastro(LocalDateTime.now());
         }
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_SQL)) {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL)) {
             preencherStatementParaSalvar(statement, cliente);
             statement.executeUpdate();
+        }
+
+        try (PreparedStatement psRole = connection.prepareStatement(
+                "INSERT INTO cliente_role (id, cliente_id, role) VALUES (?, ?, 'ROLE_CLIENTE')")) {
+            psRole.setObject(1, UUID.randomUUID());
+            psRole.setObject(2, cliente.getId());
+            psRole.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 

@@ -32,6 +32,8 @@ public class ProdutoDAO {
             SET nome = ?, descricao = ?, tipo = ?, regiao = ?, pais = ?, uva = ?, preco = ?, estoque = ?, imagem = ?, ativo = ?
             WHERE id = ?
             """;
+    private static final String SELECT_BY_NOME_SQL = "SELECT * FROM produto WHERE ativo = true AND LOWER(nome) LIKE LOWER(?) ORDER BY nome LIMIT ? OFFSET ?";
+    private static final String SELECT_COUNT_BY_NOME_SQL = "SELECT COUNT(*) FROM produto WHERE ativo = true AND LOWER(nome) LIKE LOWER(?)";
     private static final String SOFT_DELETE_SQL = "UPDATE produto SET ativo = false WHERE id = ?";
 
     private final DataSource dataSource;
@@ -144,6 +146,38 @@ public class ProdutoDAO {
              PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_BY_TIPO_SQL)) {
             statement.setString(1, tipo);
 
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    public List<Produto> buscarPorNome(String termo, int page, int pageSize) throws SQLException {
+        List<Produto> produtos = new ArrayList<>();
+        int offset = Math.max(0, page - 1) * pageSize;
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BY_NOME_SQL)) {
+            statement.setString(1, termo);
+            statement.setInt(2, pageSize);
+            statement.setInt(3, offset);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    produtos.add(mapearProduto(resultSet));
+                }
+            }
+        }
+        return produtos;
+    }
+
+    public int contarPorNome(String termo) throws SQLException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_BY_NOME_SQL)) {
+            statement.setString(1, termo);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt(1);
