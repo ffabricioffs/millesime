@@ -1,6 +1,7 @@
 package com.example.Millesime.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,11 @@ public class Pedido {
     private Double total;
     private String status;
     private List<ItemPedido> itens;
+
+    public String getDataFormatada() {
+        if (dataPedido == null) return "";
+        return dataPedido.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
 
     public Pedido() {
         this.dataPedido = LocalDateTime.now();

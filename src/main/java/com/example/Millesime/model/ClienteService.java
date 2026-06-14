@@ -204,6 +204,17 @@ public class ClienteService {
         }
     }
 
+    public Cliente buscarPorEmail(String email) throws Exception {
+        if (email == null || email.isBlank()) {
+            throw new ValidationException("E-mail é obrigatório.");
+        }
+        try {
+            return clienteDAO.buscarPorEmail(normalizeEmail(email));
+        } catch (SQLException e) {
+            throw new Exception("Erro ao buscar cliente por e-mail.", e);
+        }
+    }
+
     private void prepararCliente(Cliente cliente) {
         if (cliente.getEmail() != null) {
             cliente.setEmail(normalizeEmail(cliente.getEmail()));

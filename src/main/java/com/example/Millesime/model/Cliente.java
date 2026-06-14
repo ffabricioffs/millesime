@@ -111,6 +111,11 @@ public class Cliente {
         this.dataCadastro = dataCadastro;
     }
 
+    public String getDataCadastroFormatada() {
+        if (dataCadastro == null) return "";
+        return dataCadastro.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+
     public boolean isAtivo() {
         return ativo;
     }

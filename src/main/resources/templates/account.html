@@ -3,33 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Conta - Millésime</title>
+    <title th:text="${pageTitle}">Minha Conta - Millésime</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-container">
-                <a th:href="@{/}" class="logo">
-                    <div>
-                        <div class="logo-title">Millésime</div>
-                        <div class="logo-subtitle">VINHOS PREMIUM</div>
-                    </div>
-                </a>
-                <nav>
-                    <a th:href="@{/}">Início</a>
-                    <a th:href="@{/catalogo}">Catálogo</a>
-                    <a th:href="@{/sobre}">Sobre</a>
-                    <a th:href="@{/contato}">Contato</a>
-                </nav>
-                <div class="header-actions">
-                    <a th:href="@{/carrinho}" class="icon-btn">Carrinho</a>
-                    <a th:href="@{/login}" class="icon-btn">Entrar</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
+    <header th:replace="layout :: header"></header>
     <main>
         <section class="container section">
             <h1>Minha Conta</h1>
@@ -47,7 +25,7 @@
                     <p><strong>CPF:</strong> <span th:text="${session.clienteLogado.cpf}"></span></p>
                     <p><strong>Telefone:</strong> <span th:text="${session.clienteLogado.telefone}">-</span></p>
                     <p><strong>Newsletter:</strong> <span th:text="${session.clienteLogado.newsletter} ? 'Sim' : 'Não'"></span></p>
-                    <p><strong>Data de cadastro:</strong> <span th:text="${session.clienteLogado.dataCadastro}"></span></p>
+                    <p><strong>Data de cadastro:</strong> <span th:text="${session.clienteLogado.dataCadastroFormatada}"></span></p>
                 </div>
                 <div class="account-actions">
                     <a th:href="@{/logout}" class="btn-premium-gold btn-full">Sair</a>
@@ -55,11 +33,6 @@
             </div>
         </section>
     </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2024</span> Millésime. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+    <footer th:replace="layout :: footer"></footer>
 </body>
 </html>

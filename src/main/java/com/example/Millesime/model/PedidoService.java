@@ -9,6 +9,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -169,8 +171,8 @@ public class PedidoService {
 
     private void darBaixaEstoque(List<ItemPedido> itens) throws Exception {
         String sql = "UPDATE produto SET estoque = estoque - ? WHERE id = ? AND estoque >= ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (ItemPedido item : itens) {
                 statement.setInt(1, item.getQuantidade());
                 statement.setObject(2, item.getProdutoId());
@@ -183,14 +185,16 @@ public class PedidoService {
             }
         } catch (SQLException e) {
             throw new Exception("Erro ao dar baixa no estoque.", e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     private void reporEstoque(UUID pedidoId) throws Exception {
         List<ItemPedido> itens = itemPedidoDAO.buscarPorPedidoId(pedidoId);
         String sql = "UPDATE produto SET estoque = estoque + ? WHERE id = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (ItemPedido item : itens) {
                 statement.setInt(1, item.getQuantidade());
                 statement.setObject(2, item.getProdutoId());
@@ -198,6 +202,8 @@ public class PedidoService {
             }
         } catch (SQLException e) {
             throw new Exception("Erro ao repor estoque.", e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 }

@@ -18,7 +18,7 @@
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:1.5rem;">
                     <div>
                         <h2 style="margin:0;">Pedido #<span th:text="${#strings.substring(pedido.id.toString(), 0, 8)}">ABC12345</span></h2>
-                        <p style="color:#666;margin-top:0.25rem;" th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy HH:mm')}">01/01/2026</p>
+                        <p style="color:#666;margin-top:0.25rem;" th:text="${pedido.dataFormatada}">01/01/2026</p>
                     </div>
                     <div>
                         <span th:text="${pedido.status}"

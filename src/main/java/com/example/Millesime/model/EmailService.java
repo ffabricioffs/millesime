@@ -17,21 +17,25 @@ public class EmailService {
     }
 
     public void enviarEmailRedefinicaoSenha(String para, String linkRedefinicao) {
-        SimpleMailMessage mensagem = new SimpleMailMessage();
-        mensagem.setFrom(fromAddress);
-        mensagem.setTo(para);
-        mensagem.setSubject("Redefinição de Senha - Millésime");
-        mensagem.setText("""
-                Olá,
+        try {
+            SimpleMailMessage mensagem = new SimpleMailMessage();
+            mensagem.setFrom(fromAddress);
+            mensagem.setTo(para);
+            mensagem.setSubject("Redefinição de Senha - Millésime");
+            mensagem.setText("""
+                    Olá,
 
-                Recebemos uma solicitação para redefinir sua senha. Clique no link abaixo para criar uma nova senha:
-                %s
+                    Recebemos uma solicitação para redefinir sua senha. Clique no link abaixo para criar uma nova senha:
+                    %s
 
-                Se você não solicitou esta alteração, ignore esta mensagem.
+                    Se você não solicitou esta alteração, ignore esta mensagem.
 
-                Atenciosamente,
-                Equipe Millésime
-                """.formatted(linkRedefinicao));
-        mailSender.send(mensagem);
+                    Atenciosamente,
+                    Equipe Millésime
+                    """.formatted(linkRedefinicao));
+            mailSender.send(mensagem);
+        } catch (Exception e) {
+            System.err.println("[EmailService] Falha ao enviar email para " + para + ": " + e.getMessage());
+        }
     }
 }
