@@ -3,24 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrinho de Compras - Millésime</title>
+    <title th:text="${pageTitle}">Carrinho de Compras - Millésime</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
     <header th:replace="layout :: header"></header>
-    <main class="container section">
-        <h1>Meu Carrinho</h1>
-        <div class="cart-items">
-            <p th:if="${#lists.isEmpty(cartItems)}">Seu carrinho está vazio.</p>
-            <div th:each="item : ${cartItems}" class="cart-item">
-                <!-- item details here -->
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Meu Carrinho</h2>
+                    <div class="divider-gold"></div>
+                </div>
+
+                <div th:if="${cartSuccess}" class="success-message">
+                    <p th:text="${cartSuccess}"></p>
+                </div>
+                <div th:if="${cartError}" class="error-message">
+                    <p th:text="${cartError}"></p>
+                </div>
+
+                <div th:if="${#lists.isEmpty(cartItems)}" style="text-align:center;padding:3rem 0;">
+                    <p>Seu carrinho está vazio.</p>
+                    <a th:href="@{/catalogo}" class="btn-premium-gold" style="display:inline-block;margin-top:1rem;">Ver Catálogo</a>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(cartItems)}">
+                    <table style="width:100%;border-collapse:collapse;margin-bottom:2rem;">
+                        <thead>
+                            <tr style="border-bottom:1px solid #c9a84c;">
+                                <th style="text-align:left;padding:0.75rem 0.5rem;">Produto</th>
+                                <th style="text-align:center;padding:0.75rem 0.5rem;">Preço</th>
+                                <th style="text-align:center;padding:0.75rem 0.5rem;">Quantidade</th>
+                                <th style="text-align:right;padding:0.75rem 0.5rem;">Subtotal</th>
+                                <th style="text-align:center;padding:0.75rem 0.5rem;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item, stat : ${cartItems}" style="border-bottom:1px solid #e0d5c1;">
+                                <td style="padding:1rem 0.5rem;" th:text="${item.nomeProduto}">Vinho Tinto</td>
+                                <td style="text-align:center;padding:1rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.precoUnitario, 1, 2)}">R$ 89,90</td>
+                                <td style="text-align:center;padding:1rem 0.5rem;" th:text="${item.quantidade}">1</td>
+                                <td style="text-align:right;padding:1rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}">R$ 89,90</td>
+                                <td style="text-align:center;padding:1rem 0.5rem;">
+                                    <form th:action="@{/carrinho/remover}" method="post" style="display:inline;">
+                                        <input type="hidden" name="index" th:value="${stat.index}">
+                                        <button type="submit" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:1.2rem;">&times;</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="text-align:right;padding:1rem 0;border-top:2px solid #c9a84c;">
+                        <p style="font-size:1.2rem;font-weight:600;">Total: <span th:text="'R$ ' + ${#numbers.formatDecimal(total, 1, 2)}">R$ 0,00</span></p>
+                        <a th:href="@{/checkout}" class="btn-premium-gold" style="display:inline-block;margin-top:1rem;">Finalizar Compra</a>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="cart-summary">
-            <p>Subtotal: <span>0.00</span></p>
-            <p>Total: <span>0.00</span></p>
-            <a th:href="@{/checkout}" class="btn-premium">Finalizar Compra</a>
-        </div>
+        </section>
     </main>
     <footer th:replace="layout :: footer"></footer>
 </body>

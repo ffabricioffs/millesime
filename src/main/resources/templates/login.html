@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
 <body>
     <header>
@@ -64,9 +65,12 @@
                     <div th:if="${loginError}" class="error-message">
                         <p th:text="${loginError}"></p>
                     </div>
+                    <div th:if="${logoutMsg}" class="success-message">
+                        <p th:text="${logoutMsg}"></p>
+                    </div>
                     <div class="register-field">
-                        <label for="email">E-mail</label>
-                        <input id="email" name="email" type="email" required autocomplete="email" placeholder="seuemail@exemplo.com">
+                        <label for="username">E-mail</label>
+                        <input id="username" name="username" type="text" required autocomplete="username" placeholder="seuemail@exemplo.com">
                     </div>
 
                     <div class="register-field">

@@ -1,14 +1,35 @@
 package com.example.Millesime.dto;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class ProdutoRequest {
+    @NotBlank(message = "Nome do produto é obrigatório")
+    @Size(min = 3, message = "Nome deve ter pelo menos 3 caracteres")
     private String nome;
+
+    @NotBlank(message = "Descrição é obrigatória")
+    @Size(min = 10, message = "Descrição deve ter pelo menos 10 caracteres")
     private String descricao;
+
+    @NotBlank(message = "Tipo do produto é obrigatório")
     private String tipo;
+
     private String regiao;
     private String pais;
     private String uva;
+
+    @NotNull(message = "Preço é obrigatório")
+    @DecimalMin(value = "0.01", message = "Preço deve ser maior que zero")
     private Double preco;
+
+    @NotNull(message = "Estoque é obrigatório")
+    @Min(value = 0, message = "Estoque não pode ser negativo")
     private Integer estoque;
+
     private String imagem;
 
     public String getNome() {

@@ -147,14 +147,6 @@ public class ClienteDAO {
         }
     }
 
-    public Cliente autenticar(String email, String senha) throws SQLException {
-        Cliente cliente = buscarPorEmail(email);
-        if (cliente != null && cliente.isAtivo() && cliente.getSenha().equals(senha)) {
-            return cliente;
-        }
-        return null;
-    }
-
     private void preencherStatementParaSalvar(PreparedStatement statement, Cliente cliente) throws SQLException {
         statement.setObject(1, cliente.getId());
         statement.setString(2, cliente.getNomeCompleto());

@@ -2,11 +2,26 @@ package com.example.Millesime.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class ClienteRequest {
+    @NotBlank(message = "Nome completo é obrigatório")
+    @Size(min = 3, message = "Nome deve ter pelo menos 3 caracteres")
     private String nomeCompleto;
+
+    @NotBlank(message = "E-mail é obrigatório")
+    @Email(message = "E-mail inválido")
     private String email;
+
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
     private String senha;
+
+    @NotBlank(message = "CPF é obrigatório")
     private String cpf;
+
     private LocalDate dataNascimento;
     private String telefone;
     private boolean newsletter;

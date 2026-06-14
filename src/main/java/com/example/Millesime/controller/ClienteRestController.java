@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,7 +63,7 @@ public class ClienteRestController {
      * POST - Criar novo cliente
      */
     @PostMapping
-    public ResponseEntity<ClienteResponse> criar(@RequestBody ClienteRequest request) throws Exception {
+    public ResponseEntity<ClienteResponse> criar(@Valid @RequestBody ClienteRequest request) throws Exception {
         Cliente cliente = fromRequest(request);
         clienteService.cadastrarCliente(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(cliente));
@@ -71,7 +73,7 @@ public class ClienteRestController {
      * PUT - Atualizar cliente existente
      */
     @PutMapping("/{id}")
-    public ResponseEntity<String> atualizar(@PathVariable UUID id, @RequestBody ClienteRequest request) {
+    public ResponseEntity<String> atualizar(@PathVariable UUID id, @Valid @RequestBody ClienteRequest request) {
         try {
             Cliente cliente = fromRequest(request);
             cliente.setId(id);

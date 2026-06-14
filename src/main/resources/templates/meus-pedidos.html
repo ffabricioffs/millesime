@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Meus Pedidos - Millésime</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Meus Pedidos</h2>
+                    <div class="divider-gold"></div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(pedidos)}" style="text-align:center;padding:3rem 0;">
+                    <p>Você ainda não tem pedidos.</p>
+                    <a th:href="@{/catalogo}" class="btn-premium-gold" style="display:inline-block;margin-top:1rem;">Começar a Comprar</a>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(pedidos)}">
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr style="border-bottom:2px solid #c9a84c;">
+                                <th style="text-align:left;padding:0.75rem 0.5rem;">Pedido</th>
+                                <th style="text-align:left;padding:0.75rem 0.5rem;">Data</th>
+                                <th style="text-align:right;padding:0.75rem 0.5rem;">Total</th>
+                                <th style="text-align:center;padding:0.75rem 0.5rem;">Status</th>
+                                <th style="text-align:center;padding:0.75rem 0.5rem;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="pedido : ${pedidos}" style="border-bottom:1px solid #e0d5c1;">
+                                <td style="padding:1rem 0.5rem;" th:text="${#strings.substring(pedido.id.toString(), 0, 8)}">ABC12345</td>
+                                <td style="padding:1rem 0.5rem;" th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy HH:mm')}">01/01/2026</td>
+                                <td style="text-align:right;padding:1rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(pedido.total, 1, 2)}">R$ 0,00</td>
+                                <td style="text-align:center;padding:1rem 0.5rem;">
+                                    <span th:text="${pedido.status}"
+                                          th:classappend="${pedido.status == 'CANCELADO'} ? 'status-cancelado' : 
+                                                         (pedido.status == 'ENTREGUE' ? 'status-entregue' : 'status-pendente')"
+                                          style="padding:0.25rem 0.75rem;border-radius:4px;font-size:0.85rem;">PENDENTE</span>
+                                </td>
+                                <td style="text-align:center;padding:1rem 0.5rem;">
+                                    <a th:href="@{/pedido/{id}(id=${pedido.id})}" style="color:#8b6914;">Detalhes</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="text-align:center;margin-top:2rem;">
+                        <span th:if="${currentPage > 1}">
+                            <a th:href="@{/meus-pedidos(page=${currentPage - 1})}" style="color:#8b6914;margin-right:0.5rem;">&laquo; Anterior</a>
+                        </span>
+                        <span th:text="'Página ' + ${currentPage} + ' de ' + ${totalPages}" style="margin:0 1rem;"></span>
+                        <span th:if="${currentPage < totalPages}">
+                            <a th:href="@{/meus-pedidos(page=${currentPage + 1})}" style="color:#8b6914;margin-left:0.5rem;">Próximo &raquo;</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="layout :: footer"></footer>
+</body>
+</html>

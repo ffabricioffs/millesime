@@ -8,31 +8,63 @@
 </head>
 <body>
     <header th:replace="layout :: header"></header>
-    <main class="container section">
-        <h1>Finalizar Compra</h1>
-        <div class="checkout-container">
-            <form th:action="@{/order/place}" method="post">
-                <div class="form-group">
-                    <label for="name">Nome Completo</label>
-                    <input type="text" id="name" name="name" required>
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Finalizar Compra</h2>
+                    <div class="divider-gold"></div>
                 </div>
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" required>
+
+                <div th:if="${error}" class="error-message">
+                    <p th:text="${error}"></p>
                 </div>
-                <div class="form-group">
-                    <label for="address">Endereço</label>
-                    <input type="text" id="address" name="address" required>
+
+                <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+                    <div style="flex:2;min-width:300px;">
+                        <h3>Resumo do Pedido</h3>
+                        <table style="width:100%;border-collapse:collapse;margin-bottom:1.5rem;">
+                            <thead>
+                                <tr style="border-bottom:1px solid #c9a84c;">
+                                    <th style="text-align:left;padding:0.5rem;">Produto</th>
+                                    <th style="text-align:center;padding:0.5rem;">Qtd</th>
+                                    <th style="text-align:right;padding:0.5rem;">Preço</th>
+                                    <th style="text-align:right;padding:0.5rem;">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item : ${cartItems}" style="border-bottom:1px solid #e0d5c1;">
+                                    <td style="padding:0.75rem 0.5rem;" th:text="${item.nomeProduto}">Vinho</td>
+                                    <td style="text-align:center;padding:0.75rem 0.5rem;" th:text="${item.quantidade}">1</td>
+                                    <td style="text-align:right;padding:0.75rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.precoUnitario, 1, 2)}">89,90</td>
+                                    <td style="text-align:right;padding:0.75rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}">89,90</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr style="border-top:2px solid #c9a84c;">
+                                    <td colspan="3" style="text-align:right;padding:0.75rem 0.5rem;font-weight:600;">Total</td>
+                                    <td style="text-align:right;padding:0.75rem 0.5rem;font-weight:600;" th:text="'R$ ' + ${#numbers.formatDecimal(total, 1, 2)}">R$ 0,00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div style="flex:1;min-width:280px;">
+                        <h3>Dados do Cliente</h3>
+                        <p><strong>Nome:</strong> <span th:text="${cliente.nomeCompleto}">Nome</span></p>
+                        <p><strong>E-mail:</strong> <span th:text="${cliente.email}">email@exemplo.com</span></p>
+                        <p><strong>Data:</strong> <span th:text="${today}">01/01/2026</span></p>
+                        <p><strong>Itens:</strong> <span th:text="${#lists.size(cartItems)}">0</span></p>
+
+                        <form th:action="@{/pedido/finalizar}" method="post" style="margin-top:2rem;">
+                            <button type="submit" class="btn-premium-gold" style="width:100%;">Confirmar Pedido</button>
+                        </form>
+                        <a th:href="@{/carrinho}" style="display:block;text-align:center;margin-top:0.75rem;color:#8b6914;">Voltar ao Carrinho</a>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="city">Cidade</label>
-                    <input type="text" id="city" name="city" required>
-                </div>
-                <button type="submit" class="btn-premium">Confirmar Pedido</button>
-            </form>
-        </div>
+            </div>
+        </section>
     </main>
     <footer th:replace="layout :: footer"></footer>
 </body>
-</html>
 </html>

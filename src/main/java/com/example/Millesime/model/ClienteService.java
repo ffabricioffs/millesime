@@ -2,7 +2,7 @@ package com.example.Millesime.model;
 
 import com.example.Millesime.exception.ResourceNotFoundException;
 import com.example.Millesime.exception.ValidationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +18,18 @@ import java.util.regex.Pattern;
 public class ClienteService {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-    private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     private final ClienteDAO clienteDAO;
     private final PasswordResetTokenDAO passwordResetTokenDAO;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
-    public ClienteService(ClienteDAO clienteDAO, PasswordResetTokenDAO passwordResetTokenDAO, EmailService emailService) {
+    public ClienteService(ClienteDAO clienteDAO, PasswordResetTokenDAO passwordResetTokenDAO,
+                          EmailService emailService, PasswordEncoder passwordEncoder) {
         this.clienteDAO = clienteDAO;
         this.passwordResetTokenDAO = passwordResetTokenDAO;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void cadastrarCliente(Cliente cliente) throws Exception {
@@ -47,44 +49,11 @@ public class ClienteService {
                 throw new ValidationException("Ja existe um cliente cadastrado com este CPF.");
             }
 
-            cliente.setSenha(hashPassword(cliente.getSenha()));
+            cliente.setSenha(passwordEncoder.encode(cliente.getSenha()));
             cliente.setAtivo(true);
             clienteDAO.salvar(cliente);
         } catch (SQLException e) {
             throw new Exception("Erro ao cadastrar cliente.", e);
-        }
-    }
-
-    public Cliente autenticar(String email, String senha) throws Exception {
-        if (email == null || email.isBlank() || senha == null || senha.isBlank()) {
-            throw new ValidationException("E-mail e senha sao obrigatorios para login.");
-        }
-
-        String normalizedEmail = normalizeEmail(email);
-
-        try {
-            Cliente cliente = clienteDAO.buscarPorEmail(normalizedEmail);
-
-            if (cliente == null) {
-                throw new ValidationException("Cliente nao encontrado para o e-mail informado.");
-            }
-
-            if (!cliente.isAtivo()) {
-                throw new ValidationException("Cliente inativo.");
-            }
-
-            if (!matchesPassword(senha, cliente.getSenha())) {
-                throw new ValidationException("Senha invalida.");
-            }
-
-            if (!isPasswordEncoded(cliente.getSenha())) {
-                cliente.setSenha(hashPassword(senha));
-                clienteDAO.atualizar(cliente);
-            }
-
-            return cliente;
-        } catch (SQLException e) {
-            throw new Exception("Erro ao autenticar cliente.", e);
         }
     }
 
@@ -151,7 +120,7 @@ public class ClienteService {
                 throw new ResourceNotFoundException("Cliente nao encontrado.");
             }
 
-            cliente.setSenha(hashPassword(novaSenha));
+            cliente.setSenha(passwordEncoder.encode(novaSenha));
             clienteDAO.atualizar(cliente);
             passwordResetTokenDAO.marcarComoUsado(token.getId());
         } catch (SQLException e) {
@@ -177,8 +146,8 @@ public class ClienteService {
 
             if (cliente.getSenha() == null || cliente.getSenha().isBlank()) {
                 cliente.setSenha(existente.getSenha());
-            } else if (!matchesPassword(cliente.getSenha(), existente.getSenha())) {
-                cliente.setSenha(hashPassword(cliente.getSenha()));
+            } else if (!passwordEncoder.matches(cliente.getSenha(), existente.getSenha())) {
+                cliente.setSenha(passwordEncoder.encode(cliente.getSenha()));
             }
 
             validarCliente(cliente);
@@ -314,24 +283,4 @@ public class ClienteService {
         return result < 2 ? 0 : 11 - result;
     }
 
-    private boolean matchesPassword(String raw, String encoded) {
-        if (raw == null || encoded == null) {
-            return false;
-        }
-        if (isPasswordEncoded(encoded)) {
-            return PASSWORD_ENCODER.matches(raw, encoded);
-        }
-        return raw.equals(encoded);
-    }
-
-    private boolean isPasswordEncoded(String senha) {
-        return senha != null && senha.startsWith("$2");
-    }
-
-    private String hashPassword(String raw) {
-        if (raw == null) {
-            throw new ValidationException("Senha nao informada.");
-        }
-        return PASSWORD_ENCODER.encode(raw);
-    }
 }

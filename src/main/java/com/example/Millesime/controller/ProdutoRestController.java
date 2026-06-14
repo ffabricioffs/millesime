@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +41,7 @@ public class ProdutoRestController {
      * POST - Criar novo produto
      */
     @PostMapping
-    public ResponseEntity<ProdutoResponse> criar(@RequestBody ProdutoRequest request) throws Exception {
+    public ResponseEntity<ProdutoResponse> criar(@Valid @RequestBody ProdutoRequest request) throws Exception {
         Produto produto = fromRequest(request);
         produtoService.cadastrarProduto(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(produto));
@@ -83,7 +85,7 @@ public class ProdutoRestController {
      * PUT - Atualizar produto existente
      */
     @PutMapping("/{id}")
-    public ResponseEntity<String> atualizar(@PathVariable UUID id, @RequestBody ProdutoRequest request) {
+    public ResponseEntity<String> atualizar(@PathVariable UUID id, @Valid @RequestBody ProdutoRequest request) {
         try {
             Produto produto = fromRequest(request);
             produto.setId(id);

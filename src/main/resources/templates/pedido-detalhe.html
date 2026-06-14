@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Detalhes do Pedido - Millésime</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header th:replace="layout :: header"></header>
+    <main>
+        <section class="section">
+            <div class="container">
+                <div th:if="${success}" class="success-message">
+                    <p th:text="${success}"></p>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:1.5rem;">
+                    <div>
+                        <h2 style="margin:0;">Pedido #<span th:text="${#strings.substring(pedido.id.toString(), 0, 8)}">ABC12345</span></h2>
+                        <p style="color:#666;margin-top:0.25rem;" th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy HH:mm')}">01/01/2026</p>
+                    </div>
+                    <div>
+                        <span th:text="${pedido.status}"
+                              style="padding:0.35rem 1rem;border-radius:4px;font-weight:600;font-size:0.9rem;
+                                     background: #f0f0f0; display:inline-block;">PENDENTE</span>
+                    </div>
+                </div>
+                <div class="divider-gold" style="margin-bottom:1.5rem;"></div>
+
+                <h3>Itens do Pedido</h3>
+                <table style="width:100%;border-collapse:collapse;margin-bottom:2rem;">
+                    <thead>
+                        <tr style="border-bottom:1px solid #c9a84c;">
+                            <th style="text-align:left;padding:0.75rem 0.5rem;">Produto</th>
+                            <th style="text-align:center;padding:0.75rem 0.5rem;">Quantidade</th>
+                            <th style="text-align:right;padding:0.75rem 0.5rem;">Preço Unit.</th>
+                            <th style="text-align:right;padding:0.75rem 0.5rem;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${pedido.itens}" style="border-bottom:1px solid #e0d5c1;">
+                            <td style="padding:1rem 0.5rem;" th:text="${item.nomeProduto}">Vinho Tinto</td>
+                            <td style="text-align:center;padding:1rem 0.5rem;" th:text="${item.quantidade}">1</td>
+                            <td style="text-align:right;padding:1rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.precoUnitario, 1, 2)}">R$ 89,90</td>
+                            <td style="text-align:right;padding:1rem 0.5rem;" th:text="'R$ ' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}">R$ 89,90</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="border-top:2px solid #c9a84c;">
+                            <td colspan="3" style="text-align:right;padding:0.75rem 0.5rem;font-weight:600;font-size:1.1rem;">Total</td>
+                            <td style="text-align:right;padding:0.75rem 0.5rem;font-weight:600;font-size:1.1rem;" th:text="'R$ ' + ${#numbers.formatDecimal(pedido.total, 1, 2)}">R$ 0,00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                    <a th:href="@{/meus-pedidos}" class="btn-premium" style="display:inline-block;padding:0.75rem 1.5rem;border:1px solid #c9a84c;color:#c9a84c;text-decoration:none;border-radius:4px;">&laquo; Voltar aos Pedidos</a>
+                    <a th:href="@{/catalogo}" class="btn-premium-gold" style="display:inline-block;padding:0.75rem 1.5rem;text-decoration:none;border-radius:4px;">Comprar Novamente</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="layout :: footer"></footer>
+</body>
+</html>

@@ -42,6 +42,13 @@ CREATE TABLE IF NOT EXISTS item_pedido(
     preco_unitario DECIMAL(10, 2) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS cliente_role(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    cliente_id UUID NOT NULL REFERENCES cliente(id) ON DELETE CASCADE,
+    role VARCHAR(50) NOT NULL DEFAULT 'ROLE_CLIENTE',
+    UNIQUE(cliente_id, role)
+);
+
 CREATE TABLE IF NOT EXISTS password_reset_token(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     cliente_id UUID NOT NULL REFERENCES cliente(id),
