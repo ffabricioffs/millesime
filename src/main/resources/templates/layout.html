@@ -41,21 +41,16 @@
 
                 <!-- Right Actions -->
                 <div class="header-actions">
-                    <!-- Search Button -->
-                    <button class="icon-btn" style="display: none;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
-                        </svg>
-                    </button>
-
-                    <!-- Account Button -->
-                    <button class="icon-btn" style="display: none;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </button>
+                    <!-- Search -->
+                    <form th:action="@{/busca}" method="get" class="header-search" id="headerSearchForm">
+                        <input type="search" name="q" class="header-search-input" id="headerSearchInput" placeholder="Buscar vinhos..." />
+                        <button type="submit" class="icon-btn header-search-btn" id="headerSearchBtn" aria-label="Buscar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </form>
 
                     <!-- Cart Button -->
                     <a href="/carrinho" class="icon-btn" style="position: relative;">
@@ -102,7 +97,7 @@
                     </div>
 
                     <!-- Mobile Menu Toggle -->
-                    <button class="icon-btn md-hidden" id="mobile-menu-toggle" style="display: none;">
+                    <button class="icon-btn md:hidden" id="mobile-menu-toggle">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <line x1="3" y1="12" x2="21" y2="12"></line>

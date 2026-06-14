@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function initializeApp() {
     initializeMobileMenu();
+    initializeSearch();
     initializeFilters();
     initializeProductInteractions();
     initializeCartFunctionality();
@@ -21,9 +22,23 @@ function initializeMobileMenu() {
     if (!mobileMenuToggle) return;
 
     mobileMenuToggle.addEventListener('click', function() {
-        const nav = this.parentElement.parentElement.querySelector('nav');
-        if (nav) {
-            nav.style.display = nav.style.display === 'none' ? 'block' : 'none';
+        document.querySelector('header nav').classList.toggle('nav-open');
+    });
+}
+
+// ========== Search ==========
+function initializeSearch() {
+    const searchForm = document.getElementById('headerSearchForm');
+    const searchInput = document.getElementById('headerSearchInput');
+    if (!searchForm || !searchInput) return;
+
+    searchForm.addEventListener('submit', function(e) {
+        if (!searchInput.value.trim()) {
+            e.preventDefault();
+            searchInput.classList.toggle('search-visible');
+            if (searchInput.classList.contains('search-visible')) {
+                searchInput.focus();
+            }
         }
     });
 }

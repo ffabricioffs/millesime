@@ -250,6 +250,19 @@ nav {
   gap: 2rem;
 }
 
+nav.nav-open {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
 @media (min-width: 768px) {
   nav {
     display: flex;
@@ -329,12 +342,53 @@ nav a:hover {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  background-color: var(--primary);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* ========== Header Search ========== */
+.header-search {
+  display: flex;
+  align-items: center;
+}
+
+.header-search-input {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: var(--card);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  transition: width 0.25s ease, padding 0.25s ease;
+  height: 2.5rem;
+}
+
+.header-search-input.search-visible {
+  width: 160px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.header-search-input:focus {
+  border-color: var(--accent);
+}
+
+.header-search-btn {
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .header-search-input.search-visible {
+    width: 120px;
+  }
 }
 
 .hero-content {
