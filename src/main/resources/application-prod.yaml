@@ -10,6 +10,29 @@ server:
         same-site: lax
 
 spring:
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 3600
+      chain:
+        strategy:
+          content:
+            enabled: true
+  mail:
+    host: ${MAIL_HOST:smtp.example.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:username}
+    password: ${MAIL_PASSWORD:password}
+    from: ${MAIL_FROM:no-reply@millesime.com.br}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: ${MAIL_HOST:smtp.example.com}
   datasource:
     platform: postgres
     url: ${DATABASE_URL}

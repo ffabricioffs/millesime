@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class ClienteRequest {
@@ -17,6 +18,8 @@ public class ClienteRequest {
 
     @NotBlank(message = "Senha é obrigatória")
     @Size(min = 12, message = "Senha deve ter no mínimo 12 caracteres")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$",
+             message = "Senha deve conter letra maiúscula, minúscula e número")
     private String senha;
 
     @NotBlank(message = "CPF é obrigatório")

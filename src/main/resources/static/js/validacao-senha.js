@@ -51,7 +51,7 @@ class ValidadorSenha {
             this.temMinuscula() &&
             this.temNumero() &&
             this.temCaractereEspecial() &&
-            this.senha.length >= 8
+            this.senha.length >= 12
         );
     }
 
@@ -64,7 +64,7 @@ class ValidadorSenha {
             minuscula: this.temMinuscula(),
             numero: this.temNumero(),
             especial: this.temCaractereEspecial(),
-            minimo: this.senha.length >= 8
+            minimo: this.senha.length >= 12
         };
     }
 }
@@ -124,7 +124,7 @@ class GerenciadorValidacaoSenha {
             </div>
             <div class="senha-requisito-item">
                 <span class="senha-requisito-icon" data-req="minimo">○</span>
-                <span class="senha-requisito-text">Mínimo 8 caracteres</span>
+                <span class="senha-requisito-text">Mínimo 12 caracteres</span>
             </div>
         `;
 
@@ -302,7 +302,7 @@ class GerenciadorValidacaoSenha {
             minuscula: 'letra minúscula',
             numero: 'número',
             especial: 'caractere especial',
-            minimo: 'mínimo 8 caracteres'
+            minimo: 'mínimo 12 caracteres'
         };
         return textos[requisito] || requisito;
     }

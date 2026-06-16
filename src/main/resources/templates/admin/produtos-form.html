@@ -66,12 +66,12 @@
                         </div>
                     </div>
 
-                    <div class="admin-form-group" style="grid-column:1/-1;">
+                    <div class="admin-form-group admin-grid-full">
                         <label for="descricao">Descrição</label>
                         <textarea id="descricao" th:field="*{descricao}" rows="4" required minlength="10" class="admin-input"></textarea>
                     </div>
 
-                    <div th:if="${produto.id != null}" class="admin-form-group" style="grid-column:1/-1;">
+                    <div th:if="${produto.id != null}" class="admin-form-group admin-grid-full">
                         <label>
                             <input type="checkbox" th:field="*{ativo}" />
                             Produto ativo
@@ -80,7 +80,7 @@
 
                     <div class="admin-form-actions">
                         <button type="submit" class="btn-premium-gold" th:text="${produto.id != null} ? 'Salvar Alterações' : 'Criar Produto'">Salvar</button>
-                        <a href="/admin/produtos" class="admin-btn-sm" style="margin-left:0.5rem;">Cancelar</a>
+                        <a href="/admin/produtos" class="admin-btn-sm admin-ml-sm">Cancelar</a>
                     </div>
                 </form>
             </div>

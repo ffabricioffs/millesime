@@ -130,7 +130,8 @@ public class OrderController {
             pedidoService.cancelarPedido(id);
             redirectAttributes.addFlashAttribute("success", "Pedido cancelado com sucesso.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao cancelar pedido {}", id, e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao cancelar pedido.");
         }
         return "redirect:/pedido/" + id;
     }
@@ -176,7 +177,8 @@ public class OrderController {
             session.removeAttribute("carrinho");
             return "redirect:/pedido/" + pedido.getId() + "?success";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao finalizar pedido do usuario {}", sessionCliente.getId(), e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao finalizar pedido.");
             return "redirect:/checkout";
         }
     }

@@ -3,6 +3,12 @@ server:
   forwarded-headers-strategy: framework
 
 spring:
+  web:
+    resources:
+      chain:
+        strategy:
+          content:
+            enabled: true
   datasource:
     platform: postgres
     url: ${DATABASE_URL:${DB_URL:jdbc:postgresql://localhost:5432/millesime}}
@@ -12,15 +18,6 @@ spring:
     hikari:
       maximum-pool-size: 5
       minimum-idle: 2
-
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   sql:
     init:

@@ -335,6 +335,11 @@ textarea.admin-input {
 }
 
 /* Responsive */
+/* CSP Compliance */
+.admin-grid-full {
+    grid-column: 1 / -1;
+}
+
 @media (max-width: 900px) {
     .admin-sidebar {
         width: 60px;

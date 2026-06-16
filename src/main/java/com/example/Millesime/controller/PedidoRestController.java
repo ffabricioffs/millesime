@@ -62,7 +62,7 @@ public class PedidoRestController {
             pedidoService.atualizarStatus(id, status);
             return ResponseEntity.ok("Status atualizado para " + status);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao atualizar status do pedido.");
         }
     }
 

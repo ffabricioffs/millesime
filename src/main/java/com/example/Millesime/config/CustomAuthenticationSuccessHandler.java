@@ -33,7 +33,9 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
             Cliente cliente = clienteService.buscarPorEmail(email);
             if (cliente != null) {
                 ClienteSession sessionCliente = new ClienteSession(
-                    cliente.getId(), cliente.getNomeCompleto(), cliente.getEmail()
+                    cliente.getId(), cliente.getNomeCompleto(), cliente.getEmail(),
+                    cliente.getCpf(), cliente.getTelefone(), cliente.isNewsletter(),
+                    cliente.getDataCadastro() != null ? cliente.getDataCadastroFormatada() : ""
                 );
                 request.getSession().setAttribute("clienteLogado", sessionCliente);
             }

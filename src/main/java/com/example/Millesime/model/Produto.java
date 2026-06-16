@@ -3,16 +3,33 @@ package com.example.Millesime.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class Produto {
 
     private UUID id;
+
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
+
     private String descricao;
-    private String tipo; // "Tinto", "Branco", "Rosé", "Espumante"
+
+    @NotBlank(message = "Tipo é obrigatório")
+    private String tipo;
+
     private String regiao;
     private String pais;
     private String uva;
+
+    @NotNull(message = "Preço é obrigatório")
+    @DecimalMin(value = "0", message = "Preço deve ser positivo")
     private Double preco;
+
+    @NotNull
+    @Min(value = 0, message = "Estoque não pode ser negativo")
     private Integer estoque;
     private String imagem;
     private LocalDateTime dataCriacao;

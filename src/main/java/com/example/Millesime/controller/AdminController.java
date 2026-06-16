@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.validation.Valid;
 
 import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
@@ -84,15 +87,21 @@ public class AdminController {
     }
 
     @PostMapping("/produtos")
-    public String salvarProduto(@ModelAttribute Produto produto,
+    public String salvarProduto(@Valid @ModelAttribute Produto produto,
+                                 BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Verifique os campos obrigatórios.");
+            return "redirect:/admin/produtos/novo";
+        }
         try {
             if (produto.getEstoque() == null) produto.setEstoque(0);
             produto.setAtivo(true);
             produtoService.cadastrarProduto(produto);
             redirectAttributes.addFlashAttribute("success", "Produto criado com sucesso!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao salvar produto", e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao salvar produto.");
         }
         return "redirect:/admin/produtos";
     }
@@ -110,15 +119,21 @@ public class AdminController {
 
     @PostMapping("/produtos/{id}")
     public String atualizarProduto(@PathVariable UUID id,
-                                    @ModelAttribute Produto produto,
+                                    @Valid @ModelAttribute Produto produto,
+                                    BindingResult bindingResult,
                                     RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Verifique os campos obrigatórios.");
+            return "redirect:/admin/produtos/" + id + "/editar";
+        }
         try {
             produto.setId(id);
             if (produto.getEstoque() == null) produto.setEstoque(0);
             produtoService.atualizarProduto(produto);
             redirectAttributes.addFlashAttribute("success", "Produto atualizado!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao atualizar produto", e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao atualizar produto.");
         }
         return "redirect:/admin/produtos";
     }
@@ -130,7 +145,8 @@ public class AdminController {
             produtoService.deletarProduto(id);
             redirectAttributes.addFlashAttribute("success", "Produto desativado.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao desativar produto", e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao desativar produto.");
         }
         return "redirect:/admin/produtos";
     }
@@ -168,7 +184,8 @@ public class AdminController {
             pedidoService.atualizarStatus(id, status);
             redirectAttributes.addFlashAttribute("success", "Status atualizado para " + status + ".");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao atualizar status do pedido {}", id, e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao atualizar status do pedido.");
         }
         return "redirect:/admin/pedidos";
     }

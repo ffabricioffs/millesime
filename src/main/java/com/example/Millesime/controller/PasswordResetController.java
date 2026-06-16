@@ -72,7 +72,7 @@ public class PasswordResetController {
             model.addAttribute("cliente", cliente);
             return "reset-password-confirm";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Erro ao redefinir senha.");
             return "redirect:/reset-password";
         }
     }
@@ -87,7 +87,7 @@ public class PasswordResetController {
                 "Senha redefinida com sucesso. Faça login com sua nova senha.");
             return "redirect:/login";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Erro ao redefinir senha.");
             redirectAttributes.addFlashAttribute("token", token);
             return "redirect:/reset-password/confirm";
         }

@@ -92,7 +92,7 @@ public class ProdutoRestController {
             produtoService.atualizarProduto(produto);
             return ResponseEntity.ok("Produto atualizado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao atualizar produto.");
         }
     }
 
@@ -105,7 +105,7 @@ public class ProdutoRestController {
             produtoService.deletarProduto(id);
             return ResponseEntity.ok("Produto deletado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao deletar produto.");
         }
     }
 

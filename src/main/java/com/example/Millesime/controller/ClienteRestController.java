@@ -81,7 +81,7 @@ public class ClienteRestController {
             clienteService.atualizarCadastro(cliente);
             return ResponseEntity.ok("Cliente atualizado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao atualizar cliente.");
         }
     }
 
@@ -94,7 +94,7 @@ public class ClienteRestController {
             clienteService.desativarConta(id);
             return ResponseEntity.ok("Cliente deletado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao deletar cliente.");
         }
     }
 

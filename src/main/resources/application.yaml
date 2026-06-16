@@ -2,6 +2,12 @@ server:
   port: ${SERVER_PORT:8081}
 
 spring:
+  web:
+    resources:
+      chain:
+        strategy:
+          content:
+            enabled: true
   datasource:
     platform: postgres
     url: ${DATABASE_URL:${DB_URL:jdbc:postgresql://localhost:5432/millesime}}

@@ -30,9 +30,9 @@
                 <div class="account-actions">
                     <a th:href="@{/conta/editar}" class="btn-premium-gold btn-full">Editar Perfil</a>
                     <a th:href="@{/meus-pedidos}" class="btn-premium-gold btn-full">Meus Pedidos</a>
-                    <form th:action="@{/logout}" method="post" style="display:inline;width:100%;">
+                    <form th:action="@{/logout}" method="post" class="logout-form">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn-premium-gold btn-full" style="width:100%;">Sair</button>
+                        <button type="submit" class="btn-premium-gold btn-full">Sair</button>
                     </form>
                 </div>
             </div>

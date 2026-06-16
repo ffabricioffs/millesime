@@ -965,6 +965,31 @@ footer {
   color: var(--primary);
 }
 
+/* ========== CSP Compliance ========== */
+.hero-home {
+    background-image: url('https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/hero-vineyard-dqfZwyX7rD42XguzQgb2zw.webp');
+}
+
+.btn-filter-clear {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.logout-form {
+    display: block;
+    width: 100%;
+}
+
+.admin-ml-sm {
+    margin-left: 0.5rem;
+}
+
 /* ========== Print Styles ========== */
 @media print {
   header,

@@ -112,6 +112,10 @@ public class AuthController {
             Cliente clienteAtualizado = clienteService.buscarPorId(sessionCliente.getId());
             sessionCliente.setNomeCompleto(clienteAtualizado.getNomeCompleto());
             sessionCliente.setEmail(clienteAtualizado.getEmail());
+            sessionCliente.setCpf(clienteAtualizado.getCpf());
+            sessionCliente.setTelefone(clienteAtualizado.getTelefone());
+            sessionCliente.setNewsletter(clienteAtualizado.isNewsletter());
+            sessionCliente.setDataCadastroFormatada(clienteAtualizado.getDataCadastroFormatada());
             session.setAttribute("clienteLogado", sessionCliente);
             redirectAttributes.addFlashAttribute("success", "Perfil atualizado com sucesso!");
         } catch (Exception e) {
@@ -133,9 +137,14 @@ public class AuthController {
     }
 
     @PostMapping("/conta/alterar-senha")
-    public String alterarSenhaSubmit(@ModelAttribute AlterarSenhaRequest request,
+    public String alterarSenhaSubmit(@Valid @ModelAttribute AlterarSenhaRequest request,
+                                      BindingResult bindingResult,
                                       HttpSession session,
                                       RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Verifique os campos.");
+            return "redirect:/conta/alterar-senha";
+        }
         ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
         if (sessionCliente == null) {
             return "redirect:/login";
