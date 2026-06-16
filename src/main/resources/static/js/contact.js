@@ -21,10 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================
     initPhoneMask();
     
-    // ========================================
-    // Success Message Handler
-    // ========================================
-    checkForSuccessMessage();
 });
 
 /**
@@ -387,45 +383,3 @@ function initPhoneMask() {
     });
 }
 
-/**
- * Verifica se há mensagem de sucesso na URL (após redirect)
- */
-function checkForSuccessMessage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('success') === 'true') {
-        showFormMessage('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
-        
-        // Limpa a URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-}
-
-// Adiciona estilo para animação de loading
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    
-    .error-field {
-        border-color: #dc2626 !important;
-        background-color: #fee2e2 !important;
-    }
-    
-    .form-message {
-        animation: slideDown 0.3s ease-out;
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-`;
-document.head.appendChild(style);

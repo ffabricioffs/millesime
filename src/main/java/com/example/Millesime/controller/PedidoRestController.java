@@ -57,7 +57,7 @@ public class PedidoRestController {
 
     @PutMapping("/{id}/status")
     public ResponseEntity<String> atualizarStatus(@PathVariable UUID id,
-                                                   @RequestParam String status) {
+                                                   @RequestParam(required = false) String status) {
         try {
             pedidoService.atualizarStatus(id, status);
             return ResponseEntity.ok("Status atualizado para " + status);

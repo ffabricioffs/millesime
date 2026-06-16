@@ -1,7 +1,10 @@
 package com.example.Millesime.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +18,12 @@ import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class AuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final ClienteService clienteService;
 
@@ -54,7 +60,8 @@ public class AuthController {
     }
 
     @GetMapping("/conta/editar")
-    public String editProfile(Model model, HttpSession session) {
+    public String editProfile(Model model, HttpSession session,
+                               RedirectAttributes redirectAttributes) {
         ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
         if (sessionCliente == null) {
             return "redirect:/login";
@@ -72,14 +79,21 @@ public class AuthController {
             model.addAttribute("pageTitle", "Editar Perfil - Mill\u00e9sime");
             return "conta-editar";
         } catch (Exception e) {
+            log.error("Erro ao carregar edicao de perfil", e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao carregar dados. Tente novamente.");
             return "redirect:/login";
         }
     }
 
     @PostMapping("/conta/editar")
-    public String saveProfile(@ModelAttribute PerfilUpdateRequest request,
+    public String saveProfile(@Valid @ModelAttribute PerfilUpdateRequest request,
+                               BindingResult bindingResult,
                                HttpSession session,
                                RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Verifique os campos obrigatorios.");
+            return "redirect:/conta/editar";
+        }
         ClienteSession sessionCliente = (ClienteSession) session.getAttribute("clienteLogado");
         if (sessionCliente == null) {
             return "redirect:/login";
@@ -101,7 +115,8 @@ public class AuthController {
             session.setAttribute("clienteLogado", sessionCliente);
             redirectAttributes.addFlashAttribute("success", "Perfil atualizado com sucesso!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao salvar perfil do usuario {}", sessionCliente.getId(), e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao atualizar perfil. Tente novamente.");
         }
         return "redirect:/conta/editar";
     }
@@ -141,7 +156,8 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("success", "Senha alterada com sucesso!");
             return "redirect:/conta/editar";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            log.error("Erro ao alterar senha do usuario {}", sessionCliente.getId(), e);
+            redirectAttributes.addFlashAttribute("error", "Erro ao alterar senha. Tente novamente.");
             return "redirect:/conta/alterar-senha";
         }
     }

@@ -61,8 +61,8 @@
 .contact-info p {
     font-size: 1.1rem;
     color: var(--muted-foreground);
-    margin-bottom: 2rem;
-    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
 }
 
 .contact-form-container p {
@@ -75,7 +75,7 @@
 .info-list {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .info-item {
@@ -193,7 +193,7 @@
 }
 
 .contact-field textarea {
-    resize: vertical;
+    resize: none;
     min-height: 6rem;
 }
 
@@ -374,6 +374,16 @@
     margin-bottom: 1rem;
     font-size: 0.875rem;
     animation: slideDown 0.3s ease-out;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.error-field {
+    border-color: #dc2626 !important;
+    background-color: #fee2e2 !important;
 }
 
 .form-message-success {

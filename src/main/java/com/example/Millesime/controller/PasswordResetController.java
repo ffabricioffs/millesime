@@ -30,7 +30,7 @@ public class PasswordResetController {
     }
 
     @PostMapping
-    public String resetPasswordSubmit(@RequestParam String email,
+    public String resetPasswordSubmit(@RequestParam(required = false) String email,
                                        RedirectAttributes redirectAttributes,
                                        HttpServletRequest request) {
         if (email == null || email.isBlank()) {
@@ -78,8 +78,8 @@ public class PasswordResetController {
     }
 
     @PostMapping("/confirm")
-    public String confirmResetPasswordSubmit(@RequestParam String token,
-                                               @RequestParam String novaSenha,
+    public String confirmResetPasswordSubmit(@RequestParam(required = false) String token,
+                                               @RequestParam(required = false) String novaSenha,
                                                RedirectAttributes redirectAttributes) {
         try {
             clienteService.redefinirSenha(token, novaSenha);

@@ -1,5 +1,9 @@
 package com.example.Millesime.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,8 +14,13 @@ import com.example.Millesime.model.ContatoDAO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 public class ContactController {
+
+    private static final Logger log = LoggerFactory.getLogger(ContactController.class);
 
     private final ContatoDAO contatoDAO;
 
@@ -20,7 +29,7 @@ public class ContactController {
     }
 
     @PostMapping("/enviar-contato")
-    public String enviarContato(
+    public Object enviarContato(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String telefone,
@@ -28,10 +37,21 @@ public class ContactController {
             @RequestParam(required = false) String mensagem,
             @RequestParam(required = false) String newsletter,
             @RequestParam(required = false) String privacidade,
-            RedirectAttributes redirectAttributes) {
-        if (nome == null || nome.isBlank() || email == null || email.isBlank()
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request) {
+
+        boolean hasError = nome == null || nome.isBlank() || email == null || email.isBlank()
             || assunto == null || assunto.isBlank()
-            || mensagem == null || mensagem.isBlank() || privacidade == null) {
+            || mensagem == null || mensagem.isBlank() || privacidade == null;
+
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            if (hasError) {
+                Map<String, Object> json = new HashMap<>();
+                json.put("success", false);
+                json.put("message", "Preencha os campos obrigatórios e concorde com a Política de Privacidade.");
+                return ResponseEntity.badRequest().body(json);
+            }
+        } else if (hasError) {
             redirectAttributes.addFlashAttribute("contactError",
                 "Preencha os campos obrigatórios e concorde com a Política de Privacidade.");
             return "redirect:/contato";
@@ -42,10 +62,28 @@ public class ContactController {
         contato.setEmail(email.trim());
         contato.setAssunto(assunto.trim());
         contato.setMensagem(mensagem.trim());
+        contato.setTelefone(telefone != null ? telefone.trim() : null);
+        contato.setNewsletter("sim".equals(newsletter));
         try {
             contatoDAO.salvar(contato);
         } catch (Exception e) {
-            // log silencioso — falha não impede o redirect de sucesso
+            log.error("Erro ao salvar contato no banco de dados", e);
+            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                Map<String, Object> json = new HashMap<>();
+                json.put("success", false);
+                json.put("message", "Erro interno ao enviar mensagem. Tente novamente mais tarde.");
+                return ResponseEntity.status(500).body(json);
+            }
+            redirectAttributes.addFlashAttribute("contactError",
+                "Erro interno ao enviar mensagem. Tente novamente mais tarde.");
+            return "redirect:/contato";
+        }
+
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            Map<String, Object> json = new HashMap<>();
+            json.put("success", true);
+            json.put("message", "Mensagem enviada com sucesso. Em breve retornaremos! Obrigado pelo contato.");
+            return ResponseEntity.ok(json);
         }
 
         redirectAttributes.addFlashAttribute("contactSuccess",
@@ -54,14 +92,25 @@ public class ContactController {
     }
 
     @PostMapping("/newsletter")
-    public String newsletter(@RequestParam String email, RedirectAttributes redirectAttributes,
+    public String newsletter(@RequestParam(required = false) String email,
+                              RedirectAttributes redirectAttributes,
                               HttpServletRequest request) {
         if (email == null || email.isBlank()) {
             redirectAttributes.addFlashAttribute("newsletterError",
                 "Digite um e-mail válido para receber nossas novidades.");
             return "redirect:" + getSafeRedirect(request);
         }
-
+        try {
+            Contato contato = new Contato();
+            contato.setEmail(email.trim());
+            contato.setAssunto("newsletter");
+            contatoDAO.salvar(contato);
+        } catch (Exception e) {
+            log.error("Erro ao salvar inscricao newsletter para {}", email, e);
+            redirectAttributes.addFlashAttribute("newsletterError",
+                "Erro ao processar inscrição. Tente novamente.");
+            return "redirect:" + getSafeRedirect(request);
+        }
         redirectAttributes.addFlashAttribute("newsletterSuccess",
             "Obrigado! Você foi inscrito para receber nossas novidades.");
         return "redirect:" + getSafeRedirect(request);

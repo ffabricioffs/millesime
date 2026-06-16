@@ -2,10 +2,13 @@ package com.example.Millesime.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.validation.Valid;
 
 import com.example.Millesime.dto.ClienteRegisterRequest;
 import com.example.Millesime.model.Cliente;
@@ -28,14 +31,20 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String registerPost(@ModelAttribute ClienteRegisterRequest request,
-                                RedirectAttributes redirectAttributes) {
-        try {
-            if (!request.getSenha().equals(request.getConfirmPassword())) {
-                redirectAttributes.addFlashAttribute("error", "Senhas não conferem.");
-                return "redirect:/register";
-            }
+    public String registerPost(@Valid @ModelAttribute ClienteRegisterRequest request,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Verifique os campos obrigatórios.");
+            return "redirect:/register";
+        }
 
+        if (!request.getSenha().equals(request.getConfirmPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Senhas não conferem.");
+            return "redirect:/register";
+        }
+
+        try {
             Cliente cliente = new Cliente();
             cliente.setNomeCompleto(request.getNomeCompleto());
             cliente.setEmail(request.getEmail());
@@ -49,7 +58,7 @@ public class RegisterController {
             redirectAttributes.addFlashAttribute("email", cliente.getEmail());
             return "redirect:/register-success";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Erro ao cadastrar. Tente novamente.");
             return "redirect:/register";
         }
     }

@@ -69,12 +69,18 @@ public class HomeController {
         Double precoMin = null;
         Double precoMax = null;
         if (preco != null && !preco.isBlank()) {
-            if (preco.contains("-")) {
-                String[] parts = preco.split("-", 2);
-                precoMin = Double.parseDouble(parts[0]);
-                precoMax = Double.parseDouble(parts[1]);
-            } else {
-                precoMin = Double.parseDouble(preco);
+            try {
+                if (preco.contains("-")) {
+                    String[] parts = preco.split("-", 2);
+                    precoMin = Double.parseDouble(parts[0]);
+                    if (parts.length == 2) {
+                        precoMax = Double.parseDouble(parts[1]);
+                    }
+                } else {
+                    precoMin = Double.parseDouble(preco);
+                }
+            } catch (NumberFormatException e) {
+                // ignorar filtro de preco — degradacao graciosa
             }
         }
 
@@ -118,7 +124,7 @@ public class HomeController {
     @GetMapping("/busca")
     public String search(Model model,
                          @RequestParam(defaultValue = "1") int page,
-                         @RequestParam String q) throws Exception {
+                         @RequestParam(required = false) String q) throws Exception {
         final int pageSize = 12;
 
         if (q == null || q.isBlank()) {

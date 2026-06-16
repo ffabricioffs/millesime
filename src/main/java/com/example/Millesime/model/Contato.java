@@ -10,6 +10,8 @@ public class Contato {
     private String email;
     private String assunto;
     private String mensagem;
+    private String telefone;
+    private boolean newsletter;
     private LocalDateTime dataContato;
 
     public Contato() {
@@ -27,6 +29,10 @@ public class Contato {
     public void setAssunto(String assunto) { this.assunto = assunto; }
     public String getMensagem() { return mensagem; }
     public void setMensagem(String mensagem) { this.mensagem = mensagem; }
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public boolean isNewsletter() { return newsletter; }
+    public void setNewsletter(boolean newsletter) { this.newsletter = newsletter; }
     public LocalDateTime getDataContato() { return dataContato; }
     public void setDataContato(LocalDateTime dataContato) { this.dataContato = dataContato; }
 }

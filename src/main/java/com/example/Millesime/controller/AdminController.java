@@ -3,6 +3,8 @@ package com.example.Millesime.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,8 @@ import com.example.Millesime.model.ProdutoService;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
     private final ProdutoService produtoService;
     private final PedidoService pedidoService;
@@ -48,6 +52,7 @@ public class AdminController {
                 Cliente c = clienteService.buscarPorId(p.getClienteId());
                 p.setClienteNome(c.getNomeCompleto());
             } catch (Exception e) {
+                log.warn("Erro ao buscar cliente do pedido {}", p.getId(), e);
                 p.setClienteNome("---");
             }
         }
@@ -144,6 +149,7 @@ public class AdminController {
                 Cliente c = clienteService.buscarPorId(p.getClienteId());
                 p.setClienteNome(c.getNomeCompleto());
             } catch (Exception e) {
+                log.warn("Erro ao buscar cliente do pedido {}", p.getId(), e);
                 p.setClienteNome("---");
             }
         }
@@ -156,7 +162,7 @@ public class AdminController {
 
     @PostMapping("/pedidos/{id}/status")
     public String atualizarStatus(@PathVariable UUID id,
-                                   @RequestParam String status,
+                                    @RequestParam(required = false) String status,
                                    RedirectAttributes redirectAttributes) {
         try {
             pedidoService.atualizarStatus(id, status);

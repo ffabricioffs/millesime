@@ -74,7 +74,7 @@ public class ProdutoRestController {
      * GET - Filtrar produtos por tipo
      */
     @GetMapping("/filtro/tipo")
-    public ResponseEntity<List<ProdutoResponse>> filtrarPorTipo(@RequestParam String tipo) throws Exception {
+    public ResponseEntity<List<ProdutoResponse>> filtrarPorTipo(@RequestParam(required = false) String tipo) throws Exception {
         List<ProdutoResponse> produtos = produtoService.filtrarPorTipo(tipo).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());

@@ -226,6 +226,7 @@ function performSearch(query) {
 const forms = document.querySelectorAll('form');
 forms.forEach(form => {
     form.addEventListener('submit', function(e) {
+        if (form.id === 'contactForm') return;
         if (!validateForm(this)) {
             e.preventDefault();
         }

@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Repository
 public class ContatoDAO {
 
-    private static final String INSERT_SQL = "INSERT INTO contato (id, nome, email, assunto, mensagem, data_contato) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_SQL = "INSERT INTO contato (id, nome, email, assunto, mensagem, telefone, newsletter, data_contato) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final DataSource dataSource;
 
@@ -28,7 +28,9 @@ public class ContatoDAO {
             stmt.setString(3, truncate(contato.getEmail(), 100));
             stmt.setString(4, truncate(contato.getAssunto(), 200));
             stmt.setString(5, truncate(contato.getMensagem(), 2000));
-            stmt.setTimestamp(6, Timestamp.valueOf(contato.getDataContato()));
+            stmt.setString(6, truncate(contato.getTelefone(), 20));
+            stmt.setBoolean(7, contato.isNewsletter());
+            stmt.setTimestamp(8, Timestamp.valueOf(contato.getDataContato()));
             stmt.executeUpdate();
         } finally {
             DataSourceUtils.releaseConnection(connection, dataSource);

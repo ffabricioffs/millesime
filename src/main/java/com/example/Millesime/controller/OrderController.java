@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,8 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class OrderController {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     private final ProdutoService produtoService;
     private final PedidoService pedidoService;
@@ -82,6 +86,7 @@ public class OrderController {
 
             redirectAttributes.addFlashAttribute("cartSuccess", "Produto adicionado ao carrinho.");
         } catch (Exception e) {
+            log.error("Erro ao adicionar produto {} ao carrinho", produtoId, e);
             redirectAttributes.addFlashAttribute("cartError", "Erro ao adicionar produto.");
         }
         return "redirect:/carrinho";
