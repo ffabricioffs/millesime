@@ -44,7 +44,7 @@
                             </td>
                             <td class="admin-actions">
                                 <a th:href="@{/admin/produtos/{id}/editar(id=${produto.id})}" class="admin-btn-sm">Editar</a>
-                                <form th:action="@{/admin/produtos/{id}/deletar(id=${produto.id})}" method="post" style="display:inline;" onsubmit="return confirm('Desativar este produto?');">
+                                <form th:action="@{/admin/produtos/{id}/deletar(id=${produto.id})}" method="post" style="display:inline;" class="form-deletar-produto">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                     <button type="submit" class="admin-btn-sm admin-btn-danger">Desativar</button>
                                 </form>
@@ -65,5 +65,6 @@
         </div>
     </main>
     <footer th:replace="layout :: footer"></footer>
+    <script th:src="@{/js/admin-produto.js}"></script>
 </body>
 </html>

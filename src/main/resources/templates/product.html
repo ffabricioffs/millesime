@@ -77,7 +77,7 @@
 
                         <!-- Price & Stock -->
                         <div class="product-price-stock">
-                            <div class="product-price" th:text="'R$ ' + ${#numbers.formatDecimal(product.preco, 0, 'POINT', 2, 'COMMA')}">R$ 189,90</div>
+                            <div class="product-price" th:text="'R$ ' + ${#numbers.formatDecimal(product.preco, 1, 2)}">R$ 189,90</div>
                             <div class="product-stock-info">
                                 <span th:if="${product.estoque > 0}" class="product-in-stock">✓ Em Estoque</span>
                                 <span th:if="${product.estoque == 0}" class="product-out-stock">✗ Fora de Estoque</span>

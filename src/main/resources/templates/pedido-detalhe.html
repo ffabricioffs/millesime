@@ -60,13 +60,13 @@
                     <form th:if="${pedido.status == 'PENDENTE' or pedido.status == 'CONFIRMADO'}"
                           th:action="@{/pedido/{id}/cancelar(id=${pedido.id})}" method="post" style="display:inline;">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn-premium" style="padding:0.75rem 1.5rem;border:1px solid #c0392b;color:#c0392b;background:none;border-radius:4px;cursor:pointer;"
-                                onclick="return confirm('Tem certeza que deseja cancelar este pedido?')">Cancelar Pedido</button>
+                        <button type="submit" class="btn-premium btn-cancelar-pedido" style="padding:0.75rem 1.5rem;border:1px solid #c0392b;color:#c0392b;background:none;border-radius:4px;cursor:pointer;">Cancelar Pedido</button>
                     </form>
                 </div>
             </div>
         </section>
     </main>
     <footer th:replace="layout :: footer"></footer>
+    <script th:src="@{/js/pedido-detalhe.js}"></script>
 </body>
 </html>

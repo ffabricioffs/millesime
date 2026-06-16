@@ -354,3 +354,44 @@ textarea.admin-input {
         font-size: 0.7rem !important;
     }
 }
+
+/* ========== Modal de Confirmacao ========== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s, visibility .2s;
+}
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-confirm {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    text-align: center;
+}
+.modal-confirm h3 {
+    margin: 0 0 1rem;
+    font-family: 'Playfair Display', serif;
+}
+.modal-confirm p {
+    margin: 0 0 1.5rem;
+    color: #666;
+    line-height: 1.5;
+}
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}

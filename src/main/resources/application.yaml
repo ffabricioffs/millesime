@@ -3,6 +3,8 @@ server:
 
 spring:
   web:
+    locale: pt_BR
+    locale-resolver: fixed
     resources:
       chain:
         strategy:

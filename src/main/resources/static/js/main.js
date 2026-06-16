@@ -260,7 +260,7 @@ function performSearch(query) {
 const forms = document.querySelectorAll('form');
 forms.forEach(form => {
     form.addEventListener('submit', function(e) {
-        if (form.id === 'contactForm') return;
+        if (form.classList.contains('footer-newsletter') || form.id === 'contactForm') return;
         if (!validateForm(this)) {
             e.preventDefault();
         }
@@ -272,7 +272,7 @@ function validateForm(form) {
     let isValid = true;
 
     inputs.forEach(input => {
-        if (!input.value.trim()) {
+        if (input.type === 'checkbox' ? !input.checked : !input.value.trim()) {
             input.style.borderColor = '#ef4444';
             isValid = false;
         } else {

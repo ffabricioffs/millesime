@@ -1,6 +1,7 @@
 package com.example.Millesime.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -89,10 +90,11 @@ public class AdminController {
     @PostMapping("/produtos")
     public String salvarProduto(@Valid @ModelAttribute Produto produto,
                                  BindingResult bindingResult,
-                                 RedirectAttributes redirectAttributes) {
+                                 RedirectAttributes redirectAttributes,
+                                 Model model) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Verifique os campos obrigatórios.");
-            return "redirect:/admin/produtos/novo";
+            model.addAttribute("pageTitle", "Novo Produto - Admin");
+            return "admin/produtos-form";
         }
         try {
             if (produto.getEstoque() == null) produto.setEstoque(0);
@@ -121,10 +123,11 @@ public class AdminController {
     public String atualizarProduto(@PathVariable UUID id,
                                     @Valid @ModelAttribute Produto produto,
                                     BindingResult bindingResult,
-                                    RedirectAttributes redirectAttributes) {
+                                    RedirectAttributes redirectAttributes,
+                                    Model model) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Verifique os campos obrigatórios.");
-            return "redirect:/admin/produtos/" + id + "/editar";
+            model.addAttribute("pageTitle", "Editar Produto - Admin");
+            return "admin/produtos-form";
         }
         try {
             produto.setId(id);
@@ -180,6 +183,16 @@ public class AdminController {
     public String atualizarStatus(@PathVariable UUID id,
                                     @RequestParam(required = false) String status,
                                    RedirectAttributes redirectAttributes) {
+        if (status == null || status.isBlank()) {
+            redirectAttributes.addFlashAttribute("error", "Status \u00e9 obrigat\u00f3rio.");
+            return "redirect:/admin/pedidos";
+        }
+        // manter sincronizado com PedidoService.STATUS_VALIDOS
+        Set<String> validos = Set.of("PENDENTE", "CONFIRMADO", "ENVIADO", "ENTREGUE", "CANCELADO");
+        if (!validos.contains(status.toUpperCase())) {
+            redirectAttributes.addFlashAttribute("error", "Status inv\u00e1lido: " + status);
+            return "redirect:/admin/pedidos";
+        }
         try {
             pedidoService.atualizarStatus(id, status);
             redirectAttributes.addFlashAttribute("success", "Status atualizado para " + status + ".");

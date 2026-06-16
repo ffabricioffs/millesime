@@ -44,7 +44,7 @@
                                 <h3 th:text="${produto.nome}">Vinho Premium</h3>
                                 <p th:text="${produto.regiao} + ' • ' + ${produto.pais}">Região • País</p>
                                 <div>
-                                    <div th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 0, 'POINT', 2, 'COMMA')}">R$ 189,90</div>
+                                    <div th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}">R$ 189,90</div>
                                     <a th:href="@{/produto/{id}(id=${produto.id})}" class="btn-premium btn-full btn-sm">Ver Detalhes</a>
                                 </div>
                             </div>

@@ -25,7 +25,7 @@ public class Produto {
     private String uva;
 
     @NotNull(message = "Preço é obrigatório")
-    @DecimalMin(value = "0", message = "Preço deve ser positivo")
+    @DecimalMin(value = "0.01", message = "Pre\u00e7o deve ser maior que zero")
     private Double preco;
 
     @NotNull

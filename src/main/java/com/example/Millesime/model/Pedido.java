@@ -2,6 +2,7 @@ package com.example.Millesime.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +32,8 @@ public class Pedido {
     public Pedido() {
         this.dataPedido = LocalDateTime.now();
         this.status = "PENDENTE";
+        this.itens = new ArrayList<>();
+        this.total = 0.0;
     }
 
     public UUID getId() {

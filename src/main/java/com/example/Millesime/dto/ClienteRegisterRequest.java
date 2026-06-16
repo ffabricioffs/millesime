@@ -18,7 +18,7 @@ public class ClienteRegisterRequest {
 
     @NotBlank(message = "Senha é obrigatória")
     @Size(min = 12, message = "Senha deve ter no mínimo 12 caracteres")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$", message = "Senha deve conter maiúscula, minúscula e número")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\",.<>?/\\\\|`~]).+$", message = "Senha deve conter maiúscula, minúscula, número e caractere especial")
     private String senha;
 
     @NotBlank(message = "CPF é obrigatório")
