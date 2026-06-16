@@ -99,6 +99,8 @@ public class HomeController {
         model.addAttribute("selectedType", type);
         model.addAttribute("selectedRegion", region);
         model.addAttribute("ordem", ordem);
+        model.addAttribute("precoMin", precoMin);
+        model.addAttribute("precoMax", precoMax);
 
         return "catalog";
     }

@@ -25,16 +25,17 @@
         <section class="section">
             <div class="container">
                 <div>
-                    <aside>
+                    <aside class="catalog-filters">
                         <h3>Filtros</h3>
                         <form th:action="@{/catalogo}" method="get">
                             <div>
                                 <h4>Tipo de Vinho</h4>
                                 <div>
-                                    <label><input type="checkbox" name="type" value="Tinto" th:checked="${selectedType == 'Tinto'}"><span>Tinto</span></label>
-                                    <label><input type="checkbox" name="type" value="Branco" th:checked="${selectedType == 'Branco'}"><span>Branco</span></label>
-                                    <label><input type="checkbox" name="type" value="Rosé" th:checked="${selectedType == 'Rosé'}"><span>Rosé</span></label>
-                                    <label><input type="checkbox" name="type" value="Espumante" th:checked="${selectedType == 'Espumante'}"><span>Espumante</span></label>
+                                    <label><input type="radio" name="type" value="" th:checked="${#strings.isEmpty(selectedType)}"><span>Todos</span></label>
+                                    <label><input type="radio" name="type" value="Tinto" th:checked="${selectedType == 'Tinto'}"><span>Tinto</span></label>
+                                    <label><input type="radio" name="type" value="Branco" th:checked="${selectedType == 'Branco'}"><span>Branco</span></label>
+                                    <label><input type="radio" name="type" value="Rosé" th:checked="${selectedType == 'Rosé'}"><span>Rosé</span></label>
+                                    <label><input type="radio" name="type" value="Espumante" th:checked="${selectedType == 'Espumante'}"><span>Espumante</span></label>
                                 </div>
                             </div>
                             <div>
@@ -61,7 +62,7 @@
                         </form>
                     </aside>
 
-                    <div>
+                    <div id="product-grid">
                         <div>
                             <p>Mostrando <strong th:text="${produtos.size()}">0</strong> de <strong th:text="${totalCount}">0</strong> produtos</p>
                         </div>
@@ -105,5 +106,6 @@
     <footer th:replace="layout :: footer"></footer>
 
     <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/catalog.js}"></script>
 </body>
 </html>

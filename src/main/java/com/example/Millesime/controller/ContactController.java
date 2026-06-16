@@ -92,10 +92,16 @@ public class ContactController {
     }
 
     @PostMapping("/newsletter")
-    public String newsletter(@RequestParam(required = false) String email,
+    public Object newsletter(@RequestParam(required = false) String email,
                               RedirectAttributes redirectAttributes,
                               HttpServletRequest request) {
         if (email == null || email.isBlank()) {
+            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                Map<String, Object> json = new HashMap<>();
+                json.put("success", false);
+                json.put("message", "Digite um e-mail válido para receber nossas novidades.");
+                return ResponseEntity.badRequest().body(json);
+            }
             redirectAttributes.addFlashAttribute("newsletterError",
                 "Digite um e-mail válido para receber nossas novidades.");
             return "redirect:" + getSafeRedirect(request);
@@ -107,9 +113,21 @@ public class ContactController {
             contatoDAO.salvar(contato);
         } catch (Exception e) {
             log.error("Erro ao salvar inscricao newsletter para {}", email, e);
+            if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+                Map<String, Object> json = new HashMap<>();
+                json.put("success", false);
+                json.put("message", "Erro ao processar inscrição. Tente novamente.");
+                return ResponseEntity.status(500).body(json);
+            }
             redirectAttributes.addFlashAttribute("newsletterError",
                 "Erro ao processar inscrição. Tente novamente.");
             return "redirect:" + getSafeRedirect(request);
+        }
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            Map<String, Object> json = new HashMap<>();
+            json.put("success", true);
+            json.put("message", "Obrigado! Você foi inscrito para receber nossas novidades.");
+            return ResponseEntity.ok(json);
         }
         redirectAttributes.addFlashAttribute("newsletterSuccess",
             "Obrigado! Você foi inscrito para receber nossas novidades.");

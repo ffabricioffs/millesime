@@ -998,3 +998,9 @@ footer {
     display: none;
   }
 }
+
+.newsletter-feedback {
+    display: block; font-size: 0.8rem; margin-top: 0.5rem;
+}
+.newsletter-success { color: #22c55e; }
+.newsletter-error { color: #ef4444; }

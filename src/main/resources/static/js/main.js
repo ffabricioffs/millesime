@@ -14,6 +14,7 @@ function initializeApp() {
     initializeFilters();
     initializeProductInteractions();
     initializeCartFunctionality();
+    initializeNewsletter();
 }
 
 // ========== Mobile Menu ==========
@@ -158,6 +159,39 @@ function updateCartCount() {
             cartBadge.style.display = 'flex';
         }
     }
+}
+
+// ========== Newsletter ==========
+function initializeNewsletter() {
+    var form = document.querySelector('.footer-newsletter');
+    if (!form) return;
+    var feedback = document.createElement('small');
+    feedback.className = 'newsletter-feedback';
+    form.appendChild(feedback);
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = form.querySelector('button');
+        btn.disabled = true;
+        fetch(form.action, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: new FormData(form)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            feedback.textContent = data.message;
+            feedback.className = 'newsletter-feedback ' +
+                (data.success ? 'newsletter-success' : 'newsletter-error');
+            if (data.success) form.querySelector('[name="email"]').value = '';
+        })
+        .catch(function() {
+            feedback.textContent = 'Erro de conexão. Tente novamente.';
+            feedback.className = 'newsletter-feedback newsletter-error';
+        })
+        .finally(function() {
+            btn.disabled = false;
+        });
+    });
 }
 
 // ========== Utilities ==========
