@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +32,8 @@ import com.example.Millesime.model.ClienteService;
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 
     private final ClienteService clienteService;
 
@@ -81,6 +85,7 @@ public class ClienteRestController {
             clienteService.atualizarCadastro(cliente);
             return ResponseEntity.ok("Cliente atualizado com sucesso");
         } catch (Exception e) {
+            log.error("Erro ao atualizar cliente {}", id, e);
             return ResponseEntity.badRequest().body("Erro ao atualizar cliente.");
         }
     }
@@ -94,6 +99,7 @@ public class ClienteRestController {
             clienteService.desativarConta(id);
             return ResponseEntity.ok("Cliente deletado com sucesso");
         } catch (Exception e) {
+            log.error("Erro ao deletar cliente {}", id, e);
             return ResponseEntity.badRequest().body("Erro ao deletar cliente.");
         }
     }

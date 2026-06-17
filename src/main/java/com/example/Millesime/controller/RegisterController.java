@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.validation.Valid;
 
 import com.example.Millesime.dto.ClienteRegisterRequest;
@@ -16,6 +19,8 @@ import com.example.Millesime.model.ClienteService;
 
 @Controller
 public class RegisterController {
+
+    private static final Logger log = LoggerFactory.getLogger(RegisterController.class);
 
     private final ClienteService clienteService;
 
@@ -58,6 +63,7 @@ public class RegisterController {
             redirectAttributes.addFlashAttribute("email", cliente.getEmail());
             return "redirect:/register-success";
         } catch (Exception e) {
+            log.error("Erro ao cadastrar cliente com email {}", request.getEmail(), e);
             redirectAttributes.addFlashAttribute("error", "Erro ao cadastrar. Tente novamente.");
             return "redirect:/register";
         }

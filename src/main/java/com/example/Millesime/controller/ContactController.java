@@ -110,6 +110,8 @@ public class ContactController {
             Contato contato = new Contato();
             contato.setEmail(email.trim());
             contato.setAssunto("newsletter");
+            contato.setNome("Newsletter");
+            contato.setMensagem("Inscricao via newsletter");
             contatoDAO.salvar(contato);
         } catch (Exception e) {
             log.error("Erro ao salvar inscricao newsletter para {}", email, e);

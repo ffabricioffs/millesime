@@ -171,8 +171,10 @@
                     <p>Receba recomendações exclusivas de nossos sommeliers.</p>
                     <form class="footer-newsletter" th:action="@{/newsletter}" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <input type="email" name="email" placeholder="Seu email" required>
-                        <button type="submit" class="btn-premium-gold btn-sm">Inscrever</button>
+                        <div class="footer-newsletter-row">
+                            <input type="email" name="email" placeholder="Seu email" required>
+                            <button type="submit" class="btn-premium-gold btn-sm">Inscrever</button>
+                        </div>
                     </form>
                 </div>
             </div>

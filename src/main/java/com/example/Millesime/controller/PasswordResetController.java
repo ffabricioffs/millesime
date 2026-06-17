@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.example.Millesime.model.Cliente;
 import com.example.Millesime.model.ClienteService;
 
@@ -16,6 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/reset-password")
 public class PasswordResetController {
+
+    private static final Logger log = LoggerFactory.getLogger(PasswordResetController.class);
 
     private final ClienteService clienteService;
 
@@ -45,6 +50,7 @@ public class PasswordResetController {
             redirectAttributes.addFlashAttribute("message",
                 "Se o e-mail estiver cadastrado, você receberá instruções de recuperação em breve.");
         } catch (Exception e) {
+            log.error("Erro ao criar token de redefinicao de senha para {}", email, e);
             redirectAttributes.addFlashAttribute("error",
                 "Não foi possível processar sua solicitação no momento. Tente novamente mais tarde.");
         }
@@ -72,6 +78,7 @@ public class PasswordResetController {
             model.addAttribute("cliente", cliente);
             return "reset-password-confirm";
         } catch (Exception e) {
+            log.error("Erro ao validar token de redefinicao de senha", e);
             redirectAttributes.addFlashAttribute("error", "Erro ao redefinir senha.");
             return "redirect:/reset-password";
         }
@@ -87,6 +94,7 @@ public class PasswordResetController {
                 "Senha redefinida com sucesso. Faça login com sua nova senha.");
             return "redirect:/login";
         } catch (Exception e) {
+            log.error("Erro ao redefinir senha com token", e);
             redirectAttributes.addFlashAttribute("error", "Erro ao redefinir senha.");
             redirectAttributes.addFlashAttribute("token", token);
             return "redirect:/reset-password/confirm";

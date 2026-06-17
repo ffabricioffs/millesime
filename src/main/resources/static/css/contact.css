@@ -462,6 +462,12 @@ footer {
 
 .footer-newsletter {
     display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-newsletter-row {
+    display: flex;
     gap: 0.5rem;
 }
 

@@ -115,6 +115,7 @@ public class AdminController {
             model.addAttribute("pageTitle", "Editar Produto - Admin");
             return "admin/produtos-form";
         } catch (Exception e) {
+            log.error("Erro ao carregar produto {} para edicao", id, e);
             return "redirect:/admin/produtos";
         }
     }
@@ -209,6 +210,7 @@ public class AdminController {
             model.addAttribute("clientes", clienteService.listarTodosClientes());
             model.addAttribute("pageTitle", "Clientes - Admin");
         } catch (Exception e) {
+            log.error("Erro ao carregar lista de clientes", e);
             model.addAttribute("error", "Erro ao carregar clientes.");
         }
         return "admin/clientes";

@@ -205,6 +205,7 @@ public class OrderController {
             }
             return "pedido-detalhe";
         } catch (Exception e) {
+            log.error("Erro ao carregar detalhe do pedido {}", id, e);
             return "redirect:/meus-pedidos";
         }
     }
@@ -229,6 +230,7 @@ public class OrderController {
             model.addAttribute("totalPages", totalPages);
             return "meus-pedidos";
         } catch (Exception e) {
+            log.error("Erro ao listar pedidos do cliente {}", sessionCliente.getId(), e);
             return "redirect:/";
         }
     }

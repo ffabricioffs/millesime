@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +32,8 @@ import com.example.Millesime.model.ProdutoService;
 @RestController
 @RequestMapping("/api/produtos")
 public class ProdutoRestController {
+
+    private static final Logger log = LoggerFactory.getLogger(ProdutoRestController.class);
 
     private final ProdutoService produtoService;
 
@@ -92,6 +96,7 @@ public class ProdutoRestController {
             produtoService.atualizarProduto(produto);
             return ResponseEntity.ok("Produto atualizado com sucesso");
         } catch (Exception e) {
+            log.error("Erro ao atualizar produto {}", id, e);
             return ResponseEntity.badRequest().body("Erro ao atualizar produto.");
         }
     }
@@ -105,6 +110,7 @@ public class ProdutoRestController {
             produtoService.deletarProduto(id);
             return ResponseEntity.ok("Produto deletado com sucesso");
         } catch (Exception e) {
+            log.error("Erro ao deletar produto {}", id, e);
             return ResponseEntity.badRequest().body("Erro ao deletar produto.");
         }
     }
