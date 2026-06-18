@@ -13,7 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/product.css}">
 </head>
 <body>
-    <header th:replace="layout :: header"></header>
+    <header th:replace="~{layout :: header}"></header>
 
     <main>
         <!-- Breadcrumb -->
@@ -201,7 +201,7 @@
         </section>
     </main>
 
-    <footer th:replace="layout :: footer"></footer>
+    <footer th:replace="~{layout :: footer}"></footer>
 
     <script th:src="@{/js/main.js}"></script>
 </body>

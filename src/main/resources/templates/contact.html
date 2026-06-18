@@ -16,7 +16,7 @@
     <link rel="stylesheet" th:href="@{/css/contact.css}">
 </head>
 <body>
-    <header th:replace="layout :: header"></header>
+    <header th:replace="~{layout :: header}"></header>
 
     <main>
         <!-- Hero Section -->
@@ -278,7 +278,7 @@
         </section>
     </main>
 
-    <footer th:replace="layout :: footer"></footer>
+    <footer th:replace="~{layout :: footer}"></footer>
 
     <!-- JavaScript -->
     <script th:src="@{/js/contact.js}"></script>

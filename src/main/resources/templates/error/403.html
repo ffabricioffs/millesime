@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <header th:replace="layout :: header"></header>
+    <header th:replace="~{layout :: header}"></header>
     <main class="container section" style="text-align:center;padding:4rem 1rem;">
         <h1 style="font-family:'Playfair Display',serif;font-size:4rem;color:var(--primary);margin-bottom:0.5rem;">403</h1>
         <h2 style="font-family:'Playfair Display',serif;color:var(--primary);margin-bottom:1rem;">Acesso Negado</h2>
@@ -17,6 +17,6 @@
         </p>
         <a href="/" class="btn-premium-gold">Voltar ao início</a>
     </main>
-    <footer th:replace="layout :: footer"></footer>
+    <footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <header th:replace="layout :: header"></header>
+    <header th:replace="~{layout :: header}"></header>
     <main>
         <section class="section">
             <div class="container">
@@ -66,6 +66,6 @@
             </div>
         </section>
     </main>
-    <footer th:replace="layout :: footer"></footer>
+    <footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>

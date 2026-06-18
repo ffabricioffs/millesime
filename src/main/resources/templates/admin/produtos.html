@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
-    <header th:replace="layout :: header"></header>
+    <header th:replace="~{layout :: header}"></header>
     <main>
         <div class="admin-layout">
             <div th:replace="admin/layout :: sidebar"></div>
@@ -64,7 +64,7 @@
             </div>
         </div>
     </main>
-    <footer th:replace="layout :: footer"></footer>
+    <footer th:replace="~{layout :: footer}"></footer>
     <script th:src="@{/js/admin-produto.js}"></script>
 </body>
 </html>
