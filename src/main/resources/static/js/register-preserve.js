@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         } catch (error) {
-            console.warn('Falha ao carregar dados salvos do registro:', error);
+            // Falha ao carregar dados salvos — ignora
         }
     }
 
@@ -61,7 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function saveFormData() {
-        sessionStorage.setItem(storageKey, JSON.stringify(getFormData()));
+        try {
+            sessionStorage.setItem(storageKey, JSON.stringify(getFormData()));
+        } catch (e) {
+            // sessionStorage indisponível — ignora
+        }
     }
 
     function bindField(field) {

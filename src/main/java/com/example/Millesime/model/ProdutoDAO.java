@@ -12,11 +12,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 @Repository
 public class ProdutoDAO {
+
+    private static final Logger log = LoggerFactory.getLogger(ProdutoDAO.class);
 
     private static final String INSERT_SQL = """
             INSERT INTO produto (
@@ -404,6 +408,7 @@ public class ProdutoDAO {
             if (dc != null) p.setDataCriacao(dc.toLocalDateTime());
             return p;
         } catch (SQLException e) {
+            log.error("Erro ao mapear produto", e);
             return null;
         }
     }

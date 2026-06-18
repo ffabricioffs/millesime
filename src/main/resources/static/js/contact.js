@@ -266,7 +266,6 @@ function submitForm(form) {
         }
     })
     .catch(error => {
-        console.error('Erro:', error);
         showFormMessage('Erro de conexão. Verifique sua internet e tente novamente.', 'error');
     })
     .finally(() => {

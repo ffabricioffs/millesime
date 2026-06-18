@@ -113,6 +113,12 @@ public class HomeController {
 
         model.addAttribute("pageTitle", produto.getNome() + " - Millésime");
         model.addAttribute("product", produto);
+        try {
+            model.addAttribute("relacionados", produtoService.listarTodos(1, 4));
+        } catch (Exception e) {
+            log.error("Erro ao carregar produtos relacionados", e);
+            model.addAttribute("relacionados", List.of());
+        }
         return "product";
     }
 

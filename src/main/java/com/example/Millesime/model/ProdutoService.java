@@ -114,7 +114,7 @@ public class ProdutoService {
             throw new ValidationException("Termo de busca é obrigatório.");
         }
         try {
-            return produtoDAO.buscarPorNome("%" + termo.trim() + "%", page, pageSize);
+            return produtoDAO.buscarPorNome("%" + termo.trim().toLowerCase() + "%", page, pageSize);
         } catch (SQLException e) {
             throw new Exception("Erro ao buscar produtos.", e);
         }
@@ -123,7 +123,7 @@ public class ProdutoService {
     public int contarPorNome(String termo) throws Exception {
         if (termo == null || termo.isBlank()) return 0;
         try {
-            return produtoDAO.contarPorNome("%" + termo.trim() + "%");
+            return produtoDAO.contarPorNome("%" + termo.trim().toLowerCase() + "%");
         } catch (SQLException e) {
             throw new Exception("Erro ao contar produtos.", e);
         }

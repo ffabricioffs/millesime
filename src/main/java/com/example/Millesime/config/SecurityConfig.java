@@ -60,7 +60,7 @@ public class SecurityConfig {
             )
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp
-                    .policyDirectives("default-src 'self'; img-src 'self' https://i.ibb.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; frame-src https://www.openstreetmap.org")
+                    .policyDirectives("default-src 'self'; img-src 'self' https://i.ibb.co https://d2xsxph8kpxj0f.cloudfront.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; frame-src https://www.openstreetmap.org")
                 )
             )
             .csrf(csrf -> csrf

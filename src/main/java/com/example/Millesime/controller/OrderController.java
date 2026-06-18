@@ -50,6 +50,7 @@ public class OrderController {
     @PostMapping("/carrinho/adicionar")
     public String addToCart(@RequestParam UUID produtoId,
                             @RequestParam(defaultValue = "1") int quantidade,
+                            @RequestParam(defaultValue = "carrinho") String redirect,
                             HttpSession session,
                             RedirectAttributes redirectAttributes) {
         try {
@@ -89,7 +90,7 @@ public class OrderController {
             log.error("Erro ao adicionar produto {} ao carrinho", produtoId, e);
             redirectAttributes.addFlashAttribute("cartError", "Erro ao adicionar produto.");
         }
-        return "redirect:/carrinho";
+        return "redirect:/" + redirect;
     }
 
     @PostMapping("/carrinho/atualizar")

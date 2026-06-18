@@ -1,9 +1,6 @@
 /* Inline CSS extracted from index.html - corrected with proper selectors */
 
 /* Header actions */
-.icon-btn {
-    position: relative;
-}
 
 /* SVG in hero button */
 .btn-premium-gold svg {

@@ -344,6 +344,9 @@ nav a:hover {
   background-attachment: fixed;
   background-color: var(--primary);
 }
+@media (max-width: 768px) {
+  .hero-bg { background-attachment: scroll; }
+}
 
 .hero-overlay {
   position: absolute;

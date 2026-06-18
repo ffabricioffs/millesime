@@ -211,6 +211,7 @@ public class AdminController {
             model.addAttribute("pageTitle", "Clientes - Admin");
         } catch (Exception e) {
             log.error("Erro ao carregar lista de clientes", e);
+            model.addAttribute("clientes", List.of());
             model.addAttribute("error", "Erro ao carregar clientes.");
         }
         return "admin/clientes";

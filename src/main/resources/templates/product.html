@@ -57,7 +57,7 @@
 
                         <!-- Region & Type -->
                         <p class="product-region">
-                            <span th:text="${product.regiao}">Napa Valley</span>, <span th:text="${product.pais}">EUA</span>
+                            <span th:text="${#strings.defaultString(product.regiao)}">Napa Valley</span><span th:if="${#strings.defaultString(product.regiao) != '' and #strings.defaultString(product.pais) != ''}">, </span><span th:text="${#strings.defaultString(product.pais)}">EUA</span>
                         </p>
 
                         <!-- Rating -->
@@ -97,7 +97,7 @@
                                 </div>
                                 <div>
                                     <h4 class="product-spec-label">Safra</h4>
-                                    <p class="product-spec-value" th:text="${product.dataCriacao.year}">2018</p>
+                                    <p class="product-spec-value" th:text="${product.dataCriacao != null ? product.dataCriacao.year : '-'}">2018</p>
                                 </div>
                                 <div>
                                     <h4 class="product-spec-label">Álcool</h4>
@@ -116,6 +116,15 @@
                                 <button type="button" class="product-quantity-button" data-action="increase">+</button>
                             </div>
                             <button type="submit" class="btn-premium btn-full product-add-cart-button">Adicionar ao Carrinho</button>
+                        </form>
+
+                        <!-- Buy Now -->
+                        <form th:action="@{/carrinho/adicionar}" method="post" style="margin-bottom: 1.5rem;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="produtoId" th:value="${product.id}" />
+                            <input type="hidden" name="quantidade" value="1" />
+                            <input type="hidden" name="redirect" value="checkout" />
+                            <button type="submit" class="btn-premium-gold btn-full">Comprar Agora</button>
                         </form>
 
                         <!-- Wishlist -->
@@ -178,21 +187,21 @@
         </section>
 
         <!-- Related Products -->
-        <section class="section">
+        <section class="section" th:if="${not #lists.isEmpty(relacionados)}">
             <div class="container">
                 <h2 class="related-title">Produtos Relacionados</h2>
 
                 <div class="grid related-grid">
-                    <div th:each="i : ${#numbers.sequence(1, 4)}" class="card-elegant related-card">
+                    <div th:each="produto : ${relacionados}" class="card-elegant related-card">
                         <div class="related-image-wrapper">
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-related.webp" alt="Vinho Relacionado" class="related-image">
+                            <img th:src="${produto.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Vinho Relacionado" class="related-image">
                         </div>
                         <div class="related-card-content">
-                            <h3 class="related-card-title">Vinho Relacionado</h3>
-                            <p class="related-card-region">Região • País</p>
+                            <h3 class="related-card-title" th:text="${produto.nome}">Vinho Relacionado</h3>
+                            <p class="related-card-region" th:text="${#strings.defaultString(produto.regiao)} + ' • ' + ${#strings.defaultString(produto.pais)}">Região • País</p>
                             <div class="related-card-footer">
-                                <div class="related-card-price">R$ 159,90</div>
-                                <a href="/produto/related" class="btn-premium btn-full btn-sm related-card-button">Ver Detalhes</a>
+                                <div class="related-card-price" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}">R$ 159,90</div>
+                                <a th:href="@{/produto/{id}(id=${produto.id})}" class="btn-premium btn-full btn-sm related-card-button">Ver Detalhes</a>
                             </div>
                         </div>
                     </div>

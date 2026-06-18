@@ -48,36 +48,40 @@ public class PedidoService {
 
         double total = 0.0;
 
-        for (ItemPedido item : itens) {
-            if (item.getProdutoId() == null) {
-                throw new ValidationException("Produto nao informado no item.");
-            }
-            if (item.getQuantidade() == null || item.getQuantidade() <= 0) {
-                throw new ValidationException("Quantidade invalida para o produto.");
+        try {
+            for (ItemPedido item : itens) {
+                if (item.getProdutoId() == null) {
+                    throw new ValidationException("Produto nao informado no item.");
+                }
+                if (item.getQuantidade() == null || item.getQuantidade() <= 0) {
+                    throw new ValidationException("Quantidade invalida para o produto.");
+                }
+
+                Produto produto = produtoDAO.buscarPorId(item.getProdutoId());
+                if (produto == null || !produto.isAtivo()) {
+                    throw new ResourceNotFoundException("Produto nao encontrado: " + item.getProdutoId());
+                }
+                if (produto.getEstoque() < item.getQuantidade()) {
+                    throw new ValidationException("Estoque insuficiente para: " + produto.getNome());
+                }
+
+                item.setPrecoUnitario(produto.getPreco());
+                item.setNomeProduto(produto.getNome());
+                total += item.getQuantidade() * item.getPrecoUnitario();
             }
 
-            Produto produto = produtoDAO.buscarPorId(item.getProdutoId());
-            if (produto == null || !produto.isAtivo()) {
-                throw new ResourceNotFoundException("Produto nao encontrado: " + item.getProdutoId());
-            }
-            if (produto.getEstoque() < item.getQuantidade()) {
-                throw new ValidationException("Estoque insuficiente para: " + produto.getNome());
+            pedido.setTotal(total);
+            pedidoDAO.salvar(pedido);
+
+            for (ItemPedido item : itens) {
+                item.setPedidoId(pedido.getId());
+                itemPedidoDAO.salvar(item);
             }
 
-            item.setPrecoUnitario(produto.getPreco());
-            item.setNomeProduto(produto.getNome());
-            total += item.getQuantidade() * item.getPrecoUnitario();
+            darBaixaEstoque(itens);
+        } catch (SQLException e) {
+            throw new Exception("Erro ao criar pedido.", e);
         }
-
-        pedido.setTotal(total);
-        pedidoDAO.salvar(pedido);
-
-        for (ItemPedido item : itens) {
-            item.setPedidoId(pedido.getId());
-            itemPedidoDAO.salvar(item);
-        }
-
-        darBaixaEstoque(itens);
 
         pedido.setItens(itens);
         return pedido;

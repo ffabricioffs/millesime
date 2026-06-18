@@ -57,13 +57,13 @@ CREATE TABLE IF NOT EXISTS password_reset_token(
     used BOOLEAN DEFAULT false
 );
 
-CREATE INDEX idx_pedido_cliente_id ON pedido(cliente_id);
-CREATE INDEX idx_pedido_status ON pedido(status);
-CREATE INDEX idx_item_pedido_pedido_id ON item_pedido(pedido_id);
-CREATE INDEX idx_item_pedido_produto_id ON item_pedido(produto_id);
-CREATE INDEX idx_cliente_role_cliente_id ON cliente_role(cliente_id);
-CREATE INDEX idx_password_reset_token_cliente_id ON password_reset_token(cliente_id);
-CREATE INDEX idx_password_reset_token_token ON password_reset_token(token);
+CREATE INDEX IF NOT EXISTS idx_pedido_cliente_id ON pedido(cliente_id);
+CREATE INDEX IF NOT EXISTS idx_pedido_status ON pedido(status);
+CREATE INDEX IF NOT EXISTS idx_item_pedido_pedido_id ON item_pedido(pedido_id);
+CREATE INDEX IF NOT EXISTS idx_item_pedido_produto_id ON item_pedido(produto_id);
+CREATE INDEX IF NOT EXISTS idx_cliente_role_cliente_id ON cliente_role(cliente_id);
+CREATE INDEX IF NOT EXISTS idx_password_reset_token_cliente_id ON password_reset_token(cliente_id);
+CREATE INDEX IF NOT EXISTS idx_password_reset_token_token ON password_reset_token(token);
 
 CREATE TABLE IF NOT EXISTS contato(
     id UUID DEFAULT RANDOM_UUID() NOT NULL PRIMARY KEY,

@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Repository
 public class PasswordResetTokenDAO {
@@ -23,6 +25,8 @@ public class PasswordResetTokenDAO {
     private static final String SELECT_BY_TOKEN_SQL = "SELECT * FROM password_reset_token WHERE token = ?";
     private static final String INVALIDATE_BY_CLIENTE_SQL = "UPDATE password_reset_token SET used = true WHERE cliente_id = ? AND used = false";
     private static final String MARK_AS_USED_SQL = "UPDATE password_reset_token SET used = true WHERE id = ?";
+
+    private static final Logger log = LoggerFactory.getLogger(PasswordResetTokenDAO.class);
 
     private final DataSource dataSource;
 
@@ -96,6 +100,7 @@ public class PasswordResetTokenDAO {
             token.setUsed(resultSet.getBoolean("used"));
             return token;
         } catch (SQLException e) {
+            log.error("Erro ao mapear token de redefinição", e);
             return null;
         }
     }

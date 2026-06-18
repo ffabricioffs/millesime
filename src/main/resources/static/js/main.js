@@ -50,7 +50,7 @@ function initializeFilters() {
     filterButtons.forEach(button => {
         button.addEventListener('change', function() {
             // Filter logic would go here
-            console.log('Filter changed:', this.name, this.value);
+            // Filter logic would go here
         });
     });
 }
@@ -120,7 +120,6 @@ function addToCart(button) {
     const quantity = button.parentElement.querySelector('input[type="number"]')?.value || 1;
     const productId = button.dataset.productId || 'unknown';
     
-    console.log('Adding to cart:', { productId, quantity });
     
     // Show feedback
     const originalText = button.textContent;
@@ -255,7 +254,6 @@ if (searchInput) {
 }
 
 function performSearch(query) {
-    console.log('Searching for:', query);
     // Search logic would go here
 }
 
@@ -318,11 +316,10 @@ document.querySelectorAll('.card-elegant, .section').forEach(element => {
 document.addEventListener('keydown', function(e) {
     // Escape key to close modals
     if (e.key === 'Escape') {
-        const modals = document.querySelectorAll('[role="dialog"][open]');
-        modals.forEach(modal => modal.close?.());
+        const modals = document.querySelectorAll('[role="dialog"].active, dialog[open]');
+        modals.forEach(modal => { if (typeof modal.close === 'function') modal.close(); });
     }
 });
 
 // ========== Console Logging ==========
-console.log('%cMillésime - Premium Wine Store', 'font-size: 20px; font-weight: bold; color: #5C2E3A;');
-console.log('%cDesign System: Neoclassic Elegant', 'font-size: 14px; color: #D4AF37;');
+// Console branding removed for production

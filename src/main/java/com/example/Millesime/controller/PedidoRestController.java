@@ -1,6 +1,7 @@
 package com.example.Millesime.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,8 @@ import com.example.Millesime.model.PedidoService;
 public class PedidoRestController {
 
     private static final Logger log = LoggerFactory.getLogger(PedidoRestController.class);
+
+    private static final Set<String> STATUS_VALIDOS = Set.of("PENDENTE", "CONFIRMADO", "ENVIADO", "ENTREGUE", "CANCELADO");
 
     private final PedidoService pedidoService;
 
@@ -62,15 +65,17 @@ public class PedidoRestController {
     @PutMapping("/{id}/status")
     public ResponseEntity<String> atualizarStatus(@PathVariable UUID id,
                                                    @RequestParam(required = false) String status) {
+        if (status == null || status.isBlank() || !STATUS_VALIDOS.contains(status)) {
+            return ResponseEntity.badRequest().body("Status inválido.");
+        }
         try {
             pedidoService.atualizarStatus(id, status);
-            return ResponseEntity.ok("Status atualizado para " + status);
+            return ResponseEntity.ok("Status atualizado.");
         } catch (Exception e) {
             log.error("Erro ao atualizar status do pedido {} para {}", id, status, e);
             return ResponseEntity.badRequest().body("Erro ao atualizar status do pedido.");
         }
     }
-
     private PedidoResponse toResponse(Pedido pedido) {
         PedidoResponse response = new PedidoResponse();
         response.setId(pedido.getId());
