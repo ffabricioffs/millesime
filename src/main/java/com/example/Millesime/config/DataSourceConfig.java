@@ -42,8 +42,7 @@ public class DataSourceConfig {
 
         config.setMaximumPoolSize(Integer.parseInt(env.getProperty("DB_MAX_POOL_SIZE", "10")));
         config.setMinimumIdle(Integer.parseInt(env.getProperty("DB_MIN_IDLE", "2")));
-        config.addDataSourceProperty("sslmode", env.getProperty("DB_SSL_MODE", "require"));
-        config.addDataSourceProperty("ssl", env.getProperty("DB_SSL", "true"));
+        config.addDataSourceProperty("sslmode", env.getProperty("DB_SSL_MODE", "prefer"));
 
         return new HikariDataSource(config);
     }

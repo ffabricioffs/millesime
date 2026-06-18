@@ -1,6 +1,9 @@
 server:
   port: ${PORT:8081}
   forwarded-headers-strategy: framework
+  error:
+    include-stacktrace: always
+    include-message: always
   servlet:
     session:
       timeout: 30m
@@ -33,27 +36,10 @@ spring:
             enable: true
           ssl:
             trust: ${MAIL_HOST:smtp.example.com}
-  datasource:
-    platform: postgres
-    url: ${DATABASE_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 5
-      minimum-idle: 1
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
-      leak-detection-threshold: 60000
-      data-source-properties:
-        sslmode: ${DB_SSL_MODE:require}
-        ssl: ${DB_SSL:true}
 
   sql:
     init:
-      mode: always
-      schema-locations: classpath:schema-postgresql.sql
+      mode: never
 
 logging:
   level:
