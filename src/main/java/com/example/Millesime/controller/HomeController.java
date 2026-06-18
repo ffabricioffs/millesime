@@ -73,7 +73,7 @@ public class HomeController {
                     precoMin = Double.parseDouble(preco);
                 }
             } catch (NumberFormatException e) {
-                // ignorar filtro de preco — degradacao graciosa
+                log.warn("Filtro de preco invalido ignorado: {}", preco);
             }
         }
 
