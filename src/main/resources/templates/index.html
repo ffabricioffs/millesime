@@ -44,107 +44,18 @@
                     <h2>Destaques da Casa</h2>
                 </div>
 
-                <div class="grid">
-                    <!-- Wine Card 1 -->
-                    <div class="card-elegant">
+                <div class="grid" th:if="${destaques != null and !destaques.isEmpty()}">
+                    <div th:each="produto : ${destaques}" class="card-elegant">
                         <div>
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-1-dqfZwyX7rD42XguzQgb2zw.webp" alt="Vinho Tinto Premium">
+                            <img th:src="${produto.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" th:alt="${produto.nome}">
+                            <div class="badge-elegant" th:text="${produto.tipo}">Destaque</div>
                         </div>
                         <div>
-                            <h3>Vinho Tinto Premium</h3>
-                            <p>Napa Valley, EUA</p>
-                            <p>Tinto • Cabernet Sauvignon</p>
-                            
+                            <h3 th:text="${produto.nome}">Vinho Premium</h3>
+                            <p th:text="${#strings.defaultString(produto.regiao)} + ' • ' + ${#strings.defaultString(produto.pais)}">Região • País</p>
                             <div>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <span>(128)</span>
-                            </div>
-
-                            <div>
-                                <div>R$ 189,90</div>
-                                <a th:href="@{/catalogo}" class="btn-premium btn-full btn-sm">Ver Mais</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Wine Card 2 -->
-                    <div class="card-elegant">
-                        <div>
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-2-dqfZwyX7rD42XguzQgb2zw.webp" alt="Vinho Branco Elegante">
-                        </div>
-                        <div>
-                            <h3>Vinho Branco Elegante</h3>
-                            <p>Bordeaux, França</p>
-                            <p>Branco • Sauvignon Blanc</p>
-                            
-                            <div>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <span>(95)</span>
-                            </div>
-
-                            <div>
-                                <div>R$ 149,90</div>
-                                <a th:href="@{/catalogo}" class="btn-premium btn-full btn-sm">Ver Mais</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Wine Card 3 -->
-                    <div class="card-elegant">
-                        <div>
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-3-dqfZwyX7rD42XguzQgb2zw.webp" alt="Vinho Rosé Sofisticado">
-                        </div>
-                        <div>
-                            <h3>Vinho Rosé Sofisticado</h3>
-                            <p>Provence, França</p>
-                            <p>Rosé • Grenache</p>
-                            
-                            <div>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <span>(87)</span>
-                            </div>
-
-                            <div>
-                                <div>R$ 129,90</div>
-                                <a th:href="@{/catalogo}" class="btn-premium btn-full btn-sm">Ver Mais</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Wine Card 4 -->
-                    <div class="card-elegant">
-                        <div>
-                            <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-4-dqfZwyX7rD42XguzQgb2zw.webp" alt="Vinho Espumante Premium">
-                        </div>
-                        <div>
-                            <h3>Vinho Espumante Premium</h3>
-                            <p>Champagne, França</p>
-                            <p>Espumante • Chardonnay</p>
-                            
-                            <div>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <span>(156)</span>
-                            </div>
-
-                            <div>
-                                <div>R$ 249,90</div>
-                                <a th:href="@{/catalogo}" class="btn-premium btn-full btn-sm">Ver Mais</a>
+                                <div th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco ?: 0, 1, 2)}">R$ 189,90</div>
+                                <a th:href="@{/produto/{id}(id=${produto.id})}" class="btn-premium btn-full btn-sm">Ver Detalhes</a>
                             </div>
                         </div>
                     </div>

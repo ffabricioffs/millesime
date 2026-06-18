@@ -58,7 +58,7 @@ main > section.section aside input[type="checkbox"] {
 }
 
 main > section.section aside > button.btn-premium {
-    margin-top: 1rem;
+    margin-top: 2.5rem;
 }
 
 main > section.section aside > button.btn-premium-outline {
@@ -152,17 +152,17 @@ main > section.section .grid > .card-elegant > div:last-child > div:last-of-type
 }
 
 main > section.section .grid > .card-elegant > div:last-child > div:last-of-type > div:first-child {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: var(--primary);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 main > section.section .grid > .card-elegant > div:last-child > div:last-of-type > a {
     text-align: center;
     display: block;
-    padding: 0.4rem 0.5rem;
-    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
 }
 
 main > section.section aside + div > div:last-child {

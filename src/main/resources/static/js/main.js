@@ -165,9 +165,12 @@ function updateCartCount() {
 function initializeNewsletter() {
     var form = document.querySelector('.footer-newsletter');
     if (!form) return;
-    var feedback = document.createElement('small');
-    feedback.className = 'newsletter-feedback';
-    form.appendChild(feedback);
+    var feedback = form.querySelector('.newsletter-feedback');
+    if (!feedback) {
+        feedback = document.createElement('small');
+        feedback.className = 'newsletter-feedback';
+        form.appendChild(feedback);
+    }
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         var btn = form.querySelector('button');

@@ -175,6 +175,10 @@
                             <input type="email" name="email" placeholder="Seu email" required>
                             <button type="submit" class="btn-premium-gold btn-sm">Inscrever</button>
                         </div>
+                        <small class="newsletter-feedback"
+                               th:if="${newsletterSuccess != null or newsletterError != null}"
+                               th:classappend="${newsletterSuccess} ? 'newsletter-success' : (${newsletterError} ? 'newsletter-error' : '')"
+                               th:text="${newsletterSuccess} ?: ${newsletterError} ?: ''"></small>
                     </form>
                 </div>
             </div>

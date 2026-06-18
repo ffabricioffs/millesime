@@ -3,6 +3,8 @@ package com.example.Millesime.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import com.example.Millesime.model.ProdutoService;
 @Controller
 public class HomeController {
 
+    private static final Logger log = LoggerFactory.getLogger(HomeController.class);
+
     private final ProdutoService produtoService;
 
     public HomeController(ProdutoService produtoService) {
@@ -32,23 +36,11 @@ public class HomeController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("pageTitle", "Millésime - Vinhos Premium");
-        
-        // Dados de exemplo para destaques
-        model.addAttribute("featuredWines", new String[]{
-            "Vinho Tinto Premium",
-            "Vinho Branco Elegante",
-            "Vinho Rosé Sofisticado",
-            "Vinho Espumante Premium"
-        });
-        
-        // Categorias
-        model.addAttribute("categories", new String[]{
-            "Tintos",
-            "Brancos",
-            "Rosés",
-            "Espumantes"
-        });
-        
+        try {
+            model.addAttribute("destaques", produtoService.listarTodos(1, 4));
+        } catch (Exception e) {
+            log.error("Erro ao carregar destaques da pagina inicial", e);
+        }
         return "index";
     }
 

@@ -57,6 +57,7 @@ body main section.section div.container div.section-title h2 {
     height: 16rem;
     overflow: hidden;
     background-color: var(--muted);
+    position: relative;
 }
 
 /* Wine card image */
