@@ -57,7 +57,7 @@
 
                         <!-- Region & Type -->
                         <p class="product-region">
-                            <span th:text="${#strings.defaultString(product.regiao)}">Napa Valley</span><span th:if="${#strings.defaultString(product.regiao) != '' and #strings.defaultString(product.pais) != ''}">, </span><span th:text="${#strings.defaultString(product.pais)}">EUA</span>
+                            <span th:text="${product.regiao} ?: ''">Napa Valley</span><span th:if="${product.regiao != null and product.regiao != '' and product.pais != null and product.pais != ''}">, </span><span th:text="${product.pais} ?: ''">EUA</span>
                         </p>
 
                         <!-- Rating -->
@@ -198,7 +198,7 @@
                         </div>
                         <div class="related-card-content">
                             <h3 class="related-card-title" th:text="${produto.nome}">Vinho Relacionado</h3>
-                            <p class="related-card-region" th:text="${#strings.defaultString(produto.regiao)} + ' • ' + ${#strings.defaultString(produto.pais)}">Região • País</p>
+                            <p class="related-card-region" th:text="|${produto.regiao} • ${produto.pais}|">Região • País</p>
                             <div class="related-card-footer">
                                 <div class="related-card-price" th:text="'R$ ' + ${#numbers.formatDecimal(produto.preco, 1, 2)}">R$ 159,90</div>
                                 <a th:href="@{/produto/{id}(id=${produto.id})}" class="btn-premium btn-full btn-sm related-card-button">Ver Detalhes</a>
