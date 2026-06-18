@@ -40,6 +40,7 @@ public class HomeController {
             model.addAttribute("destaques", produtoService.listarTodos(1, 4));
         } catch (Exception e) {
             log.error("Erro ao carregar destaques da pagina inicial", e);
+            model.addAttribute("destaques", List.of());
         }
         return "index";
     }

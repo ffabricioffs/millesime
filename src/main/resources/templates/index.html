@@ -44,7 +44,7 @@
                     <h2>Destaques da Casa</h2>
                 </div>
 
-                <div class="grid" th:if="${destaques != null and !destaques.isEmpty()}">
+                <div class="grid" th:if="${not #lists.isEmpty(destaques)}">
                     <div th:each="produto : ${destaques}" class="card-elegant">
                         <div>
                             <img th:src="${produto.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" th:alt="${produto.nome}">

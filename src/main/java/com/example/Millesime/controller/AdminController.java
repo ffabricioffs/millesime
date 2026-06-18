@@ -56,7 +56,7 @@ public class AdminController {
                 Cliente c = clienteService.buscarPorId(p.getClienteId());
                 p.setClienteNome(c.getNomeCompleto());
             } catch (Exception e) {
-                log.warn("Erro ao buscar cliente do pedido {}", p.getId(), e);
+                log.error("Erro ao buscar cliente do pedido {}", p.getId(), e);
                 p.setClienteNome("---");
             }
         }
@@ -169,7 +169,7 @@ public class AdminController {
                 Cliente c = clienteService.buscarPorId(p.getClienteId());
                 p.setClienteNome(c.getNomeCompleto());
             } catch (Exception e) {
-                log.warn("Erro ao buscar cliente do pedido {}", p.getId(), e);
+                log.error("Erro ao buscar cliente do pedido {}", p.getId(), e);
                 p.setClienteNome("---");
             }
         }
