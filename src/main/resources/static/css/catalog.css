@@ -159,8 +159,10 @@ main > section.section .grid > .card-elegant > div:last-child > div:last-of-type
 }
 
 main > section.section .grid > .card-elegant > div:last-child > div:last-of-type > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    display: block;
     padding: 0.35rem 0.75rem;
     font-size: 0.8rem;
 }
