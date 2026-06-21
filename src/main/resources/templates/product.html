@@ -199,7 +199,7 @@
                         </form>
                     </div>
                     <div class="review-list" th:if="${not #lists.isEmpty(avaliacoes)}">
-                        <h4 class="review-list-title" th:text="|${totalAvaliacoes} avaliação(ões)|">3 avaliações</h4>
+                        <h4 class="review-list-title" th:text="${totalAvaliacoes == 1 ? '1 avaliação' : totalAvaliacoes + ' avaliações'}">3 avaliações</h4>
                         <div th:each="av : ${avaliacoes}" class="review-item">
                             <div class="review-header">
                                 <strong class="review-author" th:text="${av.clienteNome}">João Silva</strong>
