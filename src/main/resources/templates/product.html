@@ -1,22 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${product.nome} + ' - Millésime'">Vinho Premium - Millésime</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/product.css}">
 </head>
 <body>
     <header th:replace="~{layout :: header}"></header>
-
     <main>
-        <!-- Breadcrumb -->
+        <div th:if="${avaliacaoSuccess}" class="product-flash product-flash-success" th:text="${avaliacaoSuccess}"></div>
+        <div th:if="${avaliacaoError}" class="product-flash product-flash-error" th:text="${avaliacaoError}"></div>
         <div class="product-breadcrumb">
             <div class="container product-breadcrumb-text">
                 <a th:href="@{/}" class="product-breadcrumb-link">Início</a>
@@ -26,56 +24,41 @@
                 <span class="product-breadcrumb-current" th:text="${product.nome}">Vinho Premium</span>
             </div>
         </div>
-
-        <!-- Product Detail -->
         <section class="section">
             <div class="container">
                 <div class="product-detail-grid">
-                    <!-- Product Image -->
                     <div>
                         <div class="product-image-wrapper">
-                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Vinho" class="product-main-image">
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Vinho" class="product-main-image" data-main-image>
                         </div>
                         <div class="product-thumbnails-grid">
-                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail-active">
-                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail">
-                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail">
-                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail">
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail-active" data-gallery>
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail" data-gallery>
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail" data-gallery>
+                            <img th:src="${product.imagem} ?: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663123416043/oNXkmfyzsbDL4eZ2xjUHn9/wine-placeholder.webp'" alt="Thumbnail" class="product-thumbnail" data-gallery>
                         </div>
                     </div>
-
-                    <!-- Product Info -->
                     <div>
-                        <!-- Badges -->
                         <div class="product-badges">
                             <div class="badge-elegant">Safra Especial</div>
                             <div class="badge-elegant">Destaque</div>
                         </div>
-
-                        <!-- Title -->
                         <h1 th:text="${product.nome}" class="product-title">Vinho Tinto Premium</h1>
-
-                        <!-- Region & Type -->
                         <p class="product-region">
                             <span th:text="${product.regiao} ?: ''">Napa Valley</span><span th:if="${product.regiao != null and product.regiao != '' and product.pais != null and product.pais != ''}">, </span><span th:text="${product.pais} ?: ''">EUA</span>
                         </p>
-
-                        <!-- Rating -->
                         <div class="product-rating-row">
                             <div class="product-stars">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon></svg>
+                                <svg th:each="i : ${#numbers.sequence(1, 5)}" width="18" height="18" viewBox="0 0 24 24"
+                                    th:attr="fill=${i <= mediaAvaliacoes ? 'var(--accent)' : 'none'},
+                                    stroke=${i <= mediaAvaliacoes ? 'var(--accent)' : 'var(--muted)'}"
+                                    stroke-width="2">
+                                    <polygon points="12 2 15.09 10.26 24 10.35 17.77 16.01 20.16 24.02 12 18.77 3.84 24.02 6.23 16.01 0 10.35 8.91 10.26 12 2"></polygon>
+                                </svg>
                             </div>
-                            <span class="product-rating-text">4.8 de 5 (<strong>128 avaliações</strong>)</span>
+                            <span class="product-rating-text" th:text="|${#numbers.formatDecimal(mediaAvaliacoes, 1, 1)} de 5 (${totalAvaliacoes} avaliações)|">4.8 de 5 (128 avaliações)</span>
                         </div>
-
-                        <!-- Divider -->
                         <div class="divider-gold product-divider"></div>
-
-                        <!-- Price & Stock -->
                         <div class="product-price-stock">
                             <div class="product-price" th:text="'R$ ' + ${#numbers.formatDecimal(product.preco, 1, 2)}">R$ 189,90</div>
                             <div class="product-stock-info">
@@ -83,8 +66,6 @@
                                 <span th:if="${product.estoque == 0}" class="product-out-stock">✗ Fora de Estoque</span>
                             </div>
                         </div>
-
-                        <!-- Product Details -->
                         <div class="product-specs-box">
                             <div class="product-specs-grid">
                                 <div>
@@ -97,7 +78,7 @@
                                 </div>
                                 <div>
                                     <h4 class="product-spec-label">Safra</h4>
-                                    <p class="product-spec-value" th:text="${product.dataCriacao != null ? product.dataCriacao.year : '-'}">2018</p>
+                                    <p class="product-spec-value" th:text="${safra}">2018</p>
                                 </div>
                                 <div>
                                     <h4 class="product-spec-label">Álcool</h4>
@@ -105,8 +86,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Add to Cart -->
                         <form th:action="@{/carrinho/adicionar}" method="post" class="product-cart-row">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <input type="hidden" name="produtoId" th:value="${product.id}" />
@@ -117,8 +96,6 @@
                             </div>
                             <button type="submit" class="btn-premium btn-full product-add-cart-button">Adicionar ao Carrinho</button>
                         </form>
-
-                        <!-- Buy Now -->
                         <form th:action="@{/carrinho/adicionar}" method="post" style="margin-bottom: 1.5rem;">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <input type="hidden" name="produtoId" th:value="${product.id}" />
@@ -126,24 +103,20 @@
                             <input type="hidden" name="redirect" value="checkout" />
                             <button type="submit" class="btn-premium-gold btn-full">Comprar Agora</button>
                         </form>
-
-                        <!-- Wishlist -->
                         <button class="btn-premium-outline btn-full product-wishlist-button">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="product-wishlist-icon">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
                             Adicionar à Lista de Desejos
                         </button>
-
-                        <!-- Share -->
                         <div class="product-share-row">
                             <span class="product-share-label">Compartilhar:</span>
-                            <a th:href="${product ? 'https://www.facebook.com/sharer/sharer.php?u=' + #request.getRequestURL() : '#'}" class="product-share-link" target="_blank">
+                            <a th:href="|https://www.facebook.com/sharer/sharer.php?u=${shareUrlEncoded}|" class="product-share-link" target="_blank" rel="noopener">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M18 2h-3a6 6 0 0 0-6 6v3H7v4h2v8h4v-8h3l1-4h-4V8a1 1 0 0 1 1-1h3z"></path>
                                 </svg>
                             </a>
-                            <a th:href="${product ? 'https://twitter.com/intent/tweet?url=' + #request.getRequestURL() : '#'}" class="product-share-link" target="_blank">
+                            <a th:href="|https://twitter.com/intent/tweet?url=${shareUrlEncoded}|" class="product-share-link" target="_blank" rel="noopener">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2s9 5 20 5a9.5 9.5 0 0 0-9-5.5c4.75 2.25 7-7 7-7"></path>
                                 </svg>
@@ -153,20 +126,15 @@
                 </div>
             </div>
         </section>
-
-        <!-- Product Tabs -->
         <section class="section product-tabs-section">
             <div class="container">
-                <!-- Tabs Navigation -->
                 <div class="product-tabs-nav">
                     <button class="product-tab-button-active">Descrição</button>
                     <button class="product-tab-button">Notas de Degustação</button>
                     <button class="product-tab-button">Harmonização</button>
                     <button class="product-tab-button">Avaliações</button>
                 </div>
-
-                <!-- Tab Content -->
-                <div>
+                <div class="product-tab-content">
                     <h3 class="product-tab-title">Descrição do Vinho</h3>
                     <p class="product-tab-paragraph" th:text="${product.descricao}">
                         Este vinho tinto premium é uma obra-prima de elegância e sofisticação. Produzido em Napa Valley com as melhores uvas Cabernet Sauvignon, apresenta um corpo encorpado com aromas complexos e um paladar refinado.
@@ -180,17 +148,78 @@
                         <li class="product-tech-item"><strong>Álcool:</strong> 13.5%</li>
                         <li class="product-tech-item"><strong>Acidez:</strong> 6.5 g/L</li>
                         <li class="product-tech-item"><strong>Temperatura de Serviço:</strong> 16-18°C</li>
-                        <li><strong>Tempo de Guarda:</strong> Até 30 anos</li>
+                        <li class="product-tech-item"><strong>Tempo de Guarda:</strong> Até 30 anos</li>
                     </ul>
+                </div>
+                <div class="product-tab-content" style="display: none;">
+                    <h3 class="product-tab-title">Notas de Degustação</h3>
+                    <p class="product-tab-paragraph">
+                        Este vinho apresenta uma cor rubi intensa com reflexos granada. No nariz, revela um bouquet complexo de frutas vermelhas maduras, como cereja e amora, combinadas com notas de baunilha, cedro e um toque sutil de tabaco.
+                    </p>
+                    <p class="product-tab-paragraph">
+                        Em boca, é encorpado com taninos aveludados e uma acidez equilibrada. O paladar é dominado por sabores de frutas escuras, chocolate amargo e especiarias, com um final longo e persistente.
+                    </p>
+                    <h4 class="product-tab-subtitle">Pontuações</h4>
+                    <ul class="product-tech-list">
+                        <li class="product-tech-item"><strong>Robert Parker:</strong> 92 pontos</li>
+                        <li class="product-tech-item"><strong>Wine Spectator:</strong> 90 pontos</li>
+                        <li class="product-tech-item"><strong>Decanter:</strong> 91 pontos</li>
+                    </ul>
+                </div>
+                <div class="product-tab-content" style="display: none;">
+                    <h3 class="product-tab-title">Sugestões de Harmonização</h3>
+                    <ul class="product-tech-list">
+                        <li class="product-tech-item"><strong>Carnes Vermelhas:</strong> Filé mignon, cordeiro assado, costela grelhada</li>
+                        <li class="product-tech-item"><strong>Queijos:</strong> Parmesão, gouda curado, brie</li>
+                        <li class="product-tech-item"><strong>Massas:</strong> Ravioli de carne, nhoque ao sugo</li>
+                        <li class="product-tech-item"><strong>Chocolates:</strong> Chocolate amargo acima de 70% cacau</li>
+                    </ul>
+                </div>
+                <div class="product-tab-content" style="display: none;">
+                    <h3 class="product-tab-title">Avaliações</h3>
+                    <div class="review-form-box">
+                        <h4 class="review-form-title">Deixe sua Avaliação</h4>
+                        <form th:action="@{/api/avaliacoes}" method="post" class="review-form">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="produtoId" th:value="${product.id}" />
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="nota" value="5" required />
+                                <label for="star5" title="5 estrelas">★</label>
+                                <input type="radio" id="star4" name="nota" value="4" />
+                                <label for="star4" title="4 estrelas">★</label>
+                                <input type="radio" id="star3" name="nota" value="3" />
+                                <label for="star3" title="3 estrelas">★</label>
+                                <input type="radio" id="star2" name="nota" value="2" />
+                                <label for="star2" title="2 estrelas">★</label>
+                                <input type="radio" id="star1" name="nota" value="1" />
+                                <label for="star1" title="1 estrela">★</label>
+                            </div>
+                            <textarea name="comentario" class="review-textarea" placeholder="Compartilhe sua opinião sobre este vinho (opcional)" maxlength="1000"></textarea>
+                            <button type="submit" class="btn-premium review-submit-btn">Enviar Avaliação</button>
+                        </form>
+                    </div>
+                    <div class="review-list" th:if="${not #lists.isEmpty(avaliacoes)}">
+                        <h4 class="review-list-title" th:text="|${totalAvaliacoes} avaliação(ões)|">3 avaliações</h4>
+                        <div th:each="av : ${avaliacoes}" class="review-item">
+                            <div class="review-header">
+                                <strong class="review-author" th:text="${av.clienteNome}">João Silva</strong>
+                                <span class="review-date" th:text="${av.dataFormatada}">01/01/2025</span>
+                            </div>
+                            <div class="review-stars">
+                                <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="${i <= av.nota ? '★' : '☆'}" th:style="${i <= av.nota ? 'color:var(--accent)' : 'color:var(--muted)'}"></span>
+                            </div>
+                            <p class="review-comment" th:if="${av.comentario != null and !av.comentario.isEmpty()}" th:text="${av.comentario}">Ótimo vinho!</p>
+                        </div>
+                    </div>
+                    <div class="review-empty" th:if="${#lists.isEmpty(avaliacoes)}">
+                        <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+                    </div>
                 </div>
             </div>
         </section>
-
-        <!-- Related Products -->
         <section class="section" th:if="${not #lists.isEmpty(relacionados)}">
             <div class="container">
                 <h2 class="related-title">Produtos Relacionados</h2>
-
                 <div class="grid related-grid">
                     <div th:each="produto : ${relacionados}" class="card-elegant related-card">
                         <div class="related-image-wrapper">
@@ -209,9 +238,8 @@
             </div>
         </section>
     </main>
-
     <footer th:replace="~{layout :: footer}"></footer>
-
     <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/product.js}"></script>
 </body>
 </html>

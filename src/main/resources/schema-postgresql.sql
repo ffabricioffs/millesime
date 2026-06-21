@@ -76,3 +76,17 @@ CREATE TABLE IF NOT EXISTS contato(
 
 ALTER TABLE contato ADD COLUMN IF NOT EXISTS telefone VARCHAR(20);
 ALTER TABLE contato ADD COLUMN IF NOT EXISTS newsletter BOOLEAN DEFAULT false;
+
+CREATE TABLE IF NOT EXISTS avaliacao(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    produto_id UUID NOT NULL REFERENCES produto(id) ON DELETE CASCADE,
+    cliente_id UUID NOT NULL REFERENCES cliente(id) ON DELETE CASCADE,
+    cliente_nome VARCHAR(100) NOT NULL,
+    nota INTEGER NOT NULL CHECK (nota >= 1 AND nota <= 5),
+    comentario VARCHAR(1000),
+    data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(produto_id, cliente_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_avaliacao_produto_id ON avaliacao(produto_id);
+CREATE INDEX IF NOT EXISTS idx_avaliacao_cliente_id ON avaliacao(cliente_id);

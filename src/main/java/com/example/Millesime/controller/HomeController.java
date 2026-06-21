@@ -1,5 +1,7 @@
 package com.example.Millesime.controller;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,8 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.Millesime.model.AvaliacaoService;
 import com.example.Millesime.model.Produto;
 import com.example.Millesime.model.ProdutoService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Millésime - Home Controller
@@ -24,9 +29,11 @@ public class HomeController {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
     private final ProdutoService produtoService;
+    private final AvaliacaoService avaliacaoService;
 
-    public HomeController(ProdutoService produtoService) {
+    public HomeController(ProdutoService produtoService, AvaliacaoService avaliacaoService) {
         this.produtoService = produtoService;
+        this.avaliacaoService = avaliacaoService;
     }
 
     /**
@@ -105,7 +112,8 @@ public class HomeController {
     @GetMapping("/produto/{id}")
     public String product(
             @PathVariable UUID id,
-            Model model) throws Exception {
+            Model model,
+            HttpServletRequest request) throws Exception {
         Produto produto = produtoService.buscarPorId(id);
         if (produto == null) {
             return "redirect:/catalogo";
@@ -113,6 +121,28 @@ public class HomeController {
 
         model.addAttribute("pageTitle", produto.getNome() + " - Millésime");
         model.addAttribute("product", produto);
+
+        String shareUrl = request.getRequestURL().toString();
+        model.addAttribute("shareUrl", shareUrl);
+        model.addAttribute("shareUrlEncoded", URLEncoder.encode(shareUrl, StandardCharsets.UTF_8));
+
+        if (produto.getDataCriacao() != null) {
+            model.addAttribute("safra", String.valueOf(produto.getDataCriacao().getYear()));
+        } else {
+            model.addAttribute("safra", "-");
+        }
+
+        try {
+            model.addAttribute("avaliacoes", avaliacaoService.listarPorProduto(id, 1, 50));
+            model.addAttribute("mediaAvaliacoes", avaliacaoService.calcularMedia(id));
+            model.addAttribute("totalAvaliacoes", avaliacaoService.contarPorProduto(id));
+        } catch (Exception e) {
+            log.error("Erro ao carregar avaliacoes do produto", e);
+            model.addAttribute("avaliacoes", List.of());
+            model.addAttribute("mediaAvaliacoes", 0.0);
+            model.addAttribute("totalAvaliacoes", 0);
+        }
+
         try {
             model.addAttribute("relacionados", produtoService.listarTodos(1, 4));
         } catch (Exception e) {

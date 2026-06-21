@@ -47,6 +47,12 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
             .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
         request.getSession().setAttribute("isAdmin", isAdmin);
 
+        String redirect = request.getParameter("redirect");
+        if (redirect != null && !redirect.isBlank()
+                && redirect.startsWith("/") && !redirect.startsWith("//")) {
+            getRedirectStrategy().sendRedirect(request, response, redirect);
+            return;
+        }
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

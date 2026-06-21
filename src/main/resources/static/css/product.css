@@ -342,6 +342,109 @@
     font-size: 0.75rem;
 }
 
+/* Flash Messages */
+.product-flash {
+    padding: 1rem;
+    text-align: center;
+    font-weight: 500;
+}
+.product-flash-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+.product-flash-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Reviews */
+.review-form-box {
+    background: #fff;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+}
+.review-form-title {
+    margin-bottom: 1rem;
+}
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0;
+}
+.star-rating input {
+    display: none;
+}
+.star-rating label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0 0.1rem;
+}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: var(--accent);
+}
+.review-textarea {
+    width: 100%;
+    min-height: 6rem;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    font-family: inherit;
+    resize: vertical;
+}
+.review-submit-btn {
+    margin-top: 1rem;
+}
+.review-list {
+    margin-top: 2rem;
+}
+.review-list-title {
+    margin-bottom: 1rem;
+}
+.review-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.review-item:last-child {
+    border-bottom: none;
+}
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+.review-author {
+    font-weight: 600;
+}
+.review-date {
+    font-size: 0.8rem;
+    color: var(--muted-foreground);
+}
+.review-stars {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.125rem;
+}
+.review-comment {
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.review-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted-foreground);
+}
+.product-tab-content {
+    display: block;
+}
+
 /* Footer */
 .footer-contact-info {
     font-size: 0.875rem;

@@ -15,6 +15,7 @@ function initializeApp() {
     initializeProductInteractions();
     initializeCartFunctionality();
     initializeNewsletter();
+    window.MillesimeMainQuantityReady = true;
 }
 
 // ========== Mobile Menu ==========
