@@ -21,6 +21,7 @@ spring:
         strategy:
           content:
             enabled: true
+            paths: /js/**,/css/**
   mail:
     host: ${MAIL_HOST:smtp.example.com}
     port: ${MAIL_PORT:587}
